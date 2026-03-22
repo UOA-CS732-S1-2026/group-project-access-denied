@@ -8,7 +8,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser]       = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // On mount, re-hydrate the user from the stored token
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -38,10 +37,9 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-ProtectedRoute.propTypes = {
+AuthProvider.propTypes = {
   children: PropTypes.node.isRequired
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);
-
