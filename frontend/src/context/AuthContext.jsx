@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { getMe } from '../services/auth.service';
+import PropTypes from 'prop-types';
 
 const AuthContext = createContext(null);
 
@@ -39,3 +40,7 @@ export const AuthProvider = ({ children }) => {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);
+
+ProtectedRoute.propTypes = {
+  children: PropTypes.node.isRequired
+};
