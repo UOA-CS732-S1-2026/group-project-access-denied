@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { getMe } from '../services/auth.service';
 import PropTypes from 'prop-types';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const AuthContext = createContext(null);
 
