@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { getMe } from '../services/auth.service';
+import PropTypes from 'prop-types';
 
 const AuthContext = createContext(null);
 
@@ -7,7 +8,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser]       = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // On mount, re-hydrate the user from the stored token
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -35,6 +35,10 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
+};
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
