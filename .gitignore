@@ -1,11 +1,25 @@
-# Please edit this gitignore file to suit your needs. You may
-# look at other .gitignore files in the provided examples for inspiration.
-
+# ── OS ────────────────────────────────────────────────────────────────────────
 .DS_Store
-node_modules
+Thumbs.db
 
-# Environment variables - Edit if necessary
+# ── Node ──────────────────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# ── Environment variables ─────────────────────────────────────────────────────
 .env
 .env.*
 !.env.example
 !.env.test
+
+# ── Build output ──────────────────────────────────────────────────────────────
+frontend/dist/
+backend/dist/
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+logs/
+*.log
+
+# ── Test coverage ─────────────────────────────────────────────────────────────
+coverage/
