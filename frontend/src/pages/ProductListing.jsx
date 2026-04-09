@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import products from '../data/products.json';
+import { useCart } from '../context/CartContext';
 
 const ProductListing = () => {
+  const { cartCount } = useCart();
   return (
     <div className="bg-surface text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
 
@@ -14,13 +16,15 @@ const ProductListing = () => {
           <Link to="/#new-arrivals" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">New Arrivals</Link>
         </div>
         <div className="flex items-center space-x-6">
-          <button className="hover:opacity-80 transition-opacity duration-300 text-on-surface">
+          <Link to="/profile" className="hover:opacity-80 transition-opacity duration-300 text-on-surface">
             <span className="material-symbols-outlined">person</span>
-          </button>
-          <button className="hover:opacity-80 transition-opacity duration-300 relative text-on-surface">
+          </Link>
+          <Link to="/cart" className="hover:opacity-80 transition-opacity duration-300 relative text-on-surface">
             <span className="material-symbols-outlined">shopping_bag</span>
-            <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">2</span>
-          </button>
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">{cartCount}</span>
+            )}
+          </Link>
         </div>
       </nav>
 

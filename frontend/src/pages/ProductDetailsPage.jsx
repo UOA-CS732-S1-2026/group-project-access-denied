@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 import products from '../data/products.json';
 import {
   detailGallery1,
@@ -21,12 +23,18 @@ const relatedItems = [
 
 const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 const unavailableSizes = ['XL'];
-const selectedSize = 'M';
 
 const ProductDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { addToCart, cartCount } = useCart();
+  const [selectedSize, setSelectedSize] = useState('M');
   const product = products.find((p) => String(p.id) === String(id));
+
+  const handleAddToCart = () => {
+    addToCart(product, { size: selectedSize });
+    navigate('/cart');
+  };
 
   if (!product) {
     return (
@@ -54,13 +62,15 @@ const ProductDetailsPage = () => {
             <Link to="/#new-arrivals" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">New Arrivals</Link>
           </div>
           <div className="flex items-center space-x-6">
-            <button className="hover:opacity-80 transition-opacity duration-300">
+            <Link to="/profile" className="hover:opacity-80 transition-opacity duration-300">
               <span className="material-symbols-outlined text-[#994127] dark:text-[#c05e42]">person</span>
-            </button>
-            <button className="hover:opacity-80 transition-opacity duration-300 relative">
+            </Link>
+            <Link to="/cart" className="hover:opacity-80 transition-opacity duration-300 relative">
               <span className="material-symbols-outlined text-[#994127] dark:text-[#c05e42]">shopping_bag</span>
-              <span className="absolute -top-1 -right-1 bg-primary text-[10px] text-white rounded-full w-4 h-4 flex items-center justify-center">1</span>
-            </button>
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary text-[10px] text-white rounded-full w-4 h-4 flex items-center justify-center">{cartCount}</span>
+              )}
+            </Link>
           </div>
         </nav>
       </header>
@@ -148,6 +158,7 @@ const ProductDetailsPage = () => {
                 {sizes.map((size) => (
                   <button
                     key={size}
+                    onClick={() => !unavailableSizes.includes(size) && setSelectedSize(size)}
                     className={`py-3 text-sm border transition-colors ${
                       unavailableSizes.includes(size)
                         ? 'border-outline-variant/30 text-outline-variant cursor-not-allowed'
@@ -165,7 +176,10 @@ const ProductDetailsPage = () => {
 
             {/* Actions */}
             <div className="flex flex-col gap-4">
-              <button className="w-full py-5 bg-gradient-to-tr from-primary to-primary-container text-white font-bold tracking-widest uppercase text-xs transition-transform active:scale-[0.98]">
+              <button
+                onClick={handleAddToCart}
+                className="w-full py-5 bg-gradient-to-tr from-primary to-primary-container text-white font-bold tracking-widest uppercase text-xs transition-transform active:scale-[0.98] hover:opacity-90"
+              >
                 Add to Bag
               </button>
               <button className="w-full py-5 border border-outline/20 hover:border-primary/40 transition-colors flex items-center justify-center gap-2 font-bold tracking-widest uppercase text-xs">

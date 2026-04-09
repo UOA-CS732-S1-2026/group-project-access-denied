@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 import {
   heroImage,
   categoryWomen,
@@ -11,6 +12,7 @@ import allProducts from '../data/products.json';
 const featuredProducts = allProducts.filter((p) => p.featured);
 
 const HomePage = () => {
+  const { cartCount } = useCart();
   return (
     <div className="bg-surface text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
 
@@ -24,13 +26,15 @@ const HomePage = () => {
             <a className="text-[#994127] font-semibold border-b-2 border-[#994127] pb-1 font-['Manrope'] tracking-tight" href="#new-arrivals">New Arrivals</a>
           </div>
           <div className="flex items-center space-x-6">
-            <button className="hover:opacity-80 transition-opacity duration-300">
+            <Link to="/profile" className="hover:opacity-80 transition-opacity duration-300">
               <span className="material-symbols-outlined text-[#1c1b1b] dark:text-[#fcf9f8]">person</span>
-            </button>
-            <button className="hover:opacity-80 transition-opacity duration-300 relative">
+            </Link>
+            <Link to="/cart" className="hover:opacity-80 transition-opacity duration-300 relative">
               <span className="material-symbols-outlined text-[#1c1b1b] dark:text-[#fcf9f8]">shopping_bag</span>
-              <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">2</span>
-            </button>
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">{cartCount}</span>
+              )}
+            </Link>
           </div>
         </nav>
       </header>
