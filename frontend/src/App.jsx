@@ -3,12 +3,13 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 
-import HomePage      from './pages/HomePage';
-import LoginPage     from './pages/LoginPage';
-import RegisterPage  from './pages/RegisterPage';
-import ChallengePage from './pages/ChallengePage';
-import ScoreboardPage from './pages/ScoreboardPage';
-import NotFoundPage  from './pages/NotFoundPage';
+import HomePage        from './pages/HomePage';
+import LoginPage       from './pages/LoginPage';
+import RegisterPage    from './pages/RegisterPage';
+import ChallengePage   from './pages/ChallengePage';
+import ScoreboardPage  from './pages/ScoreboardPage';
+import NotFoundPage    from './pages/NotFoundPage';
+import ProductListing  from './pages/ProductListing';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Routes>
           {/* Public routes */}
           <Route path="/"         element={<HomePage />} />
+          <Route path="/products" element={<ProductListing />} />
           <Route path="/login"    element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
