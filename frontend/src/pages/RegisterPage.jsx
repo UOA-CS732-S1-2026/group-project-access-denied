@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { register as registerService } from '../services/auth.service';
+import { heroImage } from '../assets/images';
 
 const SECURITY_QUESTIONS = [
   "What is the name of your first pet?",
@@ -39,81 +40,147 @@ const RegisterPage = () => {
     }
   };
 
+  const inputClass =
+    'bg-white border border-[#dcc1ba] text-[#1c1b1b] rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#994127] focus:ring-1 focus:ring-[#994127] placeholder:text-[#b09a96] transition-colors';
+
+  const labelClass =
+    'text-xs font-semibold uppercase tracking-widest text-[#56423d]';
+
   return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center px-4">
-      <div className="bg-gray-900 border border-gray-700 rounded-xl p-8 w-full max-w-md">
-        <h2 className="text-2xl font-bold text-green-400 mb-6 text-center">Create Account</h2>
-        {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <input
-            id="username"
-            name="username"
-            type="text"
-            placeholder="Username"
-            value={form.username}
-            onChange={handleChange}
-            required
-            className="bg-gray-800 text-white border border-gray-600 rounded px-4 py-2 focus:outline-none focus:border-green-400"
-          />
-          <input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={handleChange}
-            required
-            className="bg-gray-800 text-white border border-gray-600 rounded px-4 py-2 focus:outline-none focus:border-green-400"
-          />
-          <input
-            id="password"
-            name="password"
-            type="password"
-            placeholder="Password (min 6 characters)"
-            value={form.password}
-            onChange={handleChange}
-            required
-            className="bg-gray-800 text-white border border-gray-600 rounded px-4 py-2 focus:outline-none focus:border-green-400"
-          />
+    <div className="min-h-screen bg-[#fcf9f8] flex">
 
-          <div className="flex flex-col gap-1">
-            <label htmlFor="securityQuestion" className="text-gray-400 text-sm">Security Question</label>
-            <select
-              id="securityQuestion"
-              name="securityQuestion"
-              value={form.securityQuestion}
-              onChange={handleChange}
-              required
-              className="bg-gray-800 text-white border border-gray-600 rounded px-4 py-2 focus:outline-none focus:border-green-400"
-            >
-              {SECURITY_QUESTIONS.map((q) => (
-                <option key={q} value={q}>{q}</option>
-              ))}
-            </select>
+      {/* Left — brand image panel */}
+      <div className="hidden lg:flex lg:w-2/5 relative overflow-hidden">
+        <img
+          src={heroImage}
+          alt="Atelier collection"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-[#1c1b1b]/50" />
+        <div className="absolute inset-0 flex flex-col justify-between p-12">
+          <Link to="/" className="text-3xl font-extrabold tracking-tighter text-white">
+            ATELIER
+          </Link>
+          <div>
+            <p className="text-[#dcc1ba] text-2xl font-light tracking-tight leading-snug max-w-xs">
+              Join a world of refined taste.
+            </p>
           </div>
+        </div>
+      </div>
 
-          <input
-            id="securityAnswer"
-            name="securityAnswer"
-            type="text"
-            placeholder="Your answer"
-            value={form.securityAnswer}
-            onChange={handleChange}
-            required
-            className="bg-gray-800 text-white border border-gray-600 rounded px-4 py-2 focus:outline-none focus:border-green-400"
-          />
+      {/* Right — form panel */}
+      <div className="flex flex-col justify-center w-full lg:w-3/5 px-8 md:px-16 xl:px-24 py-16 overflow-y-auto">
 
-          <button
-            type="submit"
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition-colors"
-          >
-            Register
-          </button>
-        </form>
-        <p className="text-gray-400 text-sm text-center mt-4">
-          Already have an account?{' '}
-          <Link to="/login" className="text-green-400 hover:underline">Login</Link>
-        </p>
+        {/* Mobile-only brand */}
+        <Link to="/" className="text-2xl font-extrabold tracking-tighter text-[#1c1b1b] mb-12 lg:hidden">
+          ATELIER
+        </Link>
+
+        <div className="w-full max-w-md mx-auto">
+          <h1 className="text-4xl font-extrabold tracking-tighter text-[#1c1b1b] mb-2">
+            Create account
+          </h1>
+          <p className="text-[#56423d] text-sm mb-10 tracking-tight">
+            Fill in the details below to get started.
+          </p>
+
+          {error && (
+            <div className="mb-6 px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="username" className={labelClass}>Username</label>
+              <input
+                id="username"
+                name="username"
+                type="text"
+                placeholder="Your display name"
+                value={form.username}
+                onChange={handleChange}
+                required
+                className={inputClass}
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="email" className={labelClass}>Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="you@example.com"
+                value={form.email}
+                onChange={handleChange}
+                required
+                className={inputClass}
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="password" className={labelClass}>Password</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Min. 6 characters"
+                value={form.password}
+                onChange={handleChange}
+                required
+                className={inputClass}
+              />
+            </div>
+
+            <div className="h-px bg-[#e8d5cf] my-1" />
+
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="securityQuestion" className={labelClass}>Security Question</label>
+              <select
+                id="securityQuestion"
+                name="securityQuestion"
+                value={form.securityQuestion}
+                onChange={handleChange}
+                required
+                className={inputClass}
+              >
+                {SECURITY_QUESTIONS.map((q) => (
+                  <option key={q} value={q}>{q}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="securityAnswer" className={labelClass}>Answer</label>
+              <input
+                id="securityAnswer"
+                name="securityAnswer"
+                type="text"
+                placeholder="Your answer (stored securely)"
+                value={form.securityAnswer}
+                onChange={handleChange}
+                required
+                className={inputClass}
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="mt-2 bg-[#994127] hover:bg-[#7a3420] text-white font-semibold py-3 rounded-lg tracking-tight transition-colors duration-200"
+            >
+              Create Account
+            </button>
+          </form>
+
+          <p className="text-[#56423d] text-sm text-center mt-8">
+            Already have an account?{' '}
+            <Link to="/login" className="text-[#994127] font-semibold hover:underline">
+              Sign in
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

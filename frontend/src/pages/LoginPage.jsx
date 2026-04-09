@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { login as loginService } from '../services/auth.service';
+import { heroImage } from '../assets/images';
 
 const LoginPage = () => {
   const { login } = useAuth();
@@ -25,42 +26,98 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center px-4">
-      <div className="bg-gray-900 border border-gray-700 rounded-xl p-8 w-full max-w-md">
-        <h2 className="text-2xl font-bold text-green-400 mb-6 text-center">Login</h2>
-        {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={handleChange}
-            required
-            className="bg-gray-800 text-white border border-gray-600 rounded px-4 py-2 focus:outline-none focus:border-green-400"
-          />
-          <input
-            id="password"
-            name="password"
-            type="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={handleChange}
-            required
-            className="bg-gray-800 text-white border border-gray-600 rounded px-4 py-2 focus:outline-none focus:border-green-400"
-          />
-          <button
-            type="submit"
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition-colors"
-          >
-            Login
-          </button>
-        </form>
-        <p className="text-gray-400 text-sm text-center mt-4">
-          No account?{' '}
-          <Link to="/register" className="text-green-400 hover:underline">Register</Link>
-        </p>
+    <div className="min-h-screen bg-[#fcf9f8] flex">
+
+      {/* Left — brand image panel */}
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
+        <img
+          src={heroImage}
+          alt="Atelier collection"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-[#1c1b1b]/50" />
+        <div className="absolute inset-0 flex flex-col justify-between p-12">
+          <Link to="/" className="text-3xl font-extrabold tracking-tighter text-white">
+            ATELIER
+          </Link>
+          <div>
+            <p className="text-[#dcc1ba] text-2xl font-light tracking-tight leading-snug max-w-xs">
+              Curated luxury,<br />effortlessly yours.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Right — form panel */}
+      <div className="flex flex-col justify-center w-full lg:w-1/2 px-8 md:px-16 xl:px-24 py-16">
+
+        {/* Mobile-only brand */}
+        <Link to="/" className="text-2xl font-extrabold tracking-tighter text-[#1c1b1b] mb-12 lg:hidden">
+          ATELIER
+        </Link>
+
+        <div className="w-full max-w-sm mx-auto">
+          <h1 className="text-4xl font-extrabold tracking-tighter text-[#1c1b1b] mb-2">
+            Welcome back
+          </h1>
+          <p className="text-[#56423d] text-sm mb-10 tracking-tight">
+            Sign in to your account to continue.
+          </p>
+
+          {error && (
+            <div className="mb-6 px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="email" className="text-xs font-semibold uppercase tracking-widest text-[#56423d]">
+                Email
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="you@example.com"
+                value={form.email}
+                onChange={handleChange}
+                required
+                className="bg-white border border-[#dcc1ba] text-[#1c1b1b] rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#994127] focus:ring-1 focus:ring-[#994127] placeholder:text-[#b09a96] transition-colors"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="password" className="text-xs font-semibold uppercase tracking-widest text-[#56423d]">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="••••••••"
+                value={form.password}
+                onChange={handleChange}
+                required
+                className="bg-white border border-[#dcc1ba] text-[#1c1b1b] rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#994127] focus:ring-1 focus:ring-[#994127] placeholder:text-[#b09a96] transition-colors"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="mt-2 bg-[#994127] hover:bg-[#7a3420] text-white font-semibold py-3 rounded-lg tracking-tight transition-colors duration-200"
+            >
+              Sign In
+            </button>
+          </form>
+
+          <p className="text-[#56423d] text-sm text-center mt-8">
+            Don&apos;t have an account?{' '}
+            <Link to="/register" className="text-[#994127] font-semibold hover:underline">
+              Create one
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
