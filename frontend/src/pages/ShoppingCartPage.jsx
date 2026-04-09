@@ -132,9 +132,12 @@ const ShoppingCartPage = () => {
                   </div>
                 </div>
                 <div className="space-y-4">
-                  <button className="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary py-4 rounded font-semibold tracking-wide hover:opacity-90 transition-opacity active:scale-[0.98]">
+                  <Link
+                    to="/checkout"
+                    className="block w-full text-center bg-gradient-to-br from-primary to-primary-container text-on-primary py-4 rounded font-semibold tracking-wide hover:opacity-90 transition-opacity active:scale-[0.98]"
+                  >
                     Proceed to Checkout
-                  </button>
+                  </Link>
                   <p className="text-[10px] text-center text-on-surface-variant uppercase tracking-widest px-4">
                     Complimentary shipping on orders over $500
                   </p>
