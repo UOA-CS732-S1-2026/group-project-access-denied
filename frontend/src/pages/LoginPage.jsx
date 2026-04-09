@@ -18,7 +18,7 @@ const LoginPage = () => {
     try {
       const { data } = await loginService(form);
       login(data.token, data.user);
-      navigate('/challenges');
+      navigate(data.user.role === 'admin' ? '/admin' : '/');
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
     }

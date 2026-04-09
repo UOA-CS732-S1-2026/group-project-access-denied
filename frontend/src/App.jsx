@@ -5,6 +5,7 @@ import ShoppingCartPage from './pages/ShoppingCartPage';
 import ProfilePage         from './pages/ProfilePage';
 import OrderHistoryPage   from './pages/OrderHistoryPage';
 import CheckoutPage       from './pages/CheckoutPage';
+import AdminPanelPage    from './pages/AdminPanelPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 
@@ -31,6 +32,7 @@ const App = () => {
           <Route path="/profile"      element={<ProfilePage />} />
           <Route path="/orders"       element={<OrderHistoryPage />} />
           <Route path="/checkout"     element={<CheckoutPage />} />
+          <Route path="/admin"        element={<AdminPanelPage />} />
           <Route path="/login"    element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
