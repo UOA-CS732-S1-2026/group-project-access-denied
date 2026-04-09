@@ -9,7 +9,8 @@ import RegisterPage    from './pages/RegisterPage';
 import ChallengePage   from './pages/ChallengePage';
 import ScoreboardPage  from './pages/ScoreboardPage';
 import NotFoundPage    from './pages/NotFoundPage';
-import ProductListing  from './pages/ProductListing';
+import ProductListing      from './pages/ProductListing';
+import ProductDetailsPage  from './pages/ProductDetailsPage';
 
 const App = () => {
   return (
@@ -19,7 +20,8 @@ const App = () => {
         <Routes>
           {/* Public routes */}
           <Route path="/"         element={<HomePage />} />
-          <Route path="/products" element={<ProductListing />} />
+          <Route path="/products"     element={<ProductListing />} />
+          <Route path="/products/:id" element={<ProductDetailsPage />} />
           <Route path="/login"    element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 

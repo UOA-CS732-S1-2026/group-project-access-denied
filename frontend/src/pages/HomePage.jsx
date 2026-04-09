@@ -5,11 +5,10 @@ import {
   categoryMen,
   categoryAccessories,
   brandStory,
-  productSilkBlouse,
-  productRunner,
-  productTrench,
-  productBoot,
 } from '../assets/images';
+import allProducts from '../data/products.json';
+
+const featuredProducts = allProducts.filter((p) => p.featured);
 
 const HomePage = () => {
   return (
@@ -130,70 +129,23 @@ const HomePage = () => {
               <h2 className="text-5xl font-bold tracking-tighter text-on-surface">The Seasonal Edit</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-x-8 gap-y-20">
-              {/* Product 1 */}
-              <div className="group">
-                <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden mb-6 rounded-lg relative">
-                  <img
-                    alt="Silk Shirt"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    src={productSilkBlouse}
-                  />
-                  <div className="absolute inset-0 glass-panel opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <button className="primary-gradient text-white px-6 py-3 rounded-lg shadow-ambient scale-95 hover:scale-100 transition-transform">Quick Buy</button>
+              {featuredProducts.map((product) => (
+                <Link key={product.id} to={`/products/${product.id}`} className="group block">
+                  <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden mb-6 rounded-lg relative">
+                    <img
+                      alt={product.name}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      src={product.image}
+                    />
+                    <div className="absolute inset-0 glass-panel opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <span className="primary-gradient text-white px-6 py-3 rounded-lg shadow-ambient text-sm font-semibold">View Product</span>
+                    </div>
                   </div>
-                </div>
-                <h3 className="text-lg font-semibold text-on-surface mb-1">Draped Silk Blouse</h3>
-                <p className="text-on-surface-variant mb-2">Parchment</p>
-                <p className="text-primary font-bold">$245.00</p>
-              </div>
-              {/* Product 2 */}
-              <div className="group">
-                <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden mb-6 rounded-lg relative">
-                  <img
-                    alt="Running Shoe"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    src={productRunner}
-                  />
-                  <div className="absolute inset-0 glass-panel opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <button className="primary-gradient text-white px-6 py-3 rounded-lg shadow-ambient scale-95 hover:scale-100 transition-transform">Quick Buy</button>
-                  </div>
-                </div>
-                <h3 className="text-lg font-semibold text-on-surface mb-1">Aero-Luxe Runner</h3>
-                <p className="text-on-surface-variant mb-2">Cloud / Slate</p>
-                <p className="text-primary font-bold">$180.00</p>
-              </div>
-              {/* Product 3 */}
-              <div className="group">
-                <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden mb-6 rounded-lg relative">
-                  <img
-                    alt="Trench Coat"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    src={productTrench}
-                  />
-                  <div className="absolute inset-0 glass-panel opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <button className="primary-gradient text-white px-6 py-3 rounded-lg shadow-ambient scale-95 hover:scale-100 transition-transform">Quick Buy</button>
-                  </div>
-                </div>
-                <h3 className="text-lg font-semibold text-on-surface mb-1">Sculpted Trench</h3>
-                <p className="text-on-surface-variant mb-2">Sienna</p>
-                <p className="text-primary font-bold">$495.00</p>
-              </div>
-              {/* Product 4 */}
-              <div className="group">
-                <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden mb-6 rounded-lg relative">
-                  <img
-                    alt="Leather Boot"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    src={productBoot}
-                  />
-                  <div className="absolute inset-0 glass-panel opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <button className="primary-gradient text-white px-6 py-3 rounded-lg shadow-ambient scale-95 hover:scale-100 transition-transform">Quick Buy</button>
-                  </div>
-                </div>
-                <h3 className="text-lg font-semibold text-on-surface mb-1">Heritage Chelsea Boot</h3>
-                <p className="text-on-surface-variant mb-2">Deep Walnut</p>
-                <p className="text-primary font-bold">$320.00</p>
-              </div>
+                  <h3 className="text-lg font-semibold text-on-surface mb-1">{product.name}</h3>
+                  <p className="text-on-surface-variant mb-2">{product.brand}</p>
+                  <p className="text-primary font-bold">${product.price}.00</p>
+                </Link>
+              ))}
             </div>
           </div>
         </section>

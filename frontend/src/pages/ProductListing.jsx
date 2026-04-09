@@ -1,12 +1,5 @@
 import { Link } from 'react-router-dom';
-import {
-  listingOvercoat,
-  listingChelseaBoot,
-  listingCottonTee,
-  listingLinenTrouser,
-  listingKnit,
-  listingTote,
-} from '../assets/images';
+import products from '../data/products.json';
 
 const ProductListing = () => {
   return (
@@ -57,7 +50,6 @@ const ProductListing = () => {
           {/* Sidebar Filter */}
           <aside className="w-full md:w-64 flex-shrink-0">
             <div className="sticky top-28 space-y-10">
-              {/* Categories */}
               <section>
                 <h3 className="text-sm font-extrabold uppercase tracking-widest text-on-surface mb-4">Categories</h3>
                 <ul className="space-y-3">
@@ -68,7 +60,6 @@ const ProductListing = () => {
                   <li><a className="text-sm text-on-surface-variant hover:text-primary transition-colors flex justify-between" href="#">Footwear <span className="text-on-surface-variant/40">(42)</span></a></li>
                 </ul>
               </section>
-              {/* Sizes */}
               <section>
                 <h3 className="text-sm font-extrabold uppercase tracking-widest text-on-surface mb-4">Size</h3>
                 <div className="grid grid-cols-4 gap-2">
@@ -76,9 +67,7 @@ const ProductListing = () => {
                     <button
                       key={size}
                       className={`h-10 text-xs border flex items-center justify-center font-medium transition-all ${
-                        size === 'S'
-                          ? 'border-primary bg-primary text-white'
-                          : 'border-outline-variant/30 hover:border-primary'
+                        size === 'S' ? 'border-primary bg-primary text-white' : 'border-outline-variant/30 hover:border-primary'
                       }`}
                     >
                       {size}
@@ -86,7 +75,6 @@ const ProductListing = () => {
                   ))}
                 </div>
               </section>
-              {/* Colors */}
               <section>
                 <h3 className="text-sm font-extrabold uppercase tracking-widest text-on-surface mb-4">Color Palette</h3>
                 <div className="flex flex-wrap gap-3">
@@ -98,7 +86,6 @@ const ProductListing = () => {
                   <button className="w-6 h-6 rounded-full bg-[#89726c] ring-1 ring-offset-2 ring-transparent transition-all"></button>
                 </div>
               </section>
-              {/* Price Range */}
               <section>
                 <h3 className="text-sm font-extrabold uppercase tracking-widest text-on-surface mb-4">Price</h3>
                 <div className="space-y-4">
@@ -115,125 +102,35 @@ const ProductListing = () => {
           {/* Product Grid */}
           <div className="flex-grow">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-16 gap-x-8">
-
-              {/* Product 1 */}
-              <article className="group relative">
-                <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden relative">
-                  <img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Structured Wool Overcoat" src={listingOvercoat} />
-                  <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  <div className="absolute bottom-4 left-4 right-4 bg-surface/80 backdrop-blur-md p-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                    <button className="w-full text-[10px] font-bold uppercase tracking-[0.2em] py-2 bg-on-surface text-surface hover:bg-primary transition-colors">Quick Add</button>
-                  </div>
-                </div>
-                <div className="mt-6 space-y-1">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant/60">Atelier Studio</p>
-                      <h4 className="text-sm font-bold text-on-surface">Structured Wool Overcoat</h4>
+              {products.map((product) => (
+                <Link key={product.id} to={`/products/${product.id}`} className="group relative block">
+                  <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden relative">
+                    <img
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      alt={product.name}
+                      src={product.image}
+                    />
+                    {product.isNew && (
+                      <div className="absolute top-4 left-4 bg-primary px-3 py-1">
+                        <span className="text-[9px] font-bold text-white uppercase tracking-widest">New</span>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div className="absolute bottom-4 left-4 right-4 bg-surface/80 backdrop-blur-md p-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                      <span className="block w-full text-center text-[10px] font-bold uppercase tracking-[0.2em] py-2 bg-on-surface text-surface">View Product</span>
                     </div>
-                    <p className="text-sm font-bold text-primary">$890</p>
                   </div>
-                </div>
-              </article>
-
-              {/* Product 2 */}
-              <article className="group relative">
-                <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden relative">
-                  <img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Minimalist Chelsea Boot" src={listingChelseaBoot} />
-                  <div className="absolute top-4 left-4 bg-primary px-3 py-1">
-                    <span className="text-[9px] font-bold text-white uppercase tracking-widest">New</span>
-                  </div>
-                  <div className="absolute bottom-4 left-4 right-4 bg-surface/80 backdrop-blur-md p-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                    <button className="w-full text-[10px] font-bold uppercase tracking-[0.2em] py-2 bg-on-surface text-surface hover:bg-primary transition-colors">Quick Add</button>
-                  </div>
-                </div>
-                <div className="mt-6 space-y-1">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant/60">Signature Line</p>
-                      <h4 className="text-sm font-bold text-on-surface">Minimalist Chelsea Boot</h4>
+                  <div className="mt-6 space-y-1">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant/60">{product.brand}</p>
+                        <h4 className="text-sm font-bold text-on-surface">{product.name}</h4>
+                      </div>
+                      <p className="text-sm font-bold text-primary">${product.price}</p>
                     </div>
-                    <p className="text-sm font-bold text-primary">$550</p>
                   </div>
-                </div>
-              </article>
-
-              {/* Product 3 */}
-              <article className="group relative">
-                <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden relative">
-                  <img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Heavyweight Cotton Tee" src={listingCottonTee} />
-                  <div className="absolute bottom-4 left-4 right-4 bg-surface/80 backdrop-blur-md p-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                    <button className="w-full text-[10px] font-bold uppercase tracking-[0.2em] py-2 bg-on-surface text-surface hover:bg-primary transition-colors">Quick Add</button>
-                  </div>
-                </div>
-                <div className="mt-6 space-y-1">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant/60">Essentials</p>
-                      <h4 className="text-sm font-bold text-on-surface">Heavyweight Cotton Tee</h4>
-                    </div>
-                    <p className="text-sm font-bold text-primary">$120</p>
-                  </div>
-                </div>
-              </article>
-
-              {/* Product 4 */}
-              <article className="group relative">
-                <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden relative">
-                  <img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Tailored Linen Trouser" src={listingLinenTrouser} />
-                  <div className="absolute bottom-4 left-4 right-4 bg-surface/80 backdrop-blur-md p-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                    <button className="w-full text-[10px] font-bold uppercase tracking-[0.2em] py-2 bg-on-surface text-surface hover:bg-primary transition-colors">Quick Add</button>
-                  </div>
-                </div>
-                <div className="mt-6 space-y-1">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant/60">Signature Line</p>
-                      <h4 className="text-sm font-bold text-on-surface">Tailored Linen Trouser</h4>
-                    </div>
-                    <p className="text-sm font-bold text-primary">$340</p>
-                  </div>
-                </div>
-              </article>
-
-              {/* Product 5 */}
-              <article className="group relative">
-                <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden relative">
-                  <img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Silk-Cashmere Knit" src={listingKnit} />
-                  <div className="absolute bottom-4 left-4 right-4 bg-surface/80 backdrop-blur-md p-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                    <button className="w-full text-[10px] font-bold uppercase tracking-[0.2em] py-2 bg-on-surface text-surface hover:bg-primary transition-colors">Quick Add</button>
-                  </div>
-                </div>
-                <div className="mt-6 space-y-1">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant/60">Knitwear</p>
-                      <h4 className="text-sm font-bold text-on-surface">Silk-Cashmere Knit</h4>
-                    </div>
-                    <p className="text-sm font-bold text-primary">$420</p>
-                  </div>
-                </div>
-              </article>
-
-              {/* Product 6 */}
-              <article className="group relative">
-                <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden relative">
-                  <img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Day-to-Night Tote" src={listingTote} />
-                  <div className="absolute bottom-4 left-4 right-4 bg-surface/80 backdrop-blur-md p-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                    <button className="w-full text-[10px] font-bold uppercase tracking-[0.2em] py-2 bg-on-surface text-surface hover:bg-primary transition-colors">Quick Add</button>
-                  </div>
-                </div>
-                <div className="mt-6 space-y-1">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant/60">Accessories</p>
-                      <h4 className="text-sm font-bold text-on-surface">Day-to-Night Tote</h4>
-                    </div>
-                    <p className="text-sm font-bold text-primary">$675</p>
-                  </div>
-                </div>
-              </article>
-
+                </Link>
+              ))}
             </div>
 
             {/* Load More */}
@@ -241,7 +138,7 @@ const ProductListing = () => {
               <button className="px-12 py-4 bg-surface border border-outline-variant hover:border-primary text-xs font-bold uppercase tracking-[0.3em] transition-all duration-300 text-on-surface">
                 View More Arrivals
               </button>
-              <p className="mt-4 text-xs text-on-surface-variant/40 tracking-wider">Showing 6 of 124 items</p>
+              <p className="mt-4 text-xs text-on-surface-variant/40 tracking-wider">Showing {products.length} of 124 items</p>
             </div>
           </div>
 
