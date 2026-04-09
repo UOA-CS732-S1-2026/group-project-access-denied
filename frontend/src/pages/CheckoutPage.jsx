@@ -235,7 +235,7 @@ const CheckoutPage = () => {
                   {cart.map((item) => (
                     <div key={item.key} className="flex gap-4">
                       <div className="w-16 h-20 bg-surface-container-highest rounded flex-shrink-0 overflow-hidden">
-                        <img src={item.product.image} alt={item.product.name} className="w-full h-full object-cover" />
+                        <img src={item.product.images[0]} alt={item.product.name} className="w-full h-full object-cover" />
                       </div>
                       <div className="flex-1">
                         <p className="text-sm font-bold text-on-surface leading-tight">{item.product.name}</p>

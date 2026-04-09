@@ -18,7 +18,7 @@ const ShoppingCartPage = () => {
             <Link to="/#new-arrivals" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">New Arrivals</Link>
           </div>
           <div className="flex items-center gap-6">
-            <Link to="/profile" className="hover:opacity-80 transition-opacity duration-300">
+            <Link to="/account" className="hover:opacity-80 transition-opacity duration-300">
               <span className="material-symbols-outlined text-[#994127] dark:text-[#c05e42]">person</span>
             </Link>
             <Link to="/cart" className="hover:opacity-80 transition-opacity duration-300 relative">
@@ -62,7 +62,7 @@ const ShoppingCartPage = () => {
                       <img
                         alt={item.product.name}
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                        src={item.product.image}
+                        src={item.product.images[0]}
                       />
                     </div>
                     <div className="flex-1 flex flex-col justify-between">

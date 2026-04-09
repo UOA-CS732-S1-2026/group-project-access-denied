@@ -26,7 +26,7 @@ const HomePage = () => {
             <a className="text-[#994127] font-semibold border-b-2 border-[#994127] pb-1 font-['Manrope'] tracking-tight" href="#new-arrivals">New Arrivals</a>
           </div>
           <div className="flex items-center space-x-6">
-            <Link to="/profile" className="hover:opacity-80 transition-opacity duration-300">
+            <Link to="/account" className="hover:opacity-80 transition-opacity duration-300">
               <span className="material-symbols-outlined text-[#1c1b1b] dark:text-[#fcf9f8]">person</span>
             </Link>
             <Link to="/cart" className="hover:opacity-80 transition-opacity duration-300 relative">
@@ -139,7 +139,7 @@ const HomePage = () => {
                     <img
                       alt={product.name}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      src={product.image}
+                      src={product.images[0]}
                     />
                     <div className="absolute inset-0 glass-panel opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                       <span className="primary-gradient text-white px-6 py-3 rounded-lg shadow-ambient text-sm font-semibold">View Product</span>

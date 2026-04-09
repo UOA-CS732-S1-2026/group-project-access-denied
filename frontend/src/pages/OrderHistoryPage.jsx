@@ -70,7 +70,7 @@ const OrderHistoryPage = () => {
             <Link to="/#new-arrivals" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">New Arrivals</Link>
           </div>
           <div className="flex items-center space-x-6 text-[#994127] dark:text-[#c05e42]">
-            <Link to="/profile" className="hover:opacity-80 transition-opacity duration-300">
+            <Link to="/account" className="hover:opacity-80 transition-opacity duration-300">
               <span className="material-symbols-outlined">person</span>
             </Link>
             <Link to="/cart" className="hover:opacity-80 transition-opacity duration-300 relative">
@@ -93,7 +93,7 @@ const OrderHistoryPage = () => {
             Review your curated collection of past acquisitions and track pending arrivals.
           </p>
           <div className="mt-4">
-            <Link to="/profile" className="text-sm text-primary hover:underline flex items-center gap-1 w-fit">
+            <Link to="/account" className="text-sm text-primary hover:underline flex items-center gap-1 w-fit">
               <span className="material-symbols-outlined text-sm">arrow_back</span>
               Back to My Account
             </Link>

@@ -91,7 +91,7 @@ const AdminPanelPage = () => {
                 onChange={(e) => { setSearch(e.target.value); setPage(1); }}
               />
             </div>
-            <Link to="/profile" className="text-on-surface hover:opacity-80 transition-opacity">
+            <Link to="/account" className="text-on-surface hover:opacity-80 transition-opacity">
               <span className="material-symbols-outlined">person</span>
             </Link>
             <Link to="/cart" className="text-on-surface hover:opacity-80 transition-opacity relative">
@@ -207,7 +207,7 @@ const AdminPanelPage = () => {
                         <tr key={product.id} className="hover:bg-surface-container-low/30 transition-colors group">
                           <td className="px-6 py-4">
                             <div className="w-16 h-20 bg-surface-container rounded overflow-hidden">
-                              <img className="w-full h-full object-cover" alt={product.name} src={product.image} />
+                              <img className="w-full h-full object-cover" alt={product.name} src={product.images[0]} />
                             </div>
                           </td>
                           <td className="px-6 py-4">

@@ -3,10 +3,25 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { register as registerService } from '../services/auth.service';
 
+const SECURITY_QUESTIONS = [
+  "What is the name of your first pet?",
+  "What city were you born in?",
+  "What is your mother's maiden name?",
+  "What was the name of your primary school?",
+  "What is the name of the street you grew up on?",
+  "What was the make of your first car?",
+];
+
 const RegisterPage = () => {
   const { login } = useAuth();
   const navigate   = useNavigate();
-  const [form, setForm]   = useState({ username: '', email: '', password: '' });
+  const [form, setForm] = useState({
+    username: '',
+    email: '',
+    password: '',
+    securityQuestion: SECURITY_QUESTIONS[0],
+    securityAnswer: '',
+  });
   const [error, setError] = useState('');
 
   const handleChange = (e) =>
@@ -60,6 +75,34 @@ const RegisterPage = () => {
             required
             className="bg-gray-800 text-white border border-gray-600 rounded px-4 py-2 focus:outline-none focus:border-green-400"
           />
+
+          <div className="flex flex-col gap-1">
+            <label htmlFor="securityQuestion" className="text-gray-400 text-sm">Security Question</label>
+            <select
+              id="securityQuestion"
+              name="securityQuestion"
+              value={form.securityQuestion}
+              onChange={handleChange}
+              required
+              className="bg-gray-800 text-white border border-gray-600 rounded px-4 py-2 focus:outline-none focus:border-green-400"
+            >
+              {SECURITY_QUESTIONS.map((q) => (
+                <option key={q} value={q}>{q}</option>
+              ))}
+            </select>
+          </div>
+
+          <input
+            id="securityAnswer"
+            name="securityAnswer"
+            type="text"
+            placeholder="Your answer"
+            value={form.securityAnswer}
+            onChange={handleChange}
+            required
+            className="bg-gray-800 text-white border border-gray-600 rounded px-4 py-2 focus:outline-none focus:border-green-400"
+          />
+
           <button
             type="submit"
             className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition-colors"

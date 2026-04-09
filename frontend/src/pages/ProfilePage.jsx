@@ -37,7 +37,7 @@ const ProfilePage = () => {
             <Link to="/#new-arrivals" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">New Arrivals</Link>
           </div>
           <div className="flex items-center space-x-6">
-            <Link to="/profile" className="hover:opacity-80 transition-opacity duration-300 text-[#994127] font-semibold border-b-2 border-[#994127] pb-1">
+            <Link to="/account" className="hover:opacity-80 transition-opacity duration-300 text-[#994127] font-semibold border-b-2 border-[#994127] pb-1">
               <span className="material-symbols-outlined">person</span>
             </Link>
             <Link to="/cart" className="hover:opacity-80 transition-opacity duration-300 relative text-[#56423d]">

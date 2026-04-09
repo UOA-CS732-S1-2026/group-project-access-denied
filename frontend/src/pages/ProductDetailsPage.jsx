@@ -62,7 +62,7 @@ const ProductDetailsPage = () => {
             <Link to="/#new-arrivals" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">New Arrivals</Link>
           </div>
           <div className="flex items-center space-x-6">
-            <Link to="/profile" className="hover:opacity-80 transition-opacity duration-300">
+            <Link to="/account" className="hover:opacity-80 transition-opacity duration-300">
               <span className="material-symbols-outlined text-[#994127] dark:text-[#c05e42]">person</span>
             </Link>
             <Link to="/cart" className="hover:opacity-80 transition-opacity duration-300 relative">
@@ -104,7 +104,7 @@ const ProductDetailsPage = () => {
                 <img
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   alt={product.name}
-                  src={product.image}
+                  src={product.images[0]}
                 />
                 <div className="absolute bottom-6 right-6 flex gap-2">
                   <button className="bg-surface/80 backdrop-blur-md p-2 hover:bg-surface transition-colors">

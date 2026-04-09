@@ -16,7 +16,7 @@ const ProductListing = () => {
           <Link to="/#new-arrivals" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">New Arrivals</Link>
         </div>
         <div className="flex items-center space-x-6">
-          <Link to="/profile" className="hover:opacity-80 transition-opacity duration-300 text-on-surface">
+          <Link to="/account" className="hover:opacity-80 transition-opacity duration-300 text-on-surface">
             <span className="material-symbols-outlined">person</span>
           </Link>
           <Link to="/cart" className="hover:opacity-80 transition-opacity duration-300 relative text-on-surface">
@@ -112,7 +112,7 @@ const ProductListing = () => {
                     <img
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       alt={product.name}
-                      src={product.image}
+                      src={product.images[0]}
                     />
                     {product.isNew && (
                       <div className="absolute top-4 left-4 bg-primary px-3 py-1">
