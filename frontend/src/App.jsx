@@ -2,7 +2,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import ShoppingCartPage from './pages/ShoppingCartPage';
-import ProfilePage      from './pages/ProfilePage';
+import ProfilePage         from './pages/ProfilePage';
+import OrderHistoryPage   from './pages/OrderHistoryPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 
@@ -27,6 +28,7 @@ const App = () => {
           <Route path="/products/:id" element={<ProductDetailsPage />} />
           <Route path="/cart"         element={<ShoppingCartPage />} />
           <Route path="/profile"      element={<ProfilePage />} />
+          <Route path="/orders"       element={<OrderHistoryPage />} />
           <Route path="/login"    element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 

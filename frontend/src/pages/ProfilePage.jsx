@@ -64,7 +64,13 @@ const ProfilePage = () => {
                 {NAV_ITEMS.map((item) => (
                   <button
                     key={item.id}
-                    onClick={() => setActiveSection(item.id)}
+                    onClick={() => {
+                      if (item.id === 'orders') {
+                        navigate('/orders');
+                      } else {
+                        setActiveSection(item.id);
+                      }
+                    }}
                     className={`group flex items-center px-4 py-3 rounded-lg transition-all text-left ${
                       activeSection === item.id
                         ? 'bg-surface-container-low text-primary font-semibold'
