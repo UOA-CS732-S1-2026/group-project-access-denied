@@ -3,7 +3,7 @@
 > A hands-on Capture the Flag platform where the entire website is the challenge.  
 > Built with the MERN stack (MongoDB, Express, React, Node.js).
 
-> **macOS note:** Port 5000 is reserved by AirPlay Receiver on macOS. The backend runs on **port 5001** by default.
+> **Ports:** Backend runs on `5001`, frontend on `3000`. These are locked in code — do not change them.
 
 **Team members:**
 - Ryan Gin _(rgin216@aucklanduni.ac.nz)_
@@ -95,10 +95,9 @@ npm install
 npm run dev            # runs on http://localhost:5001
 ```
 
-`JWT_SECRET` can be any random string, and it does not need to match other teammates as long as each person is running their own backend locally.
+`JWT_SECRET` can be any random string — it does not need to match other teammates.
 
 > The default `MONGO_URI` in `.env.example` already points to `localhost:27017` — no changes needed if you used the Docker command above.
-> **macOS users:** Port 5000 is taken by AirPlay Receiver. The `.env.example` already defaults to `PORT=5001` to avoid this.
 
 ### 4. Set up the frontend
 
@@ -106,19 +105,19 @@ Open a **second terminal**:
 
 ```bash
 cd frontend
-cp .env.example .env
 npm install
-npm run dev            # runs on http://localhost:5173
+npm run dev
 ```
 
-Make sure your `frontend/.env` has:
-`VITE_API_URL=http://localhost:5001/api`
+Create `frontend/.env`:
 
-If you don't set this, the frontend may try port `5000` and registration/login can fail.
+```
+VITE_API_URL=http://localhost:5001/api
+```
 
 ### 5. Open the app
 
-Visit [http://localhost:5173](http://localhost:5173) in your browser.
+Visit http://localhost:3000
 
 ---
 
@@ -134,7 +133,7 @@ docker compose up --build
 
 | Service   | URL                        |
 |-----------|----------------------------|
-| Frontend  | http://localhost:5173      |
+| Frontend  | http://localhost:3000      |
 | Backend   | http://localhost:5001      |
 | MongoDB   | mongodb://localhost:27017  |
 
@@ -202,7 +201,7 @@ bugfix/flag-submission-error
 | `MONGO_URI`         | MongoDB connection string          | `mongodb://localhost:27017/access-denied` |
 | `JWT_SECRET`        | Secret key for signing JWTs        | any long random string (can differ per developer)           |
 | `JWT_EXPIRES_IN`    | Token expiry duration              | `7d`                             |
-| `CLIENT_URL`        | Frontend URL (for CORS)            | `http://localhost:5173`          |
+| `CLIENT_URL`        | Frontend URL (for CORS)            | `http://localhost:3000`          |
 
 ### Frontend (`frontend/.env`)
 

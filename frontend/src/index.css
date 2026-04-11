@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  font-family: 'Manrope', sans-serif;
+}
+
+.glass-panel {
+  background: rgba(252, 249, 248, 0.8);
+  backdrop-filter: blur(20px);
+}
+
+.primary-gradient {
+  background: linear-gradient(135deg, #994127 0%, #b8583d 100%);
+}
+
+.shadow-ambient {
+  box-shadow: 0 20px 40px rgba(86, 66, 61, 0.06);
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

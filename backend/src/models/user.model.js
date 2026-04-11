@@ -33,6 +33,18 @@ const userSchema = new mongoose.Schema(
       enum: ['user', 'admin'],
       default: 'user',
     },
+    securityQuestion: {
+      type: String,
+      required: [true, 'Security question is required'],
+      trim: true,
+    },
+    securityAnswer: {
+      type: String,
+      required: [true, 'Security answer is required'],
+      lowercase: true,
+      trim: true,
+      select: false,
+    },
     solvedChallenges: [
       {
         type: mongoose.Schema.Types.ObjectId,

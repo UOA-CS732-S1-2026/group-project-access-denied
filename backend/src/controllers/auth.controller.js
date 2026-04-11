@@ -14,9 +14,9 @@ const generateToken = (user) =>
 // ─── POST /api/auth/register ──────────────────────────────────────────────────
 const register = async (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, securityQuestion, securityAnswer } = req.body;
 
-    if (!username || !email || !password) {
+    if (!username || !email || !password || !securityQuestion || !securityAnswer) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
@@ -25,7 +25,7 @@ const register = async (req, res, next) => {
       return res.status(409).json({ message: 'Username or email already taken' });
     }
 
-    const user = await User.create({ username, email, password });
+    const user = await User.create({ username, email, password, securityQuestion, securityAnswer });
     const token = generateToken(user);
 
     res.status(201).json({
