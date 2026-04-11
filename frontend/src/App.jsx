@@ -7,7 +7,6 @@ import OrderHistoryPage   from './pages/OrderHistoryPage';
 import CheckoutPage       from './pages/CheckoutPage';
 import AdminPanelPage    from './pages/AdminPanelPage';
 import ProtectedRoute from './components/ProtectedRoute';
-import Navbar from './components/Navbar';
 
 import HomePage        from './pages/HomePage';
 import LoginPage       from './pages/LoginPage';
@@ -22,7 +21,6 @@ const App = () => {
     <BrowserRouter>
       <CartProvider>
       <AuthProvider>
-        <Navbar />
         <Routes>
           {/* Public routes */}
           <Route path="/"         element={<HomePage />} />

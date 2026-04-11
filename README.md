@@ -3,6 +3,11 @@
 > A hands-on Capture the Flag platform where the entire website is the challenge.  
 > Built with the MERN stack (MongoDB, Express, React, Node.js).
 
+<<<<<<< HEAD
+=======
+> **Ports:** Backend runs on `5001`, frontend on `3000`. These are locked in code — do not change them.
+
+>>>>>>> main
 **Team members:**
 - Ryan Gin _(rgin216@aucklanduni.ac.nz)_
 - Soham Kulkarni _(skul970@aucklanduni.ac.nz)_
@@ -75,17 +80,26 @@ npm install
 npm run dev   # runs on http://localhost:5001
 ```
 
+<<<<<<< HEAD
 Open `backend/.env` and set:
 - `JWT_SECRET` — any random string
 - `MONGO_URI` — Atlas connection string from the team
 
 ### 3. Set up the frontend
+=======
+`JWT_SECRET` can be any random string — it does not need to match other teammates.
+
+> The default `MONGO_URI` in `.env.example` already points to `localhost:27017` — no changes needed if you used the Docker command above.
+
+### 4. Set up the frontend
+>>>>>>> main
 
 Open a **second terminal**:
 
 ```bash
 cd frontend
 npm install
+<<<<<<< HEAD
 npm run dev   # runs on http://localhost:3000
 ```
 
@@ -95,6 +109,38 @@ VITE_API_URL=http://localhost:5001/api
 ```
 
 ### 4. Open the app
+=======
+npm run dev
+```
+
+Create `frontend/.env`:
+
+```
+VITE_API_URL=http://localhost:5001/api
+```
+
+### 5. Open the app
+
+Visit http://localhost:3000
+
+---
+
+## Full Docker Setup (for demos / final testing)
+
+Runs everything (frontend, backend, MongoDB) in containers with one command.
+
+```bash
+# From the project root
+cp backend/.env.example backend/.env   # fill in JWT_SECRET first
+docker compose up --build
+```
+
+| Service   | URL                        |
+|-----------|----------------------------|
+| Frontend  | http://localhost:3000      |
+| Backend   | http://localhost:5001      |
+| MongoDB   | mongodb://localhost:27017  |
+>>>>>>> main
 
 Visit http://localhost:3000
 
@@ -139,6 +185,7 @@ bugfix/flag-submission-error
 
 ### Backend (`backend/.env`)
 
+<<<<<<< HEAD
 | Variable         | Description                   | Example                                      |
 |------------------|-------------------------------|----------------------------------------------|
 | `NODE_ENV`       | Environment mode              | `development`                                |
@@ -147,6 +194,16 @@ bugfix/flag-submission-error
 | `JWT_SECRET`     | Secret key for signing JWTs   | any long random string                       |
 | `JWT_EXPIRES_IN` | Token expiry duration         | `2h`                                         |
 | `CLIENT_URL`     | Frontend URL (for CORS)       | `http://localhost:3000`                      |
+=======
+| Variable            | Description                        | Example                          |
+|---------------------|------------------------------------|----------------------------------|
+| `NODE_ENV`          | Environment mode                   | `development`                    |
+| `PORT`              | Backend port                       | `5001` (5000 is taken by AirPlay on macOS) |
+| `MONGO_URI`         | MongoDB connection string          | `mongodb://localhost:27017/access-denied` |
+| `JWT_SECRET`        | Secret key for signing JWTs        | any long random string (can differ per developer)           |
+| `JWT_EXPIRES_IN`    | Token expiry duration              | `7d`                             |
+| `CLIENT_URL`        | Frontend URL (for CORS)            | `http://localhost:3000`          |
+>>>>>>> main
 
 ### Frontend (`frontend/.env`)
 
