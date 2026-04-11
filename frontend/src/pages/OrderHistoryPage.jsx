@@ -1,59 +1,38 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { getOrders } from '../api/order.api';
 
 const TABS = ['All Orders', 'In Transit', 'Completed', 'Returns'];
 
-const orders = [
-  {
-    id: 'ATL-882910',
-    title: 'Winter Capsule Selection',
-    date: 'October 12, 2023',
-    total: '$1,420.00',
-    status: 'Delivered',
-    statusColor: 'bg-green-600',
-    statusTextColor: 'text-green-700',
-    pulse: false,
-    action: 'View Details',
-    actionIcon: 'arrow_forward',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBdXzNQ6bBYdcULSy4DmTYtowIcTSUCMy6NU0bLtU1FirC0U4jD9vTrp6vWNJEMoMG-ggnOxuCevcvTeYNriN5fsD3lLoNIf6b5GU2D_w7Cc9uj80z0Dkk7Xk_GdlW9Sv9wbdPl_9nbb-5rZswKFRhZiLv3rAlO9phuEswcU5C-O9EJM8MmTToeE3EpnJ7C_q5M8yGMK2HtBo1K92HyaImSoooEyADU8KghqI2DpBUyFr9lFDcO971GRwAOCQwcS5NsxEbT4lerPNc',
-  },
-  {
-    id: 'ATL-901244',
-    title: 'Essential Footwear & Accessories',
-    date: 'January 04, 2024',
-    total: '$585.00',
-    status: 'In Transit',
-    statusColor: 'bg-primary',
-    statusTextColor: 'text-primary',
-    pulse: true,
-    action: 'Track Package',
-    actionIcon: 'local_shipping',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBJ5kmSAKJasC3bYxo9m4MlL8-E_Gwop0BNPJtybr408lxkk9aC_k-5jhAjYl3A2H6GMnAehE_PBuOo2Rc9TtKgUEz0crshrNy9d_fDKViGsXFjfYIdqHP9-qa946qgdQIpq8F3nhqoa_DZIQI0JXZmtUm5bMGaFNOdMQZVv38Z4oquhmwYCfF1b6pwiDySevpQWT4XSJIBiVmcvHonocAhGOcULnjHOhTojQYMcfV-TjibNcTVpdiQmfp56HZZCHfD0v96N3048vg',
-  },
-  {
-    id: 'ATL-775431',
-    title: 'Knitwear Collection',
-    date: 'September 28, 2023',
-    total: '$310.00',
-    status: 'Delivered',
-    statusColor: 'bg-green-600',
-    statusTextColor: 'text-green-700',
-    pulse: false,
-    action: 'View Details',
-    actionIcon: 'arrow_forward',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDD-sj9wSTBOhIRWRSZwvDQGA1w5DP4Tv-tRto6QqOBiIqtGcJyiH9H9ZD_6F5Fiiwk1YVv8YhlVqawArGnsqAiONFPklD1LVKd7KQI7FRtB3wMHu7LGjD5qczsGMvr2pcoI7txbXPP9YRllmdLaoQX4A8oKgy2WuJNb4hZx3oKwZzsEFtDglnPRc1xGRGUg60cSeCIoqd1rOyTR0S46NKilALSd-kxMsyxjyaWQ3rJMw0tA8O0vznfpFzd0ivYDNdiGmbXVt37gqo',
-  },
-];
+const statusStyle = (status) => {
+  switch (status) {
+    case 'delivered':   return { color: 'bg-green-600', text: 'text-green-700', pulse: false };
+    case 'processing':  return { color: 'bg-primary',   text: 'text-primary',   pulse: true  };
+    case 'pending':     return { color: 'bg-yellow-500', text: 'text-yellow-700', pulse: false };
+    case 'cancelled':   return { color: 'bg-red-500',   text: 'text-red-700',   pulse: false };
+    default:            return { color: 'bg-outline',   text: 'text-outline',   pulse: false };
+  }
+};
 
 const OrderHistoryPage = () => {
   const [activeTab, setActiveTab] = useState('All Orders');
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { cartCount } = useCart();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    getOrders()
+      .then((res) => setOrders(res.data))
+      .catch(() => setOrders([]))
+      .finally(() => setLoading(false));
+  }, []);
 
   const filtered = orders.filter((o) => {
     if (activeTab === 'All Orders') return true;
-    if (activeTab === 'In Transit') return o.status === 'In Transit';
-    if (activeTab === 'Completed') return o.status === 'Delivered';
+    if (activeTab === 'In Transit') return o.status === 'processing';
+    if (activeTab === 'Completed')  return o.status === 'delivered';
     return false;
   });
 
@@ -119,44 +98,56 @@ const OrderHistoryPage = () => {
 
         {/* Orders List */}
         <div className="space-y-8">
-          {filtered.length === 0 ? (
+          {loading ? (
+            <div className="py-24 text-center text-on-surface-variant font-light">Loading orders...</div>
+          ) : filtered.length === 0 ? (
             <div className="py-24 text-center text-on-surface-variant font-light">No orders in this category.</div>
           ) : (
-            filtered.map((order) => (
-              <div
-                key={order.id}
-                className="group relative bg-surface-container-low rounded-lg p-6 md:p-8 shadow-[0_20px_40px_rgba(86,66,61,0.06)] transition-all hover:bg-surface-container-lowest"
-              >
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                  <div className="flex items-start gap-6">
-                    <div className="w-24 h-32 bg-surface-container-highest rounded flex-shrink-0 overflow-hidden">
-                      <img className="w-full h-full object-cover" alt={order.title} src={order.image} />
-                    </div>
-                    <div className="flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-sm font-semibold tracking-wide text-outline mb-1 uppercase">Order #{order.id}</h3>
-                        <p className="text-xl font-bold text-on-surface mb-2 tracking-tight">{order.title}</p>
-                        <p className="text-sm text-on-surface-variant">Placed on {order.date}</p>
+            filtered.map((order) => {
+              const { color, text, pulse } = statusStyle(order.status);
+              const firstImage = order.items?.[0]?.product?.images?.[0];
+              const itemNames = order.items?.map((i) => i.product?.name).filter(Boolean).join(', ');
+              return (
+                <div
+                  key={order._id}
+                  className="group relative bg-surface-container-low rounded-lg p-6 md:p-8 shadow-[0_20px_40px_rgba(86,66,61,0.06)] transition-all hover:bg-surface-container-lowest"
+                >
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div className="flex items-start gap-6">
+                      {firstImage && (
+                        <div className="w-24 h-32 bg-surface-container-highest rounded flex-shrink-0 overflow-hidden">
+                          <img className="w-full h-full object-cover" alt="Order item" src={firstImage} />
+                        </div>
+                      )}
+                      <div className="flex flex-col justify-between">
+                        <div>
+                          <h3 className="text-sm font-semibold tracking-wide text-outline mb-1 uppercase">Order #{order._id.slice(-8).toUpperCase()}</h3>
+                          <p className="text-xl font-bold text-on-surface mb-2 tracking-tight">{itemNames || 'Order'}</p>
+                          <p className="text-sm text-on-surface-variant">Placed on {new Date(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                        </div>
+                        <div className="mt-4 flex items-center gap-2">
+                          <span className={`w-2 h-2 rounded-full ${color} ${pulse ? 'animate-pulse' : ''}`}></span>
+                          <span className={`text-xs font-bold uppercase tracking-wider ${text}`}>{order.status}</span>
+                        </div>
                       </div>
-                      <div className="mt-4 flex items-center gap-2">
-                        <span className={`w-2 h-2 rounded-full ${order.statusColor} ${order.pulse ? 'animate-pulse' : ''}`}></span>
-                        <span className={`text-xs font-bold uppercase tracking-wider ${order.statusTextColor}`}>{order.status}</span>
+                    </div>
+                    <div className="flex flex-col md:items-end justify-between gap-4">
+                      <div className="text-right">
+                        <span className="text-xs text-on-surface-variant block mb-1">Total Amount</span>
+                        <span className="text-2xl font-extrabold text-on-surface">${order.total.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                       </div>
+                      <button
+                        onClick={() => navigate(`/orders/${order._id}`)}
+                        className="px-6 py-3 bg-gradient-to-br from-primary to-primary-container text-white text-sm font-semibold tracking-tight rounded hover:opacity-90 transition-all flex items-center gap-2"
+                      >
+                        View Details
+                        <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                      </button>
                     </div>
-                  </div>
-                  <div className="flex flex-col md:items-end justify-between gap-4">
-                    <div className="text-right">
-                      <span className="text-xs text-on-surface-variant block mb-1">Total Amount</span>
-                      <span className="text-2xl font-extrabold text-on-surface">{order.total}</span>
-                    </div>
-                    <button className="px-6 py-3 bg-gradient-to-br from-primary to-primary-container text-white text-sm font-semibold tracking-tight rounded hover:opacity-90 transition-all flex items-center gap-2">
-                      {order.action}
-                      <span className="material-symbols-outlined text-sm">{order.actionIcon}</span>
-                    </button>
                   </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
 

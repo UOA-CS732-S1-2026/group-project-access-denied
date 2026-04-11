@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { login as loginService } from '../services/auth.service';
+import { login as loginService } from '../api/auth.api';
 import { heroImage } from '../assets/images';
 
 const LoginPage = () => {
