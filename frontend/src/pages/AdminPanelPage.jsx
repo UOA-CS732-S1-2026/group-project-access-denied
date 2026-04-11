@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
-import initialProducts from '../data/products.json';
+import { getProducts } from '../api/product.api';
 
 const STATS = [
   { icon: 'payments',     label: 'Total Revenue',    value: '$124,592.00', badge: '+12.5%', badgeColor: 'text-tertiary bg-tertiary/10' },
@@ -36,7 +36,11 @@ const AdminPanelPage = () => {
   const { user } = useAuth();
   const { cartCount } = useCart();
   const [activeNav, setActiveNav]   = useState('products');
-  const [products, setProducts]     = useState(initialProducts);
+  const [products, setProducts]     = useState([]);
+
+  useEffect(() => {
+    getProducts().then((res) => setProducts(res.data)).catch(() => {});
+  }, []);
   const [search, setSearch]         = useState('');
   const [page, setPage]             = useState(1);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -48,22 +52,20 @@ const AdminPanelPage = () => {
 
   const filtered = products.filter((p) =>
     p.name.toLowerCase().includes(search.toLowerCase()) ||
-    p.category.toLowerCase().includes(search.toLowerCase()) ||
-    p.brand.toLowerCase().includes(search.toLowerCase())
+    p.category.toLowerCase().includes(search.toLowerCase())
   );
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const paginated  = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const handleDelete = (id) => {
-    setProducts((prev) => prev.filter((p) => p.id !== id));
+    setProducts((prev) => prev.filter((p) => p._id !== id));
     setPage(1);
   };
 
   const handleAddProduct = (e) => {
     e.preventDefault();
-    const id = Math.max(...products.map((p) => p.id), 0) + 1;
-    setProducts((prev) => [...prev, { ...newProduct, id, price: Number(newProduct.price) }]);
-    setNewProduct({ name: '', brand: '', category: 'Clothes', price: '', image: '', isNew: false, featured: false });
+    setProducts((prev) => [...prev, { ...newProduct, _id: Date.now().toString(), price: Number(newProduct.price) }]);
+    setNewProduct({ name: '', category: 'clothing', price: '', image: '', isNew: false, featured: false });
     setShowAddModal(false);
   };
 
@@ -204,7 +206,7 @@ const AdminPanelPage = () => {
                     paginated.map((product) => {
                       const stock = stockLevel(product.price);
                       return (
-                        <tr key={product.id} className="hover:bg-surface-container-low/30 transition-colors group">
+                        <tr key={product._id} className="hover:bg-surface-container-low/30 transition-colors group">
                           <td className="px-6 py-4">
                             <div className="w-16 h-20 bg-surface-container rounded overflow-hidden">
                               <img className="w-full h-full object-cover" alt={product.name} src={product.images[0]} />
@@ -234,7 +236,7 @@ const AdminPanelPage = () => {
                                 <span className="material-symbols-outlined text-lg">edit</span>
                               </button>
                               <button
-                                onClick={() => handleDelete(product.id)}
+                                onClick={() => handleDelete(product._id)}
                                 className="p-2 text-outline hover:text-error hover:bg-error/5 rounded-lg transition-all"
                               >
                                 <span className="material-symbols-outlined text-lg">delete</span>

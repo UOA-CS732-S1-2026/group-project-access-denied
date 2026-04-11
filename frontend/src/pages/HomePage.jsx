@@ -1,24 +1,30 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import {
-  heroImage,
   categoryWomen,
   categoryMen,
   categoryAccessories,
   brandStory,
 } from '../assets/images';
-import allProducts from '../data/products.json';
-
-const featuredProducts = allProducts.filter((p) => p.featured);
+import { getProducts } from '../api/product.api';
 
 const HomePage = () => {
   const { cartCount } = useCart();
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+
+  useEffect(() => {
+    getProducts()
+      .then((res) => setFeaturedProducts(res.data.filter((p) => p.featured)))
+      .catch(() => setFeaturedProducts([]));
+  }, []);
+
   return (
     <div className="bg-surface text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
 
       {/* TopAppBar */}
       <header className="fixed top-0 w-full z-50 bg-[#fcf9f8]/80 dark:bg-[#1c1b1b]/80 backdrop-blur-md">
-        <nav className="flex justify-between items-center px-8 py-4 max-w-full mx-auto">
+        <nav className="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
           <div className="text-2xl font-bold tracking-tighter text-[#1c1b1b] dark:text-[#fcf9f8]">ATELIER</div>
           <div className="hidden md:flex items-center space-x-10">
             <Link to="/products" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">Clothes</Link>
@@ -39,19 +45,19 @@ const HomePage = () => {
         </nav>
       </header>
 
-      <main className="pt-16">
+      <main>
 
         {/* Hero Section */}
-        <section className="relative h-[921px] flex items-center overflow-hidden">
+        <section className="relative h-screen min-h-[600px] flex items-center overflow-hidden">
           <div className="absolute inset-0 z-0">
             <img
               alt="Hero"
               className="w-full h-full object-cover"
-              src={heroImage}
+              src="/hero.png"
             />
             <div className="absolute inset-0 bg-on-background/5"></div>
           </div>
-          <div className="container mx-auto px-8 relative z-10">
+          <div className="max-w-7xl mx-auto w-full relative z-10">
             <div className="max-w-2xl">
               <h1 className="text-6xl md:text-8xl font-extrabold tracking-tighter text-on-surface leading-tight mb-6">
                 ESTHÉTIQUE <br /> MODERNE
@@ -72,16 +78,16 @@ const HomePage = () => {
 
         {/* Shop by Category (Asymmetric Bento Grid) */}
         <section className="py-32 bg-surface-container-low">
-          <div className="container mx-auto px-8">
+          <div className="max-w-7xl mx-auto px-8">
             <div className="flex flex-col md:flex-row justify-between items-end mb-16">
               <div>
                 <span className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-4 block">Categories</span>
                 <h2 className="text-4xl font-bold tracking-tight text-on-surface">Curated Collections</h2>
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 h-[700px]">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
               {/* Women */}
-              <div className="md:col-span-7 relative group overflow-hidden rounded-xl">
+              <div className="md:col-span-7 relative group overflow-hidden rounded-xl h-[50vh]">
                 <img
                   alt="Women"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -95,8 +101,8 @@ const HomePage = () => {
                 </div>
               </div>
               {/* Men & Accessories Column */}
-              <div className="md:col-span-5 grid grid-rows-2 gap-8">
-                <div className="relative group overflow-hidden rounded-xl">
+              <div className="md:col-span-5 grid grid-rows-2 gap-8 h-[50vh]">
+                <div className="relative group overflow-hidden rounded-xl h-full">
                   <img
                     alt="Men"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -108,7 +114,7 @@ const HomePage = () => {
                     <p className="text-xs tracking-widest uppercase opacity-80">Tailored Precision</p>
                   </div>
                 </div>
-                <div className="relative group overflow-hidden rounded-xl">
+                <div className="relative group overflow-hidden rounded-xl h-full">
                   <img
                     alt="Accessories"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -126,15 +132,15 @@ const HomePage = () => {
         </section>
 
         {/* Featured Products (No Divider Grid) */}
-        <section className="py-32 bg-surface" id="new-arrivals">
-          <div className="container mx-auto px-8">
-            <div className="text-center mb-24">
+        <section className="py-16 md:py-24 bg-surface relative z-10" id="new-arrivals">
+          <div className="max-w-7xl mx-auto px-8">
+            <div className="text-center mb-12 md:mb-16">
               <span className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-4 block">New Arrivals</span>
-              <h2 className="text-5xl font-bold tracking-tighter text-on-surface">The Seasonal Edit</h2>
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-on-surface">The Seasonal Edit</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-x-8 gap-y-20">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
               {featuredProducts.map((product) => (
-                <Link key={product.id} to={`/products/${product.id}`} className="group block">
+                <Link key={product._id} to={`/products/${product._id}`} className="group block">
                   <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden mb-6 rounded-lg relative">
                     <img
                       alt={product.name}
@@ -156,13 +162,13 @@ const HomePage = () => {
 
         {/* Brand Story (Asymmetric Layout) */}
         <section className="py-32 bg-surface-container-low overflow-hidden">
-          <div className="container mx-auto px-8">
+          <div className="max-w-7xl mx-auto px-8">
             <div className="flex flex-col md:flex-row items-center gap-20">
               <div className="md:w-1/2 relative">
                 <div className="relative z-10 rounded-xl overflow-hidden shadow-ambient transform -rotate-2">
                   <img
                     alt="Brand Story"
-                    className="w-full h-[600px] object-cover"
+                    className="w-full h-[40vh] md:h-[55vh] object-cover"
                     src={brandStory}
                   />
                 </div>
