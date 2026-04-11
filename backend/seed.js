@@ -293,7 +293,7 @@ async function seed() {
     admin = await User.create({
       username: 'admin',
       email: 'admin@threadvault.com',
-      password: 'admin',          // CTF: intentional vulnerability — default-credentials
+      password: 'admin1',         // CTF: intentional vulnerability — default-credentials
       role: 'admin',
       securityQuestion: 'What is your pet\'s name?',
       securityAnswer: 'biscuit',  // CTF: discoverable via fictional social profile (Flag #9)

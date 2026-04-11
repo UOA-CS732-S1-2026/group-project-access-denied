@@ -1,40 +1,38 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import products from '../data/products.json';
-import {
-  detailGallery1,
-  detailGallery2,
-  detailGallery3,
-  relatedCashmere,
-  relatedDenim,
-  relatedChelseaBoot,
-  relatedBelt,
-} from '../assets/images';
-
-const galleries = [detailGallery1, detailGallery2, detailGallery3];
-
-const relatedItems = [
-  { id: 'r1', name: 'Cashmere Roll Neck', price: 380, image: relatedCashmere },
-  { id: 'r2', name: 'Raw Selvedge Denim', price: 260, image: relatedDenim },
-  { id: 'r3', name: 'City Chelsea Boot',  price: 540, image: relatedChelseaBoot },
-  { id: 'r4', name: 'Heritage Leather Belt', price: 145, image: relatedBelt },
-];
-
-const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-const unavailableSizes = ['XL'];
+import { getProduct } from '../api/product.api';
 
 const ProductDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart, cartCount } = useCart();
-  const [selectedSize, setSelectedSize] = useState('M');
-  const product = products.find((p) => String(p.id) === String(id));
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedSize, setSelectedSize] = useState('');
+
+  useEffect(() => {
+    getProduct(id)
+      .then((res) => {
+        setProduct(res.data);
+        setSelectedSize(res.data.sizes?.[0] || '');
+      })
+      .catch(() => setProduct(null))
+      .finally(() => setLoading(false));
+  }, [id]);
 
   const handleAddToCart = () => {
     addToCart(product, { size: selectedSize });
     navigate('/cart');
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-surface flex items-center justify-center">
+        <p className="text-on-surface-variant">Loading...</p>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -93,8 +91,8 @@ const ProductDetailsPage = () => {
             <div className="flex flex-col-reverse md:flex-row gap-4">
               {/* Thumbnails */}
               <div className="flex md:flex-col gap-4 overflow-x-auto no-scrollbar md:w-24 shrink-0">
-                {galleries.map((src, i) => (
-                  <div key={i} className={`aspect-[3/4] w-20 md:w-full bg-surface-container-highest cursor-pointer hover:opacity-80 transition-opacity ${i === 2 ? 'ring-1 ring-primary/30' : ''}`}>
+                {product.images.map((src, i) => (
+                  <div key={i} className={`aspect-[3/4] w-20 md:w-full bg-surface-container-highest cursor-pointer hover:opacity-80 transition-opacity ${i === 0 ? 'ring-1 ring-primary/30' : ''}`}>
                     <img className="w-full h-full object-cover" alt={`${product.name} view ${i + 1}`} src={src} />
                   </div>
                 ))}
@@ -155,18 +153,15 @@ const ProductDetailsPage = () => {
                 <button className="text-[10px] uppercase font-bold tracking-widest text-outline hover:text-primary transition-colors underline underline-offset-4">Size Guide</button>
               </div>
               <div className="grid grid-cols-4 gap-2">
-                {sizes.map((size) => (
+                {product.sizes.map((size) => (
                   <button
                     key={size}
-                    onClick={() => !unavailableSizes.includes(size) && setSelectedSize(size)}
+                    onClick={() => setSelectedSize(size)}
                     className={`py-3 text-sm border transition-colors ${
-                      unavailableSizes.includes(size)
-                        ? 'border-outline-variant/30 text-outline-variant cursor-not-allowed'
-                        : size === selectedSize
+                      size === selectedSize
                         ? 'border-primary bg-surface-container-low font-semibold'
                         : 'border-outline-variant/30 hover:border-primary'
                     }`}
-                    disabled={unavailableSizes.includes(size)}
                   >
                     {size}
                   </button>
@@ -316,18 +311,6 @@ const ProductDetailsPage = () => {
           <div className="flex justify-between items-end mb-12">
             <h2 className="text-3xl font-bold tracking-tighter text-on-surface">You May Also Like</h2>
             <Link to="/products" className="text-xs font-bold tracking-widest uppercase text-outline hover:text-primary transition-colors underline underline-offset-8">View Collection</Link>
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
-            {relatedItems.map((item) => (
-              <div key={item.id} className="group">
-                <div className="aspect-[3/4] bg-surface-container-low overflow-hidden mb-6 relative">
-                  <img className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={item.name} src={item.image} />
-                  <button className="absolute bottom-4 left-4 right-4 bg-surface/90 backdrop-blur-md py-3 text-[10px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">Quick Add</button>
-                </div>
-                <h3 className="text-sm font-bold text-on-surface mb-1">{item.name}</h3>
-                <p className="text-sm text-outline">${item.price}.00</p>
-              </div>
-            ))}
           </div>
         </section>
 
