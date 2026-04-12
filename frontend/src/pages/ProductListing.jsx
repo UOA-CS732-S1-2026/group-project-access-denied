@@ -1,9 +1,20 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import products from '../data/products.json';
+import { getProducts } from '../api/product.api';
 import { useCart } from '../context/CartContext';
 
 const ProductListing = () => {
   const { cartCount } = useCart();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getProducts()
+      .then((res) => setProducts(res.data))
+      .catch(() => setProducts([]))
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <div className="bg-surface text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
 
@@ -106,8 +117,10 @@ const ProductListing = () => {
           {/* Product Grid */}
           <div className="flex-grow">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-16 gap-x-8">
-              {products.map((product) => (
-                <Link key={product.id} to={`/products/${product.id}`} className="group relative block">
+              {loading ? (
+                <p className="text-on-surface-variant col-span-3 text-center py-24">Loading products...</p>
+              ) : products.map((product) => (
+                <Link key={product._id} to={`/products/${product._id}`} className="group relative block">
                   <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden relative">
                     <img
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -138,12 +151,14 @@ const ProductListing = () => {
             </div>
 
             {/* Load More */}
+            {!loading && (
             <div className="mt-24 text-center">
               <button className="px-12 py-4 bg-surface border border-outline-variant hover:border-primary text-xs font-bold uppercase tracking-[0.3em] transition-all duration-300 text-on-surface">
                 View More Arrivals
               </button>
-              <p className="mt-4 text-xs text-on-surface-variant/40 tracking-wider">Showing {products.length} of 124 items</p>
+              <p className="mt-4 text-xs text-on-surface-variant/40 tracking-wider">Showing {products.length} items</p>
             </div>
+            )}
           </div>
 
         </div>

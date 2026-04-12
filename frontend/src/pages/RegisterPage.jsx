@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { register as registerService } from '../services/auth.service';
-import { heroImage } from '../assets/images';
+import { register as registerService } from '../api/auth.api.js';
+import { heroImage } from '../assets/images.js';
 
 const SECURITY_QUESTIONS = [
   "What is the name of your first pet?",

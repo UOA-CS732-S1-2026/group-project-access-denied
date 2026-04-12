@@ -73,52 +73,50 @@ npm run lint     # ESLint (max-warnings: 0 — zero warnings allowed)
 npm run preview  # Preview production build locally
 ```
 
+### Full Stack with Docker
+
+```bash
+docker compose up --build   # MongoDB + backend (:5000) + frontend (:5173)
+```
+
+### MongoDB only (local dev)
+
+```bash
+docker run -d -p 27017:27017 --name ctf-mongo mongo:7
+docker start ctf-mongo      # subsequent starts
+```
+
 ## Environment Setup
 
-**Backend** — copy `backend/.env.example` to `backend/.env` and set:
-- `JWT_SECRET` — any random string
-- `MONGO_URI` — MongoDB Atlas connection string (see team shared credentials)
-- `PORT` — defaults to 5001
-- `CLIENT_URL` — defaults to `http://localhost:3000` for CORS
+**Backend** — copy `backend/.env.example` to `backend/.env` and set at minimum:
 
-**Frontend** — create `frontend/.env`:
-- `VITE_API_URL=http://localhost:5001/api`
+- `JWT_SECRET` — any random string
+- `MONGO_URI` — defaults to `mongodb://localhost:27017/access-denied`
+- `PORT` — defaults to 5001 (macOS reserves 5000 for AirPlay)
+- `CLIENT_URL` — defaults to `http://localhost:5173` for CORS
+
+**Frontend** — optionally create `frontend/.env`:
+
+- `VITE_API_URL=http://localhost:5001/api` — if not set, code falls back to port
+  5000
 
 ## Architecture
-
-### Deployment
-
-- **One Fly.io machine** runs both the Express backend and serves the React static build. No separate frontend host.
-- **Ports**: backend `:5001`, frontend `:3000` — locked in code, do not change.
-
-### Database
-
-- **MongoDB Atlas M0** (free tier, 512MB). Each player gets their own isolated database named `threadVault_{userId}`, created and seeded automatically on login.
-- **Session lifetime**: JWT expires after 2 hours. On expiry the player's database is dropped by a server-side cron job. No persistence — session gone, data gone. No refresh tokens.
-- **Seed runs on login** — if the database doesn't exist yet, the seed script runs automatically. This populates all the data the flags depend on.
-- **Per-player database contains**: admin account, victim user "alice" (with the IDOR-flagged order), full product inventory, seeded reviews (with admin username visible for SQL injection discovery), and all 14 challenge definitions.
-- **Rate limiting** on write endpoints (reviews, orders) to prevent Atlas storage spam.
-- **Scoreboard**: personal progress only, not persisted across sessions.
-- **Atlas headroom**: 5 collections × ~80 concurrent users ≈ 400 collections, under the 500 collection limit.
-
-### Seed
-
-A `seed/` directory contains JSON fixtures. The seed runs automatically on login if the player's database doesn't exist. All flags depend on this seeded data — alice's flagged order, the admin credentials, the vulnerable reviews are all pre-populated here. Do not modify seed fixtures without checking flag dependencies.
 
 ### Stack
 
 - **Frontend**: React 18 + Vite, React Router v7, Axios, Tailwind CSS
-- **Backend**: Node.js + Express 4, Mongoose 8, JWT auth, bcryptjs, Helmet, Winston
-- **Database**: MongoDB Atlas (free M0 tier)
+- **Backend**: Node.js + Express 4, Mongoose 8, JWT auth, bcryptjs, Helmet,
+  Winston
+- **Database**: MongoDB 7
 
 ### Auth Flow
 
-1. Login → backend hashes password (bcryptjs, 12 rounds) → creates player database → runs seed → returns JWT (2 hour expiry)
+1. Register/login → backend hashes password (bcryptjs, 12 rounds) → returns JWT
 2. Frontend stores JWT in `localStorage` → `AuthContext` updates global state
-3. Axios interceptor auto-attaches `Authorization: Bearer <token>` to all requests
+3. Axios interceptor auto-attaches `Authorization: Bearer <token>` to all
+   requests
 4. Backend `protect` middleware verifies JWT → attaches `req.user`
 5. `adminOnly` middleware gates challenge CRUD to `req.user.role === 'admin'`
-6. On JWT expiry — session dead, player logs in again and gets a fresh database. No refresh tokens.
 
 ### Key Design Decisions
 

@@ -4,6 +4,7 @@ import { CartProvider } from './context/CartContext';
 import ShoppingCartPage from './pages/ShoppingCartPage';
 import ProfilePage         from './pages/ProfilePage';
 import OrderHistoryPage   from './pages/OrderHistoryPage';
+import OrderDetailPage    from './pages/OrderDetailPage';
 import CheckoutPage       from './pages/CheckoutPage';
 import AdminPanelPage    from './pages/AdminPanelPage';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="/cart"         element={<ShoppingCartPage />} />
           <Route path="/account"      element={<ProfilePage />} />
           <Route path="/orders"       element={<OrderHistoryPage />} />
+          <Route path="/orders/:id"   element={<OrderDetailPage />} />
           <Route path="/checkout"     element={<CheckoutPage />} />
           <Route path="/admin"        element={<AdminPanelPage />} />
           <Route path="/login"    element={<LoginPage />} />

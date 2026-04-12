@@ -14,7 +14,7 @@ const challengeSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-      enum: ['sql-injection', 'xss', 'auth-bypass', 'exposed-files', 'insecure-api', 'default-credentials', 'other'],
+      enum: ['sql-injection', 'xss', 'auth-bypass', 'exposed-files', 'insecure-api', 'default-credentials', 'prompt-injection', 'logic-flaw', 'other'],
     },
     difficulty: {
       type: String,

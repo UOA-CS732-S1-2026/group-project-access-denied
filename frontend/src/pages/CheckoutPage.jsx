@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { createOrder } from '../api/order.api';
 
 const STEPS = ['Shipping', 'Delivery', 'Payment'];
 
 const CheckoutPage = () => {
-  const { cart, cartTotal, cartCount } = useCart();
+  const { cart, cartTotal, cartCount, clearCart } = useCart();
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     firstName: '', lastName: '', email: '', phone: '',
     address: '', city: '', state: '', zip: '', country: 'United States',
@@ -20,9 +22,33 @@ const CheckoutPage = () => {
 
   const handleChange = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  const handlePlaceOrder = (e) => {
+  const handlePlaceOrder = async (e) => {
     e.preventDefault();
-    navigate('/orders');
+    setSubmitting(true);
+    try {
+      await createOrder({
+        items: cart.map((item) => ({
+          product: item.product._id,
+          size: item.size,
+          quantity: item.qty,
+          priceAtPurchase: item.product.price,
+        })),
+        total,
+        shippingAddress: {
+          fullName: `${form.firstName} ${form.lastName}`,
+          street: form.address,
+          city: form.city,
+          postcode: form.zip,
+          country: form.country,
+        },
+      });
+      clearCart();
+      navigate('/orders');
+    } catch (err) {
+      console.error('Order failed:', err);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const inputClass = 'w-full bg-transparent border-b border-outline-variant/30 py-3 text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-on-surface-variant/40';
@@ -213,9 +239,10 @@ const CheckoutPage = () => {
                 ) : (
                   <button
                     type="submit"
-                    className="flex-1 py-4 bg-gradient-to-br from-primary to-primary-container text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity active:scale-[0.98]"
+                    disabled={submitting}
+                    className="flex-1 py-4 bg-gradient-to-br from-primary to-primary-container text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity active:scale-[0.98] disabled:opacity-60"
                   >
-                    Place Order — ${total.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    {submitting ? 'Placing Order...' : `Place Order — $${total.toLocaleString('en-US', { minimumFractionDigits: 2 })}`}
                   </button>
                 )}
               </div>
