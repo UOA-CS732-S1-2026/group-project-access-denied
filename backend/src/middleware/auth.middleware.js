@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { getDb } = require('../config/db');
 
 /**
  * Middleware to protect routes — verifies the JWT from the Authorization header.
@@ -14,7 +15,8 @@ const protect = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // { id, username, role }
+    req.user = decoded; // { id, username, role, dbName }
+    req.db = getDb(decoded.dbName);
     next();
   } catch {
     return res.status(401).json({ message: 'Not authorised, token invalid or expired' });

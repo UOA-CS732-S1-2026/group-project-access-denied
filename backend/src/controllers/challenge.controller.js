@@ -1,9 +1,10 @@
-const Challenge = require('../models/challenge.model');
+const challengeSchema = require('../models/challenge.model').schema;
 
 // GET /api/challenges
 const getChallenges = async (req, res, next) => {
   try {
-    const challenges = await Challenge.find({ isActive: true }).select('-flag');
+    const ChallengeModel = req.db.model('Challenge', challengeSchema);
+    const challenges = await ChallengeModel.find({ isActive: true }).select('-flag');
     res.json(challenges);
   } catch (err) {
     next(err);
@@ -13,7 +14,8 @@ const getChallenges = async (req, res, next) => {
 // GET /api/challenges/:id
 const getChallenge = async (req, res, next) => {
   try {
-    const challenge = await Challenge.findById(req.params.id).select('-flag');
+    const ChallengeModel = req.db.model('Challenge', challengeSchema);
+    const challenge = await ChallengeModel.findById(req.params.id).select('-flag');
     if (!challenge) return res.status(404).json({ message: 'Challenge not found' });
     res.json(challenge);
   } catch (err) {
@@ -24,7 +26,8 @@ const getChallenge = async (req, res, next) => {
 // POST /api/challenges  (admin only)
 const createChallenge = async (req, res, next) => {
   try {
-    const challenge = await Challenge.create(req.body);
+    const ChallengeModel = req.db.model('Challenge', challengeSchema);
+    const challenge = await ChallengeModel.create(req.body);
     res.status(201).json(challenge);
   } catch (err) {
     next(err);
@@ -34,7 +37,8 @@ const createChallenge = async (req, res, next) => {
 // PUT /api/challenges/:id  (admin only)
 const updateChallenge = async (req, res, next) => {
   try {
-    const challenge = await Challenge.findByIdAndUpdate(req.params.id, req.body, {
+    const ChallengeModel = req.db.model('Challenge', challengeSchema);
+    const challenge = await ChallengeModel.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
@@ -48,7 +52,8 @@ const updateChallenge = async (req, res, next) => {
 // DELETE /api/challenges/:id  (admin only)
 const deleteChallenge = async (req, res, next) => {
   try {
-    const challenge = await Challenge.findByIdAndDelete(req.params.id);
+    const ChallengeModel = req.db.model('Challenge', challengeSchema);
+    const challenge = await ChallengeModel.findByIdAndDelete(req.params.id);
     if (!challenge) return res.status(404).json({ message: 'Challenge not found' });
     res.json({ message: 'Challenge deleted' });
   } catch (err) {
