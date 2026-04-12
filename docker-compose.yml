@@ -12,6 +12,12 @@ services:
       - mongo-data:/data/db
     networks:
       - ctf-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   # ── Backend (Node/Express) ───────────────────────────────────────────────────
   backend:
@@ -29,7 +35,8 @@ services:
       JWT_EXPIRES_IN: 7d
       CLIENT_URL: http://localhost:5173
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
     volumes:
       - ./backend:/app
       - /app/node_modules
