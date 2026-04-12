@@ -24,22 +24,20 @@ const App = () => {
       <AuthProvider>
         <Routes>
           {/* Public routes */}
-          <Route path="/"         element={<HomePage />} />
-          <Route path="/products"     element={<ProductListing />} />
-          <Route path="/products/:id" element={<ProductDetailsPage />} />
-          <Route path="/cart"         element={<ShoppingCartPage />} />
-          <Route path="/account"      element={<ProfilePage />} />
-          <Route path="/orders"       element={<OrderHistoryPage />} />
-          <Route path="/orders/:id"   element={<OrderDetailPage />} />
-          <Route path="/checkout"     element={<CheckoutPage />} />
-          <Route path="/admin"        element={<AdminPanelPage />} />
           <Route path="/login"    element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
           {/* Protected routes — require login */}
-          <Route path="/challenges" element={
-            <ProtectedRoute><ChallengePage /></ProtectedRoute>
-          } />
+          <Route path="/"             element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+          <Route path="/products"     element={<ProtectedRoute><ProductListing /></ProtectedRoute>} />
+          <Route path="/products/:id" element={<ProtectedRoute><ProductDetailsPage /></ProtectedRoute>} />
+          <Route path="/cart"         element={<ProtectedRoute><ShoppingCartPage /></ProtectedRoute>} />
+          <Route path="/account"      element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+          <Route path="/orders"       element={<ProtectedRoute><OrderHistoryPage /></ProtectedRoute>} />
+          <Route path="/orders/:id"   element={<ProtectedRoute><OrderDetailPage /></ProtectedRoute>} />
+          <Route path="/checkout"     element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
+          <Route path="/admin"        element={<ProtectedRoute><AdminPanelPage /></ProtectedRoute>} />
+          <Route path="/challenges"   element={<ProtectedRoute><ChallengePage /></ProtectedRoute>} />
 
           {/* 404 */}
           <Route path="*" element={<NotFoundPage />} />
