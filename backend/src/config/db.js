@@ -11,4 +11,6 @@ const connectDB = async () => {
   }
 };
 
-module.exports = connectDB;
+const getDb = (dbName) => mongoose.connection.useDb(dbName, { useCache: true });
+
+module.exports = {connectDB,getDb};

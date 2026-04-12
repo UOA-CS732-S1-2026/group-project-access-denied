@@ -1,32 +1,34 @@
-const Challenge = require('../models/challenge.model');
-const User = require('../models/user.model');
-const Submission = require('../models/submission.model');
+const challengeSchema  = require('../models/challenge.model').schema;
+const userSchema       = require('../models/user.model').schema;
+const submissionSchema = require('../models/submission.model').schema;
 
 // POST /api/flags/submit
 const submitFlag = async (req, res, next) => {
   try {
+    const ChallengeModel  = req.db.model('Challenge', challengeSchema);
+    const UserModel       = req.db.model('User', userSchema);
+    const SubmissionModel = req.db.model('Submission', submissionSchema);
+
     const { challengeId, flag } = req.body;
 
     if (!challengeId || !flag) {
       return res.status(400).json({ message: 'challengeId and flag are required' });
     }
 
-    const challenge = await Challenge.findById(challengeId).select('+flag');
+    const challenge = await ChallengeModel.findById(challengeId).select('+flag');
     if (!challenge || !challenge.isActive) {
       return res.status(404).json({ message: 'Challenge not found' });
     }
 
-    const user = await User.findById(req.user.id);
+    const user = await UserModel.findById(req.user.id);
 
-    // Check if already solved
     if (user.solvedChallenges.includes(challengeId)) {
       return res.status(400).json({ message: 'You have already solved this challenge' });
     }
 
     const isCorrect = flag.trim() === challenge.flag.trim();
 
-    // Record the submission
-    await Submission.create({
+    await SubmissionModel.create({
       user: user._id,
       challenge: challenge._id,
       submittedFlag: flag,
@@ -38,12 +40,10 @@ const submitFlag = async (req, res, next) => {
       return res.status(200).json({ correct: false, message: 'Incorrect flag, try again!' });
     }
 
-    // Update user score and solved list
     user.solvedChallenges.push(challenge._id);
     user.totalScore += challenge.points;
     await user.save();
 
-    // Increment challenge solve count
     challenge.solveCount += 1;
     await challenge.save();
 
