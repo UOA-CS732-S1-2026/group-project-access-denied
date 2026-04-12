@@ -99,6 +99,7 @@ const login = async (req, res, next) => {
     const dbName = sanitiseDbName(user.username);
     const db = getDb(dbName);
 
+
     // If Atlas trigger already dropped the game db, reseed it on login
     const userCount = await db.collection("users").countDocuments();
     if (userCount === 0) {
@@ -128,11 +129,8 @@ const login = async (req, res, next) => {
 // ─── GET /api/auth/me ─────────────────────────────────────────────────────────
 const getMe = async (req, res, next) => {
   try {
-    const UserModel = req.db.model("User", userSchema);
-    const user = await UserModel.findById(req.user.id).populate(
-      "solvedChallenges",
-      "title category points",
-    );
+    // User lives in global_registry, not the game database
+    const user = await GlobalUser.findById(req.user.id);
     if (!user) return res.status(404).json({ message: "User not found" });
     res.json(user);
   } catch (err) {
