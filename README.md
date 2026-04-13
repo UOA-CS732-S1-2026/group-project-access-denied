@@ -3,11 +3,6 @@
 > A hands-on Capture the Flag platform where the entire website is the challenge.  
 > Built with the MERN stack (MongoDB, Express, React, Node.js).
 
-<<<<<<< HEAD
-=======
-> **Ports:** Backend runs on `5001`, frontend on `3000`. These are locked in code — do not change them.
-
->>>>>>> main
 **Team members:**
 - Ryan Gin _(rgin216@aucklanduni.ac.nz)_
 - Soham Kulkarni _(skul970@aucklanduni.ac.nz)_
