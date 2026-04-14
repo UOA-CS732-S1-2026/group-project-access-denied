@@ -72,7 +72,7 @@ const PRODUCTS = [
     name: 'Tailored Linen Trouser',
     description: 'Crisp linen trousers with a high-rise waistband and wide-leg cut for an elevated casual look.',
     price: 340, category: 'clothing', sizes: ['XS', 'S', 'M', 'L', 'XL'],
-    images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuBOBxQThs5RXnku0C_9qWRWws__PDFbuTSsLRGXzT7YPmWGORUuLy8w1jNoNpoA9TeFuvifggMLrQ0u1lTdZfX83MbXA-3gYx-eetTO5z0VVOPVpsdyhBc3wypDCsMxfghM1V0FJK8axOBPCRh3u1_0B6qQJcajdLVG6_3eEpmk0m7mQb7w-1wNhWEFqvU68cRGVB9g20pNWflAMCkWfQVFjdOvCRqyegZZ-wHNO6PLvfKB3M6n1Ci6ihgj_6S7cnm98nZcjZbkTTm2tCyHBJF4l6SgNYdSsgHxNAn-qxpl2fsJemrPZ6XkJM'],
+    images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuBOBxQThs5RXnku0C_9qWRWws__PDFbuTSsLRGXzT7YPmWGORUuLy8w1jNoNpoA9TeFuvifggMLrQ0u1lTdZfX83MbXA-3gYx-eetTO5z0VVOPVpsdyhBc3wypDCsMxfghM1V0FJK8axOBPCRh3u1_0B6qQJcajdLVG6_3eEpmk0m7mQb7w-1wNhWEFqvU68cRGVB9g20pNWflAMCkWfQVFjdOvCRqyegZZ-wHNO6KSK7BApyDEJuDlcjdbv6o5Im0MFswbGyYPQqM'],
     stock: 31, isActive: true, isNew: false, featured: false,
   },
   {
