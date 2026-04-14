@@ -1,10 +1,9 @@
-const userSchema = require('../models/user.model').schema;
+const User = require('../models/user.model');
 
 // GET /api/scoreboard
 const getScoreboard = async (req, res, next) => {
   try {
-    const UserModel = req.db.model('User', userSchema);
-    const users = await UserModel.find({ role: 'user' })
+    const users = await User.find({ role: 'user' })
       .select('username totalScore solvedChallenges')
       .sort({ totalScore: -1 })
       .limit(100);
