@@ -12,6 +12,12 @@ const reviewSchema = new mongoose.Schema(
       ref: 'Product',
       required: true,
     },
+    // Links review to a player session — null for seeded data
+    sessionId: {
+      type: String,
+      default: null,
+      index: true,
+    },
     // CTF: intentional vulnerability — xss
     // username is stored separately and rendered raw on the product page.
     // This allows XSS payloads submitted as a username to execute in other users' browsers.

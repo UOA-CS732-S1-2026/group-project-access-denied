@@ -12,6 +12,12 @@ const submissionSchema = new mongoose.Schema(
       ref: 'Challenge',
       required: true,
     },
+    // Links submission to a player session
+    sessionId: {
+      type: String,
+      default: null,
+      index: true,
+    },
     submittedFlag: {
       type: String,
       required: true,
