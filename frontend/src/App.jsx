@@ -16,6 +16,7 @@ import ChallengePage   from './pages/ChallengePage';
 import NotFoundPage    from './pages/NotFoundPage';
 import ProductListing      from './pages/ProductListing';
 import ProductDetailsPage  from './pages/ProductDetailsPage';
+import HelpBot from './components/Helpbot';
 
 const App = () => {
   return (
@@ -38,10 +39,12 @@ const App = () => {
           <Route path="/checkout"     element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
           <Route path="/admin"        element={<ProtectedRoute><AdminPanelPage /></ProtectedRoute>} />
           <Route path="/challenges"   element={<ProtectedRoute><ChallengePage /></ProtectedRoute>} />
+          
 
           {/* 404 */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
+        <HelpBot />
       </AuthProvider>
       </CartProvider>
     </BrowserRouter>
