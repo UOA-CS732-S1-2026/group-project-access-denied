@@ -29,8 +29,14 @@ export default function HelpBot() {
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [sessionId, setSessionId] = useState(null);
-  const bottomRef = useRef(null);
+  
+  const [sessionId, setSessionId] = useState(
+  () => sessionStorage.getItem('helpbot_session')
+    ? parseInt(sessionStorage.getItem('helpbot_session'))
+    : null
+);
+  
+const bottomRef = useRef(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -53,7 +59,10 @@ export default function HelpBot() {
 
       const data = await res.json();
 
-      if (data.sessionId && !sessionId) setSessionId(data.sessionId);
+      if (data.sessionId && !sessionId) {
+        setSessionId(data.sessionId);
+        sessionStorage.setItem('helpbot_session', data.sessionId);
+      }
 
       setMessages(prev => [...prev, {
         role: 'model',

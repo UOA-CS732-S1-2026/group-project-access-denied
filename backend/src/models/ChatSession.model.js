@@ -36,13 +36,4 @@ const chatSessionSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-// Auto-increment sessionId on creation
-chatSessionSchema.pre('save', async function (next) {
-  if (this.isNew) {
-    const lastSession = await this.constructor.findOne({}, {}, { sort: { sessionId: -1 } });
-    this.sessionId = lastSession ? lastSession.sessionId + 1 : 2; // Start at 2, seed takes 1
-  }
-  next();
-});
-
 module.exports = mongoose.model('ChatSession', chatSessionSchema);

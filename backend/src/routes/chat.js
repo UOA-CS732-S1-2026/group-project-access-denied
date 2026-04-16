@@ -41,11 +41,15 @@ router.post('/', async (req, res) => {
   let session = await ChatSession.findOne({ sessionId });
  
   if (!session) {
-    session = new ChatSession({
-      userId: req.user?._id || null,
-      messages: [],
-    });
-  }
+  const lastSession = await ChatSession.findOne({}, {}, { sort: { sessionId: -1 } });
+  const nextId = lastSession ? lastSession.sessionId + 1 : 2;
+
+  session = new ChatSession({
+    sessionId: nextId,
+    userId: req.user?._id || null,
+    messages: [],
+  });
+}
  
   // Append the user's message to history
   session.messages.push({ role: 'user', content: message });
@@ -57,7 +61,7 @@ router.post('/', async (req, res) => {
   }));
  
   const model = genAI.getGenerativeModel({
-    model: 'gemini-2.0-flash',
+    model: 'gemini-2.5-flash',
     systemInstruction: SYSTEM_PROMPT,
   });
  
