@@ -1,11 +1,9 @@
 const orderSchema = require('../models/order.model').schema;
 
-// GET /api/orders
-// CTF: intentional vulnerability — insecure-api (IDOR, Flag #3)
+// GET /api/orders — returns current session's orders
 const getOrders = async (req, res, next) => {
   try {
-    const OrderModel = req.db.model('Order', orderSchema);
-    const orders = await OrderModel.find({ user: req.user.id })
+    const orders = await Order.find({ sessionId: req.sessionId })
       .populate('items.product', 'name price images')
       .sort({ createdAt: -1 });
     res.json(orders);
@@ -16,13 +14,14 @@ const getOrders = async (req, res, next) => {
 
 // GET /api/orders/:id
 // CTF: intentional vulnerability — insecure-api (IDOR, Flag #3)
-// No ownership check — any authenticated user can fetch any order by ID.
+// No session check — any authenticated user can fetch any order by ID,
+// including alice's seeded order which has the flag in internalNote.
 const getOrder = async (req, res, next) => {
   try {
     const OrderModel = req.db.model('Order', orderSchema);
     // CTF: intentional vulnerability — insecure-api
-    // Missing ownership check: should verify order.user.toString() === req.user.id
-    const order = await OrderModel.findById(req.params.id).populate(
+    // Missing session check: should verify order.sessionId === req.sessionId
+    const order = await Order.findById(req.params.id).populate(
       'items.product',
       'name price images'
     );
@@ -45,6 +44,7 @@ const createOrder = async (req, res, next) => {
 
     const order = await OrderModel.create({
       user: req.user.id,
+      sessionId: req.sessionId,
       items,
       total,
       shippingAddress,
@@ -72,3 +72,4 @@ const getAllOrders = async (req, res, next) => {
 };
 
 module.exports = { getOrders, getOrder, createOrder, getAllOrders };
+

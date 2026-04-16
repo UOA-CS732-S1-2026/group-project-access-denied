@@ -1,11 +1,14 @@
-const reviewSchema  = require('../models/review.model').schema;
-const productSchema = require('../models/product.model').schema;
+const Review = require("../models/review.model");
+const Product = require("../models/product.model");
 
-// GET /api/products/:productId/reviews
+// GET /api/products/:productId/reviews — scoped to current session
 const getReviews = async (req, res, next) => {
   try {
-    const ReviewModel = req.db.model('Review', reviewSchema);
-    const reviews = await ReviewModel.find({ product: req.params.productId }).sort({ createdAt: -1 });
+    const reviews = await Review.find({
+      sessionId: req.sessionId,
+      product: req.params.productId,
+    }).sort({ createdAt: -1 });
+
     res.json(reviews);
   } catch (err) {
     next(err);
@@ -18,21 +21,19 @@ const getReviews = async (req, res, next) => {
 // It is then rendered raw on the product detail page, enabling XSS.
 const createReview = async (req, res, next) => {
   try {
-    const ProductModel = req.db.model('Product', productSchema);
-    const ReviewModel  = req.db.model('Review', reviewSchema);
-
-    const product = await ProductModel.findById(req.params.productId);
-    if (!product) return res.status(404).json({ message: 'Product not found' });
+    const product = await Product.findById(req.params.productId);
+    if (!product) return res.status(404).json({ message: "Product not found" });
 
     const { rating, body } = req.body;
     if (!rating || !body) {
-      return res.status(400).json({ message: 'rating and body are required' });
+      return res.status(400).json({ message: "rating and body are required" });
     }
 
     // CTF: intentional vulnerability — xss
-    const review = await ReviewModel.create({
+    const review = await Review.create({
       user: req.user.id,
-      product: req.params.productId,
+      sessionId: req.sessionId,
+      product: req.params.productId,   
       username: req.user.username, // stored as-is for XSS flag surface
       rating,
       body,
@@ -47,10 +48,9 @@ const createReview = async (req, res, next) => {
 // DELETE /api/products/:productId/reviews/:id  (admin only)
 const deleteReview = async (req, res, next) => {
   try {
-    const ReviewModel = req.db.model('Review', reviewSchema);
-    const review = await ReviewModel.findByIdAndDelete(req.params.id);
-    if (!review) return res.status(404).json({ message: 'Review not found' });
-    res.json({ message: 'Review deleted' });
+    const review = await Review.findByIdAndDelete(req.params.id);
+    if (!review) return res.status(404).json({ message: "Review not found" });
+    res.json({ message: "Review deleted" });
   } catch (err) {
     next(err);
   }

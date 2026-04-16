@@ -1,9 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { getDb } = require('../config/db');
 
-/**
- * Middleware to protect routes — verifies the JWT from the Authorization header.
- */
 const protect = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
@@ -15,18 +11,14 @@ const protect = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // { id, username, role, dbName }
-    req.db = getDb(decoded.dbName);
+    req.user = decoded;              // { id, username, role, sessionId }
+    req.sessionId = decoded.sessionId;
     next();
   } catch {
     return res.status(401).json({ message: 'Not authorised, token invalid or expired' });
   }
 };
 
-/**
- * Middleware to restrict access to admin users only.
- * Must be used after `protect`.
- */
 const adminOnly = (req, res, next) => {
   if (req.user && req.user.role === 'admin') {
     return next();

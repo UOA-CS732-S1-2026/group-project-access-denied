@@ -45,6 +45,12 @@ const orderSchema = new mongoose.Schema(
       postcode: { type: String, required: true },
       country:  { type: String, required: true },
     },
+    // Links order to a player session — null for seeded data (alice's order)
+    sessionId: {
+      type: String,
+      default: null,
+      index: true,
+    },
     // CTF: never rendered in UI — seed populates this with the IDOR flag (Flag #3)
     internalNote: {
       type: String,
