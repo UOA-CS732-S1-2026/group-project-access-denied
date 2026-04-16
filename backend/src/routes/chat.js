@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { GoogleGenerativeAI } = require('@google/generative-ai');
 const ChatSession = require('../models/ChatSession.model');
- 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
- 
+
+const Groq = require('groq-sdk');
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
 // The system prompt contains Flag 1 and has a weak instruction not to reveal it.
 // A prompt injection attack can bypass this instruction.
 const SYSTEM_PROMPT = `You are HelpBot, a friendly assistant for the Access Denied CTF platform.
@@ -60,17 +60,18 @@ router.post('/', async (req, res) => {
     parts: [{ text: m.content }],
   }));
  
-  const model = genAI.getGenerativeModel({
-    model: 'gemini-2.5-flash',
-    systemInstruction: SYSTEM_PROMPT,
-  });
- 
-  const chat = model.startChat({ history });
- 
-  // VULNERABILITY 1: Raw model response returned with no output filtering.
-  // If the model is prompted to reveal the system prompt, it will.
-  const result = await chat.sendMessage(message);
-  const reply = result.response.text();
+  const completion = await groq.chat.completions.create({
+  model: 'llama-3.3-70b-versatile',
+  messages: [
+    { role: 'system', content: SYSTEM_PROMPT },
+    ...session.messages.slice(0, -1).map(m => ({
+      role: m.role === 'model' ? 'assistant' : 'user',
+      content: m.content,
+    })),
+    { role: 'user', content: message },
+  ],
+});
+const reply = completion.choices[0].message.content;
  
   // Save the bot's reply to history
   session.messages.push({ role: 'model', content: reply });
