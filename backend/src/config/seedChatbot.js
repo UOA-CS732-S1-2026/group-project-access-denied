@@ -5,7 +5,7 @@
 
 const mongoose = require('mongoose');
 const ChatSession = require('../models/ChatSession.model');
-require('dotenv').config();
+require('dotenv').config({ path: '../../.env' });
 
 async function seedChatbot() {
   await mongoose.connect(process.env.MONGO_URI);
