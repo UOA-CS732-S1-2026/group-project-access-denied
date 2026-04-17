@@ -12,6 +12,10 @@ const orderRoutes   = require('./routes/order.routes');
 const { notFound, errorHandler } = require('./middleware/error.middleware');
 const logger = require('./utils/logger');
 const chatRoutes = require('./routes/chat');
+
+const seedChatbot = require('./config/seedChatbot');
+
+
 const vulnerableErrorHandler = require('./middleware/vulnerableErrorhandler.middleware')
 
 const app = express();
@@ -40,7 +44,7 @@ app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 
 // ─── Error Handling ───────────────────────────────────────────────────────────
 app.use(notFound);
-app.use(errorHandler);
-app.use(vulnerableErrorHandler)
+app.use(vulnerableErrorHandler);
+
 
 module.exports = app;
