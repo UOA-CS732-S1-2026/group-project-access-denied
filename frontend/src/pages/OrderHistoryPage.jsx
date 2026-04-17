@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
+import Navbar from '../components/common/Navbar';
 import { getOrders } from '../api/order.api';
 
 const TABS = ['All Orders', 'In Transit', 'Completed', 'Returns'];
@@ -19,7 +19,6 @@ const OrderHistoryPage = () => {
   const [activeTab, setActiveTab] = useState('All Orders');
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { cartCount } = useCart();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,29 +37,7 @@ const OrderHistoryPage = () => {
 
   return (
     <div className="bg-surface text-on-surface font-body min-h-screen flex flex-col">
-
-      {/* TopNavBar */}
-      <nav className="fixed top-0 w-full z-50 bg-[#fcf9f8]/80 dark:bg-[#1c1b1b]/80 backdrop-blur-md">
-        <div className="flex justify-between items-center px-8 py-4 max-w-full mx-auto">
-          <Link to="/" className="text-2xl font-bold tracking-tighter text-[#1c1b1b] dark:text-[#fcf9f8]">ATELIER</Link>
-          <div className="hidden md:flex items-center space-x-8">
-            <Link to="/products" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">Clothes</Link>
-            <Link to="/products" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">Shoes</Link>
-            <Link to="/#new-arrivals" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">New Arrivals</Link>
-          </div>
-          <div className="flex items-center space-x-6 text-[#994127] dark:text-[#c05e42]">
-            <Link to="/account" className="hover:opacity-80 transition-opacity duration-300">
-              <span className="material-symbols-outlined">person</span>
-            </Link>
-            <Link to="/cart" className="hover:opacity-80 transition-opacity duration-300 relative">
-              <span className="material-symbols-outlined">shopping_bag</span>
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">{cartCount}</span>
-              )}
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar activePage="orders" />
 
       <main className="flex-grow pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto w-full">
 

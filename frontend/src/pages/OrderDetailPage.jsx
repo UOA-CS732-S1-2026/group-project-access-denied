@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { getOrder } from '../api/order.api';
 import { useCart } from '../context/CartContext';
+import { cartBadge } from '../components/common/navbarStyles';
 
 const statusStyle = (status) => {
   switch (status) {
@@ -64,7 +65,7 @@ const OrderDetailPage = () => {
             <Link to="/cart" className="hover:opacity-80 transition-opacity relative">
               <span className="material-symbols-outlined">shopping_bag</span>
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">{cartCount}</span>
+                <span className={cartBadge}>{cartCount}</span>
               )}
             </Link>
           </div>

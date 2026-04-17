@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Navbar from '../components/common/Navbar';
 import { getProducts } from '../api/product.api';
-import { useCart } from '../context/CartContext';
 
 const ProductListing = () => {
-  const { cartCount } = useCart();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -17,27 +16,7 @@ const ProductListing = () => {
 
   return (
     <div className="bg-surface text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
-
-      {/* Top Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-[#fcf9f8]/80 dark:bg-[#1c1b1b]/80 backdrop-blur-md flex justify-between items-center px-8 py-4 max-w-full mx-auto">
-        <Link to="/" className="text-2xl font-bold tracking-tighter text-[#1c1b1b] dark:text-[#fcf9f8]">ATELIER</Link>
-        <div className="hidden md:flex items-center space-x-12">
-          <Link to="/products" className="text-[#994127] font-semibold border-b-2 border-[#994127] pb-1 font-['Manrope'] tracking-tight">Clothes</Link>
-          <Link to="/products" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">Shoes</Link>
-          <Link to="/#new-arrivals" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">New Arrivals</Link>
-        </div>
-        <div className="flex items-center space-x-6">
-          <Link to="/account" className="hover:opacity-80 transition-opacity duration-300 text-on-surface">
-            <span className="material-symbols-outlined">person</span>
-          </Link>
-          <Link to="/cart" className="hover:opacity-80 transition-opacity duration-300 relative text-on-surface">
-            <span className="material-symbols-outlined">shopping_bag</span>
-            {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">{cartCount}</span>
-            )}
-          </Link>
-        </div>
-      </nav>
+      <Navbar activePage="products" />
 
       <main className="pt-24 min-h-screen">
 

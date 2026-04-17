@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
+import Navbar from '../components/common/Navbar';
 import { useCart } from '../context/CartContext';
 
 const ShoppingCartPage = () => {
@@ -7,29 +8,7 @@ const ShoppingCartPage = () => {
 
   return (
     <div className="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
-
-      {/* Top Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-[#fcf9f8]/80 dark:bg-[#1c1b1b]/80 backdrop-blur-md">
-        <div className="flex justify-between items-center px-8 py-4 max-w-full mx-auto">
-          <Link to="/" className="text-2xl font-bold tracking-tighter text-[#1c1b1b] dark:text-[#fcf9f8]">ATELIER</Link>
-          <div className="hidden md:flex gap-8 items-center">
-            <Link to="/products" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">Clothes</Link>
-            <Link to="/products" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">Shoes</Link>
-            <Link to="/#new-arrivals" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">New Arrivals</Link>
-          </div>
-          <div className="flex items-center gap-6">
-            <Link to="/account" className="hover:opacity-80 transition-opacity duration-300">
-              <span className="material-symbols-outlined text-[#994127] dark:text-[#c05e42]">person</span>
-            </Link>
-            <Link to="/cart" className="hover:opacity-80 transition-opacity duration-300 relative">
-              <span className="material-symbols-outlined text-[#994127] dark:text-[#c05e42]">shopping_bag</span>
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-on-primary text-[10px] w-4 h-4 flex items-center justify-center rounded-full">{cartCount}</span>
-              )}
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       <main className="pt-32 pb-24 px-8 max-w-7xl mx-auto min-h-screen">
         <header className="mb-16">
