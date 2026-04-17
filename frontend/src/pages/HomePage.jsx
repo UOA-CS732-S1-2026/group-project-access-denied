@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
+import Navbar from '../components/common/Navbar';
 import {
   categoryWomen,
   categoryMen,
@@ -10,7 +10,6 @@ import {
 import { getProducts } from '../api/product.api';
 
 const HomePage = () => {
-  const { cartCount } = useCart();
   const [featuredProducts, setFeaturedProducts] = useState([]);
 
   useEffect(() => {
@@ -21,29 +20,7 @@ const HomePage = () => {
 
   return (
     <div className="bg-surface text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
-
-      {/* TopAppBar */}
-      <header className="fixed top-0 w-full z-50 bg-[#fcf9f8]/80 dark:bg-[#1c1b1b]/80 backdrop-blur-md">
-        <nav className="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
-          <div className="text-2xl font-bold tracking-tighter text-[#1c1b1b] dark:text-[#fcf9f8]">ATELIER</div>
-          <div className="hidden md:flex items-center space-x-10">
-            <Link to="/products" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">Clothes</Link>
-            <Link to="/products" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">Shoes</Link>
-            <a className="text-[#994127] font-semibold border-b-2 border-[#994127] pb-1 font-['Manrope'] tracking-tight" href="#new-arrivals">New Arrivals</a>
-          </div>
-          <div className="flex items-center space-x-6">
-            <Link to="/account" className="hover:opacity-80 transition-opacity duration-300">
-              <span className="material-symbols-outlined text-[#1c1b1b] dark:text-[#fcf9f8]">person</span>
-            </Link>
-            <Link to="/cart" className="hover:opacity-80 transition-opacity duration-300 relative">
-              <span className="material-symbols-outlined text-[#1c1b1b] dark:text-[#fcf9f8]">shopping_bag</span>
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">{cartCount}</span>
-              )}
-            </Link>
-          </div>
-        </nav>
-      </header>
+      <Navbar activePage="home" />
 
       <main>
 

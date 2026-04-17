@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Navbar from '../components/common/Navbar';
 import { useAuth } from '../context/AuthContext';
-import { useCart } from '../context/CartContext';
 import { profileBanner } from '../assets/images';
 
 const NAV_ITEMS = [
@@ -13,7 +13,6 @@ const NAV_ITEMS = [
 
 const ProfilePage = () => {
   const { user, logout } = useAuth();
-  const { cartCount } = useCart();
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('profile');
 
@@ -26,29 +25,7 @@ const ProfilePage = () => {
 
   return (
     <div className="bg-surface text-on-surface font-body antialiased">
-
-      {/* TopNavBar */}
-      <nav className="fixed top-0 w-full z-50 bg-[#fcf9f8]/80 dark:bg-[#1c1b1b]/80 backdrop-blur-md">
-        <div className="flex justify-between items-center px-8 py-4 max-w-full mx-auto">
-          <Link to="/" className="text-2xl font-bold tracking-tighter text-[#1c1b1b] dark:text-[#fcf9f8]">ATELIER</Link>
-          <div className="hidden md:flex items-center space-x-12">
-            <Link to="/products" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">Clothes</Link>
-            <Link to="/products" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">Shoes</Link>
-            <Link to="/#new-arrivals" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">New Arrivals</Link>
-          </div>
-          <div className="flex items-center space-x-6">
-            <Link to="/account" className="hover:opacity-80 transition-opacity duration-300 text-[#994127] font-semibold border-b-2 border-[#994127] pb-1">
-              <span className="material-symbols-outlined">person</span>
-            </Link>
-            <Link to="/cart" className="hover:opacity-80 transition-opacity duration-300 relative text-[#56423d]">
-              <span className="material-symbols-outlined">shopping_bag</span>
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">{cartCount}</span>
-              )}
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar activePage="account" />
 
       <main className="pt-24 pb-20 px-4 md:px-8 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
