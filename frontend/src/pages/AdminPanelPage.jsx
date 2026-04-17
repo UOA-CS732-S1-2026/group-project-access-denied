@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import { cartBadge } from '../components/common/navbarStyles';
 import { getProducts } from '../api/product.api';
 
 const STATS = [
@@ -99,7 +100,7 @@ const AdminPanelPage = () => {
             <Link to="/cart" className="text-on-surface hover:opacity-80 transition-opacity relative">
               <span className="material-symbols-outlined">shopping_bag</span>
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">{cartCount}</span>
+                <span className={cartBadge}>{cartCount}</span>
               )}
             </Link>
           </div>

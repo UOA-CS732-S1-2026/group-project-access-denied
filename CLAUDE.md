@@ -287,6 +287,10 @@ not a nice-to-have.
   `frontend/src/components/common/`. Before building a button, card, input,
   modal, badge, or layout wrapper from scratch, check if one already exists. If
   it doesn't exist yet, add it there so others can use it.
+  
+  **Components in `common/`:**
+  - `Navbar.jsx` — Reusable navbar for all store pages (HomePage, ProductListing, OrderHistoryPage, ProfilePage, ShoppingCartPage)
+  - `navbarStyles.js` — Extracted Tailwind utility class strings (navbarContainer, navLinkDefault, navLinkActive, cartBadge, logoText, iconButton)
 - **Tailwind only**: No inline `style` props, no CSS modules, no separate `.css`
   files for component styling. All styling is Tailwind utility classes.
 - **Colour palette**: Use a consistent set of Tailwind colour tokens across the
