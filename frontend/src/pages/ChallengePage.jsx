@@ -23,7 +23,8 @@ const ChallengePage = () => {
       .finally(() => setLoading(false));
 
     if (user) {
-      setSolvedIds(user.solvedChallenges || []);
+      // solvedChallenges comes back populated (array of objects), so extract just the _id strings
+      setSolvedIds((user.solvedChallenges || []).map((c) => c._id ?? c));
       setTotalScore(user.totalScore || 0);
     }
   }, [user]);
