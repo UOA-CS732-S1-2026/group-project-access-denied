@@ -13,7 +13,6 @@ const { notFound, errorHandler } = require('./middleware/error.middleware');
 const logger = require('./utils/logger');
 const chatRoutes = require('./routes/chat');
 
-const seedChatbot = require('./config/seedChatbot');
 
 
 const vulnerableErrorHandler = require('./middleware/vulnerableErrorhandler.middleware')
