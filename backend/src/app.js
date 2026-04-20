@@ -11,6 +11,11 @@ const productRoutes = require('./routes/product.routes');
 const orderRoutes   = require('./routes/order.routes');
 const { notFound, errorHandler } = require('./middleware/error.middleware');
 const logger = require('./utils/logger');
+const chatRoutes = require('./routes/chat');
+
+
+
+const vulnerableErrorHandler = require('./middleware/vulnerableErrorhandler.middleware')
 
 const app = express();
 
@@ -31,12 +36,14 @@ app.use('/api/flags', flagRoutes);
 app.use('/api/scoreboard', scoreboardRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders',   orderRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Health check
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 
 // ─── Error Handling ───────────────────────────────────────────────────────────
 app.use(notFound);
-app.use(errorHandler);
+app.use(vulnerableErrorHandler);
+
 
 module.exports = app;

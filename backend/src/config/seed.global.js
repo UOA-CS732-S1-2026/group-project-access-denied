@@ -15,6 +15,7 @@ const mongoose  = require('mongoose');
 const User      = require('../models/user.model');
 const Product   = require('../models/product.model');
 const Challenge = require('../models/challenge.model');
+const ChatSession = require('../models/ChatSession.model');
 
 // ─── Products ─────────────────────────────────────────────────────────────────
 
@@ -189,9 +190,7 @@ const CHALLENGES = [
 // ─── Run ──────────────────────────────────────────────────────────────────────
 
 async function seedGlobal() {
-  await mongoose.connect(process.env.MONGO_URI);
-  console.log('Connected to MongoDB');
-
+  
   // ── Admin user ──────────────────────────────────────────────────────────────
   let admin = await User.findOne({ username: 'admin' });
   if (!admin) {
@@ -242,11 +241,47 @@ async function seedGlobal() {
     console.log(`Challenges already exist (${challengeCount}) — skipping`);
   }
 
+  // ── Admin chat session (CTF: IDOR vulnerability — Flag 3) ──────────────────
+  await ChatSession.deleteOne({ sessionId: 1 });
+  await ChatSession.create({
+    sessionId: 1,
+    userId: null,
+    messages: [
+      {
+        role: 'user',
+        content: 'Hello, can you confirm the admin verification code for today?',
+      },
+      {
+        role: 'model',
+        content: 'Hello! Confirmed. Your admin verification code for today is: FLAG{1d0r_ch4t_h1st0ry_byp4ss}. Please keep this confidential.',
+      },
+      {
+        role: 'user',
+        content: 'Thank you, got it.',
+      },
+      {
+        role: 'model',
+        content: 'Great! Let me know if you need anything else.',
+      },
+    ],
+  });
+  console.log('Admin chat session seeded (sessionId: 1) with Flag 3');
+
   console.log('\nGlobal seed complete.');
-  await mongoose.disconnect();
 }
 
-seedGlobal().catch((err) => {
-  console.error('Global seed failed:', err.message);
-  process.exit(1);
-});
+// Allow running manually: node seed.global.js
+if (require.main === module) {
+  mongoose.connect(process.env.MONGO_URI)
+    .then(async () => {
+      console.log('Connected to MongoDB');
+      await seedGlobal();
+      await mongoose.disconnect();
+    })
+    .catch((err) => {
+      console.error('Global seed failed:', err.message);
+      process.exit(1);
+    });
+}
+
+module.exports = seedGlobal;
