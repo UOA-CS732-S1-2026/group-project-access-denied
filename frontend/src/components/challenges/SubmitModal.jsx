@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { submitFlag } from '../../api/challenge.api';
+import { submitFlag, useHint as unlockHint } from '../../api/challenge.api';
 import { CATEGORY_LABELS, CATEGORY_COLORS, DIFFICULTY_COLORS, POINTS_COLOR } from './challengeConstants';
 
-const SubmitModal = ({ challenge, solvedIds, onClose, onSuccess }) => {
-  const [flag, setFlag]           = useState('');
-  const [status, setStatus]       = useState(null); // null | 'loading' | 'correct' | 'wrong' | 'error'
-  const [message, setMessage]     = useState('');
+const SubmitModal = ({ challenge, solvedIds, onClose, onSuccess, onHintUsed }) => {
+  const [flag, setFlag]             = useState('');
+  const [status, setStatus]         = useState(null); // null | 'loading' | 'correct' | 'wrong' | 'error'
+  const [message, setMessage]       = useState('');
   const [shownHints, setShownHints] = useState([]);
+  const [unlockedHints, setUnlockedHints] = useState({}); // idx → hint text (from API)
 
   const alreadySolved = solvedIds.includes(challenge._id);
 
@@ -32,10 +33,35 @@ const SubmitModal = ({ challenge, solvedIds, onClose, onSuccess }) => {
     }
   };
 
-  const toggleHint = (idx) => {
-    setShownHints((prev) =>
-      prev.includes(idx) ? prev.filter((i) => i !== idx) : [...prev, idx]
-    );
+  const toggleHint = async (idx) => {
+    const hint = challenge.hints[idx];
+    const isShown = shownHints.includes(idx);
+
+    if (isShown) {
+      setShownHints((prev) => prev.filter((i) => i !== idx));
+      return;
+    }
+
+    // Free hints: reveal immediately, no API call needed
+    if (!hint.cost || hint.cost === 0) {
+      setShownHints((prev) => [...prev, idx]);
+      return;
+    }
+
+    // Paid hint: call API on first reveal to deduct points
+    if (idx in unlockedHints) {
+      setShownHints((prev) => [...prev, idx]);
+      return;
+    }
+
+    try {
+      const res = await unlockHint(challenge._id, idx);
+      setUnlockedHints((prev) => ({ ...prev, [idx]: res.data.text }));
+      onHintUsed(res.data.totalScore);
+      setShownHints((prev) => [...prev, idx]);
+    } catch {
+      // silently fail — hint stays hidden
+    }
   };
 
   return (
@@ -89,7 +115,7 @@ const SubmitModal = ({ challenge, solvedIds, onClose, onSuccess }) => {
                   </button>
                   {shownHints.includes(idx) && (
                     <div className="px-4 py-3 bg-gray-800/50 text-gray-300 text-sm border-t border-gray-700">
-                      {hint.text}
+                      {unlockedHints[idx] ?? hint.text}
                     </div>
                   )}
                 </div>
@@ -152,10 +178,11 @@ const SubmitModal = ({ challenge, solvedIds, onClose, onSuccess }) => {
 };
 
 SubmitModal.propTypes = {
-  challenge: PropTypes.object.isRequired,
-  solvedIds: PropTypes.array.isRequired,
-  onClose:   PropTypes.func.isRequired,
-  onSuccess: PropTypes.func.isRequired,
+  challenge:   PropTypes.object.isRequired,
+  solvedIds:   PropTypes.array.isRequired,
+  onClose:     PropTypes.func.isRequired,
+  onSuccess:   PropTypes.func.isRequired,
+  onHintUsed:  PropTypes.func.isRequired,
 };
 
 export default SubmitModal;

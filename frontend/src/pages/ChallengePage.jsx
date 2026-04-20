@@ -34,6 +34,10 @@ const ChallengePage = () => {
     setTotalScore(newTotal);
   };
 
+  const handleHintUsed = (newTotal) => {
+    setTotalScore(newTotal);
+  };
+
   const categories = ['all', ...new Set(challenges.map((c) => c.category))];
 
   const filtered = filter === 'all'
@@ -157,6 +161,7 @@ const ChallengePage = () => {
           solvedIds={solvedIds}
           onClose={() => setSelected(null)}
           onSuccess={handleSuccess}
+          onHintUsed={handleHintUsed}
         />
       )}
     </div>
