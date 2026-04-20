@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const ChatSession = require('../models/ChatSession.model');
+const vulnerableErrorHandler = require('../middleware/vulnerableErrorhandler.middleware');
 
 const Groq = require('groq-sdk');
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
@@ -104,5 +105,9 @@ router.get('/:sessionId', async (req, res, next) => {
   }
 });
 
+
+// CTF: intentional vulnerability — exposed-files
+// Scoped to this router only so other routes use the safe error handler
+router.use(vulnerableErrorHandler);
 
 module.exports = router;

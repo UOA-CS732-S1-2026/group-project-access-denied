@@ -13,10 +13,6 @@ const { notFound, errorHandler } = require('./middleware/error.middleware');
 const logger = require('./utils/logger');
 const chatRoutes = require('./routes/chat');
 
-
-
-const vulnerableErrorHandler = require('./middleware/vulnerableErrorhandler.middleware')
-
 const app = express();
 
 // ─── Core Middleware ───────────────────────────────────────────────────────────
@@ -43,7 +39,7 @@ app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 
 // ─── Error Handling ───────────────────────────────────────────────────────────
 app.use(notFound);
-app.use(vulnerableErrorHandler);
+app.use(errorHandler);
 
 
 module.exports = app;
