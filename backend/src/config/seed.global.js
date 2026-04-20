@@ -181,8 +181,28 @@ const CHALLENGES = [
     hints: [{ text: 'Try applying a discount code twice. Does the total keep going down?', cost: 0 }],
     isActive: true,
   },
-  { title: 'TBD', description: 'Coming soon.', category: 'other', difficulty: 'easy', points: 100, flag: 'CTF{tbd_flag_11}', isActive: false },
-  { title: 'TBD', description: 'Coming soon.', category: 'other', difficulty: 'easy', points: 100, flag: 'CTF{tbd_flag_12}', isActive: false },
+  {
+    title: 'Something Went Wrong',
+    description: "StyleBot crashed — and ThreadVault's error handler had a lot to say about it. See what gets exposed when the bot can't cope.",
+    category: 'exposed-files', difficulty: 'medium', points: 200,
+    flag: 'CTF{verbose_error_env_leak}',
+    hints: [
+      { text: 'What happens when you send the chatbot something it cannot handle?', cost: 0 },
+      { text: 'A malformed or empty message body might cause an unhandled exception. Check the full response carefully.', cost: 50 },
+    ],
+    isActive: true,
+  },
+  {
+    title: "Other People's Conversations",
+    description: "StyleBot keeps a history of every conversation. Sessions are numbered. Not all of them belong to you.",
+    category: 'insecure-api', difficulty: 'medium', points: 200,
+    flag: 'CTF{idor_chat_history_exposed}',
+    hints: [
+      { text: 'Your session ID is returned in the chat API response. What does that tell you about other sessions?', cost: 0 },
+      { text: 'Try fetching /api/chat/1 directly — no login required.', cost: 50 },
+    ],
+    isActive: true,
+  },
   { title: 'TBD', description: 'Coming soon.', category: 'other', difficulty: 'easy', points: 100, flag: 'CTF{tbd_flag_13}', isActive: false },
   { title: 'TBD', description: 'Coming soon.', category: 'other', difficulty: 'easy', points: 100, flag: 'CTF{tbd_flag_14}', isActive: false },
 ];
@@ -233,13 +253,16 @@ async function seedGlobal() {
   }
 
   // ── Challenges ──────────────────────────────────────────────────────────────
-  const challengeCount = await Challenge.countDocuments();
-  if (challengeCount === 0) {
-    await Challenge.insertMany(CHALLENGES);
-    console.log(`Inserted ${CHALLENGES.length} challenges`);
-  } else {
-    console.log(`Challenges already exist (${challengeCount}) — skipping`);
+  // Upsert by title so re-running the seed updates existing records (e.g. TBD
+  // slots that have been filled in) without wiping solve counts on other fields.
+  for (const challenge of CHALLENGES) {
+    await Challenge.findOneAndUpdate(
+      { title: challenge.title },
+      { $set: challenge },
+      { upsert: true }
+    );
   }
+  console.log(`Upserted ${CHALLENGES.length} challenges`);
 
   // ── Admin chat session (CTF: IDOR vulnerability — Flag 3) ──────────────────
   await ChatSession.deleteOne({ sessionId: 1 });
@@ -253,7 +276,7 @@ async function seedGlobal() {
       },
       {
         role: 'model',
-        content: 'Hello! Confirmed. Your admin verification code for today is: FLAG{1d0r_ch4t_h1st0ry_byp4ss}. Please keep this confidential.',
+        content: 'Hello! Confirmed. Your admin verification code for today is: CTF{idor_chat_history_exposed}. Please keep this confidential.',
       },
       {
         role: 'user',
