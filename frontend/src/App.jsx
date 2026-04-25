@@ -39,7 +39,7 @@ const AppContent = () => {
         <Route path="/cart"         element={<ProtectedRoute><ShoppingCartPage /></ProtectedRoute>} />
         <Route path="/account"      element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
         <Route path="/orders"       element={<ProtectedRoute><OrderHistoryPage /></ProtectedRoute>} />
-        <Route path="/orders/:id"   element={<ProtectedRoute><OrderDetailPage /></ProtectedRoute>} />
+        <Route path="/orders/:orderNumber" element={<ProtectedRoute><OrderDetailPage /></ProtectedRoute>} />
         <Route path="/checkout"     element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
         <Route path="/admin"        element={<ProtectedRoute><AdminPanelPage /></ProtectedRoute>} />
         <Route path="/challenges"   element={<ProtectedRoute><ChallengePage /></ProtectedRoute>} />

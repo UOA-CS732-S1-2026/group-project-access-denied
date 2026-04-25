@@ -98,7 +98,7 @@ const OrderHistoryPage = () => {
                       )}
                       <div className="flex flex-col justify-between">
                         <div>
-                          <h3 className="text-sm font-semibold tracking-wide text-outline mb-1 uppercase">Order #{order._id.slice(-8).toUpperCase()}</h3>
+                          <h3 className="text-sm font-semibold tracking-wide text-outline mb-1 uppercase">Order #{order.orderNumber}</h3>
                           <p className="text-xl font-bold text-on-surface mb-2 tracking-tight">{itemNames || 'Order'}</p>
                           <p className="text-sm text-on-surface-variant">Placed on {new Date(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                         </div>
@@ -114,7 +114,7 @@ const OrderHistoryPage = () => {
                         <span className="text-2xl font-extrabold text-on-surface">${order.total.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                       </div>
                       <button
-                        onClick={() => navigate(`/orders/${order._id}`)}
+                        onClick={() => navigate(`/orders/${order.orderNumber}`)}
                         className="px-6 py-3 bg-gradient-to-br from-primary to-primary-container text-white text-sm font-semibold tracking-tight rounded hover:opacity-90 transition-all flex items-center gap-2"
                       >
                         View Details
