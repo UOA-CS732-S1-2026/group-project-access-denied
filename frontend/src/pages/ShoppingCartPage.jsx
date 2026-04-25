@@ -37,7 +37,7 @@ const ShoppingCartPage = () => {
                   <div key={item.key} className="flex gap-8 pb-12 border-b border-outline-variant/15 last:border-0">
                     <div
                       className="w-32 h-44 bg-surface-container-highest overflow-hidden flex-shrink-0 cursor-pointer"
-                      onClick={() => navigate(`/products/${item.product.id}`)}
+                      onClick={() => navigate(`/products/${item.product._id || item.product.id}`)}
                     >
                       <img
                         alt={item.product.name}
@@ -97,10 +97,6 @@ const ShoppingCartPage = () => {
                   <div className="flex justify-between text-sm">
                     <span className="text-on-surface-variant">Shipping</span>
                     <span className="text-on-surface">{cartTotal >= 500 ? 'Free' : 'Calculated at next step'}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-on-surface-variant">Estimated Tax</span>
-                    <span className="text-on-surface">$0.00</span>
                   </div>
                 </div>
                 <div className="pt-6 border-t border-outline-variant/30 mb-10">
