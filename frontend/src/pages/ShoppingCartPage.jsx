@@ -3,9 +3,13 @@ import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { useCart } from '../context/CartContext';
 
+const STANDARD_SHIPPING_FEE = 25;
+
 const ShoppingCartPage = () => {
   const { cart, removeFromCart, updateQty, cartCount, cartTotal } = useCart();
   const navigate = useNavigate();
+  const shipping = cartTotal >= 500 ? 0 : STANDARD_SHIPPING_FEE;
+  const orderTotal = cartTotal + shipping;
 
   return (
     <div className="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
@@ -96,14 +100,14 @@ const ShoppingCartPage = () => {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-on-surface-variant">Shipping</span>
-                    <span className="text-on-surface">{cartTotal >= 500 ? 'Free' : 'Calculated at next step'}</span>
+                    <span className="text-on-surface">{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
                   </div>
                 </div>
                 <div className="pt-6 border-t border-outline-variant/30 mb-10">
                   <div className="flex justify-between items-baseline">
                     <span className="text-lg font-semibold text-on-surface">Total</span>
                     <span className="text-2xl font-bold text-on-surface tracking-tight">
-                      ${cartTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      ${orderTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </span>
                   </div>
                 </div>

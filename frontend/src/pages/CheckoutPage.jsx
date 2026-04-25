@@ -5,7 +5,8 @@ import { cartBadge } from '../components/common/navbarStyles';
 import Footer from '../components/common/Footer';
 import { createOrder } from '../api/order.api';
 
-const STEPS = ['Shipping', 'Delivery', 'Payment'];
+const STEPS = ['Shipping', 'Payment'];
+const STANDARD_SHIPPING_FEE = 25;
 
 const CheckoutPage = () => {
   const { cart, cartTotal, cartCount, clearCart } = useCart();
@@ -15,11 +16,10 @@ const CheckoutPage = () => {
   const [form, setForm] = useState({
     firstName: '', lastName: '', email: '', phone: '',
     address: '', city: '', state: '', zip: '', country: 'United States',
-    delivery: 'standard',
     cardName: '', cardNumber: '', expiry: '', cvv: '',
   });
 
-  const shipping = cartTotal >= 500 ? 0 : form.delivery === 'express' ? 25 : form.delivery === 'overnight' ? 45 : 12;
+  const shipping = cartTotal >= 500 ? 0 : STANDARD_SHIPPING_FEE;
   const total = cartTotal + shipping;
 
   const handleChange = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -147,46 +147,8 @@ const CheckoutPage = () => {
                 </div>
               )}
 
-              {/* Step 1 — Delivery */}
+              {/* Step 1 — Payment */}
               {step === 1 && (
-                <div className="space-y-4">
-                  {[
-                    { id: 'standard',  label: 'Standard',  detail: '5–7 business days', price: cartTotal >= 500 ? 'Free' : '$12.00' },
-                    { id: 'express',   label: 'Express',   detail: '2–3 business days',  price: '$25.00' },
-                    { id: 'overnight', label: 'Overnight', detail: 'Next business day',   price: '$45.00' },
-                  ].map((opt) => (
-                    <label
-                      key={opt.id}
-                      className={`flex items-center justify-between p-5 rounded-lg border cursor-pointer transition-all ${form.delivery === opt.id ? 'border-primary bg-surface-container-low' : 'border-outline-variant/20 hover:border-primary/40'}`}
-                    >
-                      <div className="flex items-center gap-4">
-                        <input
-                          type="radio"
-                          name="delivery"
-                          value={opt.id}
-                          checked={form.delivery === opt.id}
-                          onChange={handleChange}
-                          className="accent-primary"
-                        />
-                        <div>
-                          <p className="text-sm font-bold text-on-surface">{opt.label}</p>
-                          <p className="text-xs text-on-surface-variant">{opt.detail}</p>
-                        </div>
-                      </div>
-                      <span className="text-sm font-bold text-primary">{opt.price}</span>
-                    </label>
-                  ))}
-                  <div className="mt-8 p-4 rounded-lg bg-surface-container-low/60 flex items-start gap-3">
-                    <span className="material-symbols-outlined text-primary text-sm mt-0.5">local_shipping</span>
-                    <p className="text-xs text-on-surface-variant leading-relaxed">
-                      Shipping to <span className="font-semibold text-on-surface">{form.address || '—'}, {form.city || '—'}</span>. All orders are packaged in our signature ATELIER box with a handwritten note option at checkout.
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {/* Step 2 — Payment */}
-              {step === 2 && (
                 <div className="space-y-8">
                   <div className="flex items-center gap-4 p-4 bg-surface-container-low rounded-lg border border-outline-variant/15">
                     <span className="material-symbols-outlined text-primary">lock</span>
@@ -284,10 +246,6 @@ const CheckoutPage = () => {
                 <div className="flex justify-between text-sm">
                   <span className="text-on-surface-variant">Shipping</span>
                   <span>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-on-surface-variant">Estimated Tax</span>
-                  <span>$0.00</span>
                 </div>
               </div>
 
