@@ -67,18 +67,7 @@ const ProductListing = () => {
                 </Link>
               ))}
             </div>
-
-            {/* Load More */}
-            {!loading && (
-            <div className="mt-24 text-center">
-              <button className="px-12 py-4 bg-surface border border-outline-variant hover:border-primary text-xs font-bold uppercase tracking-[0.3em] transition-all duration-300 text-on-surface">
-                View More Arrivals
-              </button>
-              <p className="mt-4 text-xs text-on-surface-variant/40 tracking-wider">Showing {products.length} items</p>
-            </div>
-            )}
           </div>
-
         </div>
       </main>
 
