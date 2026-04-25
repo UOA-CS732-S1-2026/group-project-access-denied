@@ -129,18 +129,6 @@ const OrderHistoryPage = () => {
           )}
         </div>
 
-        {/* Support Section */}
-        <section className="mt-24 p-12 bg-surface-container-low rounded-lg flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
-          <div>
-            <h2 className="text-2xl font-bold tracking-tight mb-2">Need assistance with an order?</h2>
-            <p className="text-on-surface-variant">Our concierge team is available 24/7 for size exchanges and returns.</p>
-          </div>
-          <div className="flex gap-4">
-            <button className="px-8 py-4 bg-on-surface text-surface text-sm font-bold tracking-widest uppercase rounded">Contact Support</button>
-            <button className="px-8 py-4 border border-outline/20 text-on-surface text-sm font-bold tracking-widest uppercase rounded hover:bg-surface transition-colors">Return Policy</button>
-          </div>
-        </section>
-
       </main>
 
       <Footer />

@@ -13,7 +13,7 @@ const ShoppingCartPage = () => {
 
   return (
     <div className="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
-      <Navbar />
+      <Navbar activePage="cart" />
 
       <main className="pt-32 pb-24 px-8 max-w-7xl mx-auto min-h-screen">
         <header className="mb-16">
