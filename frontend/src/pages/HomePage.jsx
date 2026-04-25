@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import {
@@ -7,17 +6,8 @@ import {
   categoryAccessories,
   brandStory,
 } from '../assets/images';
-import { getProducts } from '../api/product.api';
 
 const HomePage = () => {
-  const [featuredProducts, setFeaturedProducts] = useState([]);
-
-  useEffect(() => {
-    getProducts()
-      .then((res) => setFeaturedProducts(res.data.filter((p) => p.featured)))
-      .catch(() => setFeaturedProducts([]));
-  }, []);
-
   return (
     <div className="bg-surface text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
       <Navbar activePage="home" />
@@ -74,7 +64,12 @@ const HomePage = () => {
                 <div className="absolute bottom-10 left-10 text-white">
                   <h3 className="text-3xl font-bold mb-2">Women</h3>
                   <p className="text-sm tracking-widest uppercase opacity-80 mb-6">The New Silhouette</p>
-                  <button className="bg-white/10 backdrop-blur-md border border-white/20 px-6 py-3 rounded-lg text-sm font-semibold hover:bg-white hover:text-black transition-all">View Product</button>
+                  <Link
+                    className="inline-flex bg-white/10 backdrop-blur-md border border-white/20 px-6 py-3 rounded-lg text-sm font-semibold hover:bg-white hover:text-black transition-all"
+                    to="/products/69de38cad627e58a73a949d3"
+                  >
+                    View Product
+                  </Link>
                 </div>
               </div>
               {/* Men & Accessories Column */}
