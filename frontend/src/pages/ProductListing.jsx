@@ -27,15 +27,6 @@ const ProductListing = () => {
               <span className="text-xs font-bold tracking-[0.1em] text-primary uppercase mb-2 block">Curated Selection</span>
               <h1 className="text-4xl md:text-5xl font-extrabold tracking-tighter text-on-surface">Ready-to-Wear</h1>
             </div>
-            <div className="flex items-center gap-4 border-b border-outline-variant/30 pb-2 min-w-[200px]">
-              <span className="text-xs font-medium text-on-surface-variant uppercase tracking-wider">Sort By</span>
-              <select className="bg-transparent border-none focus:ring-0 text-sm font-semibold text-on-surface cursor-pointer w-full text-right p-0">
-                <option>Newest First</option>
-                <option>Price: Low to High</option>
-                <option>Price: High to Low</option>
-                <option>Curated Trend</option>
-              </select>
-            </div>
           </div>
         </header>
 
