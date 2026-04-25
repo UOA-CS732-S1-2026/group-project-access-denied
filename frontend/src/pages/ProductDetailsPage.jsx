@@ -3,6 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { getProduct } from '../api/product.api';
 import Navbar from '../components/common/Navbar';
+import Footer from '../components/common/Footer';
 
 const ProductDetailsPage = () => {
   const { id } = useParams();
@@ -263,31 +264,7 @@ const ProductDetailsPage = () => {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="w-full mt-auto bg-[#f6f3f2] dark:bg-[#1c1b1b]">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-12 py-16 border-t border-[#dcc1ba]/15 max-w-7xl mx-auto">
-          <div>
-            <div className="text-lg font-bold text-[#1c1b1b] dark:text-[#fcf9f8] mb-6">ATELIER</div>
-            <p className="text-sm text-[#56423d] dark:text-[#dcc1ba] leading-relaxed font-['Manrope']">Defining modern luxury through artisanal craftsmanship and sustainable storytelling. Each piece is a testament to timeless design and human touch.</p>
-          </div>
-          <div className="flex flex-col gap-4">
-            <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-on-surface mb-2">Customer Care</span>
-            {['Shipping', 'Returns', 'Privacy Policy', 'Terms of Service'].map((link) => (
-              <a key={link} className="text-sm text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-wide" href="#">{link}</a>
-            ))}
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-on-surface mb-6">Join the Atelier</span>
-            <div className="relative">
-              <input className="w-full bg-transparent border-b border-outline-variant/30 py-2 text-sm focus:outline-none focus:border-primary transition-colors" placeholder="Enter your email" type="email" />
-              <button className="absolute right-0 bottom-2 text-primary font-bold text-xs uppercase tracking-widest">Subscribe</button>
-            </div>
-            <div className="mt-auto pt-10 text-[10px] text-[#56423d] dark:text-[#dcc1ba] tracking-wide">
-              © 2024 Atelier Editorial. All rights reserved.
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
     </div>
   );

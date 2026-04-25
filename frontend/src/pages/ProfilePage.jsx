@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
+import Footer from '../components/common/Footer';
 import { useAuth } from '../context/AuthContext';
 import { profileBanner } from '../assets/images';
 
@@ -177,37 +178,7 @@ const ProfilePage = () => {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-[#f6f3f2] dark:bg-[#1c1b1b] w-full mt-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-12 py-16 border-t border-[#dcc1ba]/15 max-w-7xl mx-auto">
-          <div className="space-y-4">
-            <div className="text-lg font-bold text-[#1c1b1b] dark:text-[#fcf9f8]">ATELIER</div>
-            <p className="text-[#56423d] dark:text-[#dcc1ba] text-sm leading-relaxed max-w-xs">
-              Redefining the digital shopping experience through curated editorial vision and artisanal craftsmanship.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col space-y-3">
-              <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] text-sm tracking-wide">Shipping</a>
-              <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] text-sm tracking-wide">Returns</a>
-            </div>
-            <div className="flex flex-col space-y-3">
-              <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] text-sm tracking-wide">Privacy Policy</a>
-              <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] text-sm tracking-wide">Terms of Service</a>
-            </div>
-          </div>
-          <div className="flex flex-col justify-between">
-            <div className="flex space-x-6 mb-8 md:mb-0">
-              <span className="material-symbols-outlined text-[#56423d] cursor-pointer hover:text-[#994127] transition-colors">share</span>
-              <span className="material-symbols-outlined text-[#56423d] cursor-pointer hover:text-[#994127] transition-colors">public</span>
-              <span className="material-symbols-outlined text-[#56423d] cursor-pointer hover:text-[#994127] transition-colors">mail</span>
-            </div>
-            <p className="text-[#56423d] dark:text-[#dcc1ba] font-['Manrope'] text-sm tracking-wide opacity-60">
-              © 2024 Atelier Editorial. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
     </div>
   );

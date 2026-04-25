@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getProducts } from '../api/product.api';
 import Navbar from '../components/common/Navbar';
+import Footer from '../components/common/Footer';
 
 const STATS = [
   { icon: 'payments',     label: 'Total Revenue',    value: '$124,592.00', badge: '+12.5%', badgeColor: 'text-tertiary bg-tertiary/10' },
@@ -324,29 +325,7 @@ const AdminPanelPage = () => {
         </div>
       )}
 
-      {/* Footer */}
-      <footer className="w-full mt-auto bg-[#f6f3f2] dark:bg-[#1c1b1b] grid grid-cols-1 md:grid-cols-3 gap-8 px-12 py-16 border-t border-[#dcc1ba]/15">
-        <div>
-          <div className="text-lg font-bold text-[#1c1b1b] dark:text-[#fcf9f8] mb-4">ATELIER</div>
-          <p className="font-['Manrope'] text-sm tracking-wide text-[#56423d] dark:text-[#dcc1ba] max-w-xs">
-            Curating the finest garments and accessories for the modern aesthetic enthusiast.
-          </p>
-        </div>
-        <div className="flex flex-col space-y-3">
-          <span className="font-bold text-xs uppercase tracking-widest text-[#994127]">Legal &amp; Info</span>
-          <a href="#" className="font-['Manrope'] text-sm text-[#56423d] hover:text-[#994127] transition-colors">Shipping</a>
-          <a href="#" className="font-['Manrope'] text-sm text-[#56423d] hover:text-[#994127] transition-colors">Returns</a>
-          <a href="#" className="font-['Manrope'] text-sm text-[#56423d] hover:text-[#994127] transition-colors">Privacy Policy</a>
-          <a href="#" className="font-['Manrope'] text-sm text-[#56423d] hover:text-[#994127] transition-colors">Terms of Service</a>
-        </div>
-        <div className="flex flex-col items-start md:items-end space-y-4">
-          <div className="text-[#994127] text-sm">© 2024 Atelier Editorial. All rights reserved.</div>
-          <div className="flex space-x-4">
-            <span className="material-symbols-outlined text-[#56423d] cursor-pointer hover:text-[#994127]">share</span>
-            <span className="material-symbols-outlined text-[#56423d] cursor-pointer hover:text-[#994127]">mail</span>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
     </div>
   );

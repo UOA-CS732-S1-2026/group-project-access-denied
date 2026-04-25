@@ -3,6 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { getOrder } from '../api/order.api';
 import { useCart } from '../context/CartContext';
 import { cartBadge } from '../components/common/navbarStyles';
+import Footer from '../components/common/Footer';
 
 const statusStyle = (status) => {
   switch (status) {
@@ -152,12 +153,7 @@ const OrderDetailPage = () => {
 
       </main>
 
-      {/* Footer */}
-      <footer className="bg-[#f6f3f2] dark:bg-[#1c1b1b] w-full mt-auto">
-        <div className="px-12 py-6 border-t border-[#dcc1ba]/10 text-center">
-          <span className="text-[#56423d] dark:text-[#dcc1ba] font-['Manrope'] text-xs tracking-widest">© 2024 Atelier Editorial. All rights reserved.</span>
-        </div>
-      </footer>
+      <Footer />
 
     </div>
   );

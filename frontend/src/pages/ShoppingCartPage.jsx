@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
+import Footer from '../components/common/Footer';
 import { useCart } from '../context/CartContext';
 
 const ShoppingCartPage = () => {
@@ -133,39 +134,7 @@ const ShoppingCartPage = () => {
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="w-full mt-auto bg-[#f6f3f2] dark:bg-[#1c1b1b]">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-12 py-16 border-t border-[#dcc1ba]/15">
-          <div>
-            <div className="text-lg font-bold text-[#1c1b1b] dark:text-[#fcf9f8] mb-4">ATELIER</div>
-            <p className="text-[#56423d] dark:text-[#dcc1ba] text-sm leading-relaxed max-w-xs">
-              Curating the finest essential wardrobe pieces with an artisanal focus on quality and timeless design.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-3">
-              <h4 className="text-[10px] font-bold tracking-widest text-[#994127] uppercase">Shop</h4>
-              <Link to="/products" className="text-[#56423d] dark:text-[#dcc1ba] text-sm hover:text-[#994127] transition-colors">Clothes</Link>
-              <Link to="/products" className="text-[#56423d] dark:text-[#dcc1ba] text-sm hover:text-[#994127] transition-colors">Shoes</Link>
-              <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] text-sm hover:text-[#994127] transition-colors">Archive</a>
-            </div>
-            <div className="flex flex-col gap-3">
-              <h4 className="text-[10px] font-bold tracking-widest text-[#994127] uppercase">Help</h4>
-              <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] text-sm hover:text-[#994127] transition-colors">Shipping</a>
-              <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] text-sm hover:text-[#994127] transition-colors">Returns</a>
-            </div>
-          </div>
-          <div className="flex flex-col justify-between items-start md:items-end">
-            <div className="flex gap-4">
-              <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors text-sm">Privacy Policy</a>
-              <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors text-sm">Terms</a>
-            </div>
-            <p className="text-[#56423d] dark:text-[#dcc1ba] text-xs font-['Manrope'] tracking-wide mt-4 md:mt-0">
-              © 2024 Atelier Editorial. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
     </div>
   );

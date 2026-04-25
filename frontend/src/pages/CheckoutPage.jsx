@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { cartBadge } from '../components/common/navbarStyles';
+import Footer from '../components/common/Footer';
 import { createOrder } from '../api/order.api';
 
 const STEPS = ['Shipping', 'Delivery', 'Payment'];
@@ -307,30 +308,7 @@ const CheckoutPage = () => {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-[#f6f3f2] dark:bg-[#1c1b1b] w-full mt-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-12 py-16 border-t border-[#dcc1ba]/15 max-w-7xl mx-auto">
-          <div>
-            <div className="text-lg font-bold text-[#1c1b1b] dark:text-[#fcf9f8] mb-4">ATELIER</div>
-            <p className="text-[#56423d] dark:text-[#dcc1ba] font-['Manrope'] text-sm tracking-wide leading-relaxed">
-              Elevating the digital commerce experience through editorial precision and artisanal focus.
-            </p>
-          </div>
-          <div className="flex flex-col space-y-3">
-            <h4 className="text-[#994127] font-semibold text-sm uppercase tracking-widest mb-2">Customer Care</h4>
-            <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors text-sm">Shipping</a>
-            <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors text-sm">Returns</a>
-          </div>
-          <div className="flex flex-col space-y-3">
-            <h4 className="text-[#994127] font-semibold text-sm uppercase tracking-widest mb-2">Legal</h4>
-            <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors text-sm">Privacy Policy</a>
-            <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors text-sm">Terms of Service</a>
-          </div>
-        </div>
-        <div className="px-12 py-6 border-t border-[#dcc1ba]/10 text-center">
-          <span className="text-[#56423d] dark:text-[#dcc1ba] font-['Manrope'] text-xs tracking-widest">© 2024 Atelier Editorial. All rights reserved.</span>
-        </div>
-      </footer>
+      <Footer />
 
     </div>
   );

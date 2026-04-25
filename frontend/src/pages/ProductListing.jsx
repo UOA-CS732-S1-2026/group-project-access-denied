@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
+import Footer from '../components/common/Footer';
 import { getProducts } from '../api/product.api';
 
 const ProductListing = () => {
@@ -71,31 +72,7 @@ const ProductListing = () => {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-[#f6f3f2] dark:bg-[#1c1b1b] w-full mt-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-12 py-16 border-t border-[#dcc1ba]/15">
-        <div className="space-y-4">
-          <div className="text-lg font-bold text-[#1c1b1b] dark:text-[#fcf9f8]">ATELIER</div>
-          <p className="text-sm text-[#56423d] dark:text-[#dcc1ba] max-w-xs leading-relaxed font-['Manrope']">A modern digital atelier dedicated to the craft of exceptional design and timeless aesthetics.</p>
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <a className="block text-sm text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-wide" href="#">Shipping</a>
-            <a className="block text-sm text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-wide" href="#">Returns</a>
-          </div>
-          <div className="space-y-2">
-            <a className="block text-sm text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-wide" href="#">Privacy Policy</a>
-            <a className="block text-sm text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-wide" href="#">Terms of Service</a>
-          </div>
-        </div>
-        <div className="md:text-right">
-          <div className="text-sm text-[#56423d] dark:text-[#dcc1ba] font-['Manrope'] tracking-wide mb-4">Subscribe to the Atelier Journal</div>
-          <div className="flex md:justify-end">
-            <input className="bg-transparent border-b border-[#dcc1ba] focus:border-[#994127] focus:ring-0 text-sm py-2 px-0 w-full max-w-[200px]" placeholder="Your email" type="email" />
-            <button className="ml-4 material-symbols-outlined text-[#994127]">arrow_forward</button>
-          </div>
-          <div className="mt-8 text-xs text-[#56423d]/60 dark:text-[#dcc1ba]/60">© 2024 Atelier Editorial. All rights reserved.</div>
-        </div>
-      </footer>
+      <Footer />
 
     </div>
   );
