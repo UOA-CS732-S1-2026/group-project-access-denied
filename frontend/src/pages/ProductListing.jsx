@@ -41,58 +41,6 @@ const ProductListing = () => {
 
         <div className="max-w-7xl mx-auto px-8 flex flex-col md:flex-row gap-12 mb-24">
 
-          {/* Sidebar Filter */}
-          <aside className="w-full md:w-64 flex-shrink-0">
-            <div className="sticky top-28 space-y-10">
-              <section>
-                <h3 className="text-sm font-extrabold uppercase tracking-widest text-on-surface mb-4">Categories</h3>
-                <ul className="space-y-3">
-                  <li><a className="text-sm text-on-surface font-medium hover:text-primary transition-colors flex justify-between" href="#">Outerwear <span className="text-on-surface-variant/40">(12)</span></a></li>
-                  <li><a className="text-sm text-on-surface-variant hover:text-primary transition-colors flex justify-between" href="#">Knitwear <span className="text-on-surface-variant/40">(24)</span></a></li>
-                  <li><a className="text-sm text-on-surface-variant hover:text-primary transition-colors flex justify-between" href="#">Dresses <span className="text-on-surface-variant/40">(18)</span></a></li>
-                  <li><a className="text-sm text-on-surface-variant hover:text-primary transition-colors flex justify-between" href="#">Trousers <span className="text-on-surface-variant/40">(31)</span></a></li>
-                  <li><a className="text-sm text-on-surface-variant hover:text-primary transition-colors flex justify-between" href="#">Footwear <span className="text-on-surface-variant/40">(42)</span></a></li>
-                </ul>
-              </section>
-              <section>
-                <h3 className="text-sm font-extrabold uppercase tracking-widest text-on-surface mb-4">Size</h3>
-                <div className="grid grid-cols-4 gap-2">
-                  {['XS', 'S', 'M', 'L', 'XL', '38', '40', '42'].map((size) => (
-                    <button
-                      key={size}
-                      className={`h-10 text-xs border flex items-center justify-center font-medium transition-all ${
-                        size === 'S' ? 'border-primary bg-primary text-white' : 'border-outline-variant/30 hover:border-primary'
-                      }`}
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
-              </section>
-              <section>
-                <h3 className="text-sm font-extrabold uppercase tracking-widest text-on-surface mb-4">Color Palette</h3>
-                <div className="flex flex-wrap gap-3">
-                  <button className="w-6 h-6 rounded-full bg-[#1c1b1b] border border-white/20 ring-1 ring-offset-2 ring-transparent hover:ring-primary/40 transition-all"></button>
-                  <button className="w-6 h-6 rounded-full bg-[#994127] ring-1 ring-offset-2 ring-primary transition-all"></button>
-                  <button className="w-6 h-6 rounded-full bg-[#fcf9f8] border border-outline-variant ring-1 ring-offset-2 ring-transparent transition-all"></button>
-                  <button className="w-6 h-6 rounded-full bg-[#dcc1ba] ring-1 ring-offset-2 ring-transparent transition-all"></button>
-                  <button className="w-6 h-6 rounded-full bg-[#56423d] ring-1 ring-offset-2 ring-transparent transition-all"></button>
-                  <button className="w-6 h-6 rounded-full bg-[#89726c] ring-1 ring-offset-2 ring-transparent transition-all"></button>
-                </div>
-              </section>
-              <section>
-                <h3 className="text-sm font-extrabold uppercase tracking-widest text-on-surface mb-4">Price</h3>
-                <div className="space-y-4">
-                  <input className="w-full accent-primary bg-surface-container-high h-1 rounded-full appearance-none cursor-pointer" max="2000" min="0" step="50" type="range" />
-                  <div className="flex justify-between text-xs font-bold text-on-surface-variant">
-                    <span>$0</span>
-                    <span>$2,000+</span>
-                  </div>
-                </div>
-              </section>
-            </div>
-          </aside>
-
           {/* Product Grid */}
           <div className="flex-grow">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-16 gap-x-8">
