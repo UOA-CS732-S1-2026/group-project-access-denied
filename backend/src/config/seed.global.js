@@ -14,6 +14,7 @@ require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env'
 const mongoose  = require('mongoose');
 const User      = require('../models/user.model');
 const Product   = require('../models/product.model');
+const Order     = require('../models/order.model');
 const Challenge = require('../models/challenge.model');
 const ChatSession = require('../models/ChatSession.model');
 
@@ -250,6 +251,32 @@ async function seedGlobal() {
     console.log(`Inserted ${PRODUCTS.length} products`);
   } else {
     console.log(`Products already exist (${productCount}) — skipping`);
+  }
+
+  // ── Alice's flagged order (IDOR flag) ───────────────────────────────────────
+  // CTF: intentional vulnerability — insecure-api (IDOR, Flag #3)
+  // sessionId: null so the cron never cleans it up — always discoverable by any player.
+  const aliceOrderExists = await Order.findOne({ user: alice._id, sessionId: null });
+  if (!aliceOrderExists) {
+    const products = await Product.find({ isActive: true });
+    await Order.create({
+      user: alice._id,
+      sessionId: null,
+      items: [{ product: products[0]._id, size: 'M', quantity: 1, priceAtPurchase: products[0].price }],
+      total: products[0].price,
+      status: 'delivered',
+      shippingAddress: {
+        fullName: 'Alice Smith',
+        street: '12 Harbour View',
+        city: 'Auckland',
+        postcode: '1010',
+        country: 'New Zealand',
+      },
+      internalNote: 'CTF{idor_order_exposed}',
+    });
+    console.log("Created alice's flagged order");
+  } else {
+    console.log("Alice's flagged order already exists — skipping");
   }
 
   // ── Challenges ──────────────────────────────────────────────────────────────
