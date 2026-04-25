@@ -8,8 +8,6 @@ import { profileBanner } from '../assets/images';
 const NAV_ITEMS = [
   { id: 'profile',   icon: 'person',           label: 'Profile' },
   { id: 'orders',    icon: 'shopping_basket',   label: 'Orders' },
-  { id: 'security',  icon: 'shield',            label: 'Security' },
-  { id: 'addresses', icon: 'location_on',       label: 'Addresses' },
 ];
 
 const ProfilePage = () => {
@@ -82,7 +80,6 @@ const ProfilePage = () => {
                   <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-primary mb-2 block">Identity</span>
                   <h2 className="text-2xl font-bold tracking-tight">Personal Information</h2>
                 </div>
-                <button className="text-sm font-semibold text-primary underline underline-offset-4 hover:opacity-70 transition-opacity">Edit Details</button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
                 <div className="space-y-1">
