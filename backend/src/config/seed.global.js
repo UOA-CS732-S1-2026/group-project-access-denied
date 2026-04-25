@@ -260,6 +260,7 @@ async function seedGlobal() {
   if (!aliceOrderExists) {
     const products = await Product.find({ isActive: true });
     await Order.create({
+      orderNumber: 1,
       user: alice._id,
       sessionId: null,
       items: [{ product: products[0]._id, size: 'M', quantity: 1, priceAtPurchase: products[0].price }],

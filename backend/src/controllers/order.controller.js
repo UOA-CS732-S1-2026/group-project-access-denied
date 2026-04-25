@@ -12,15 +12,15 @@ const getOrders = async (req, res, next) => {
   }
 };
 
-// GET /api/orders/:id
+// GET /api/orders/:orderNumber
 // CTF: intentional vulnerability — insecure-api (IDOR, Flag #3)
-// No session check — any authenticated user can fetch any order by ID,
-// including alice's seeded order which has the flag in internalNote.
+// No session check — any authenticated user can fetch any order by orderNumber,
+// including alice's seeded order (orderNumber: 1) which has the flag in internalNote.
 const getOrder = async (req, res, next) => {
   try {
     // CTF: intentional vulnerability — insecure-api
     // Missing session check: should verify order.sessionId === req.sessionId
-    const order = await Order.findById(req.params.id).populate(
+    const order = await Order.findOne({ orderNumber: parseInt(req.params.orderNumber, 10) }).populate(
       'items.product',
       'name price images'
     );
@@ -40,7 +40,11 @@ const createOrder = async (req, res, next) => {
       return res.status(400).json({ message: 'items, total and shippingAddress are required' });
     }
 
+    const last = await Order.findOne().sort({ orderNumber: -1 }).select('orderNumber');
+    const nextNumber = last?.orderNumber ? last.orderNumber + 1 : 2;
+
     const order = await Order.create({
+      orderNumber: nextNumber,
       user: req.user.id,
       sessionId: req.sessionId,
       items,
