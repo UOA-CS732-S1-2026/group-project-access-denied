@@ -58,8 +58,8 @@ const HomePage = () => {
           <div className="max-w-7xl mx-auto px-8">
             <div className="flex flex-col md:flex-row justify-between items-end mb-16">
               <div>
-                <span className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-4 block">Categories</span>
-                <h2 className="text-4xl font-bold tracking-tight text-on-surface">Curated Collections</h2>
+                <span className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-4 block">Top This Season</span>
+                <h2 className="text-4xl font-bold tracking-tight text-on-surface">Curated Picks</h2>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
@@ -104,35 +104,6 @@ const HomePage = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Featured Products (No Divider Grid) */}
-        <section className="py-16 md:py-24 bg-surface relative z-10" id="new-arrivals">
-          <div className="max-w-7xl mx-auto px-8">
-            <div className="text-center mb-12 md:mb-16">
-              <span className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-4 block">New Arrivals</span>
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-on-surface">The Seasonal Edit</h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
-              {featuredProducts.map((product) => (
-                <Link key={product._id} to={`/products/${product._id}`} className="group block">
-                  <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden mb-6 rounded-lg relative">
-                    <img
-                      alt={product.name}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      src={product.images[0]}
-                    />
-                    <div className="absolute inset-0 glass-panel opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <span className="primary-gradient text-white px-6 py-3 rounded-lg shadow-ambient text-sm font-semibold">View Product</span>
-                    </div>
-                  </div>
-                  <h3 className="text-lg font-semibold text-on-surface mb-1">{product.name}</h3>
-                  <p className="text-on-surface-variant mb-2">{product.brand}</p>
-                  <p className="text-primary font-bold">${product.price}.00</p>
-                </Link>
-              ))}
             </div>
           </div>
         </section>
@@ -191,9 +162,9 @@ const HomePage = () => {
             Elevating the digital commerce experience through editorial curation and artisanal focus.
           </p>
           <div className="flex space-x-4">
-            <span className="material-symbols-outlined text-[#994127] cursor-pointer hover:opacity-80 transition-opacity">public</span>
-            <span className="material-symbols-outlined text-[#994127] cursor-pointer hover:opacity-80 transition-opacity">nest_eco_leaf</span>
-            <span className="material-symbols-outlined text-[#994127] cursor-pointer hover:opacity-80 transition-opacity">share</span>
+            <span className="material-symbols-outlined text-[#994127]">public</span>
+            <span className="material-symbols-outlined text-[#994127]">nest_eco_leaf</span>
+            <span className="material-symbols-outlined text-[#994127]">share</span>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
