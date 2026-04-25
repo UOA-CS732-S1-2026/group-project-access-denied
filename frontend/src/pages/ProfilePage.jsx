@@ -103,55 +103,6 @@ const ProfilePage = () => {
               </div>
             </section>
 
-            {/* Security + Addresses Bento */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-              {/* Security Card */}
-              <div className="bg-surface-container-lowest rounded-xl p-8 shadow-[0_20px_40px_rgba(86,66,61,0.06)] flex flex-col justify-between border border-outline-variant/10">
-                <div>
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-6">
-                    <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>lock</span>
-                  </div>
-                  <h3 className="text-xl font-bold mb-2">Password &amp; Security</h3>
-                  <p className="text-on-surface-variant text-sm leading-relaxed mb-8">Maintain your account integrity by updating your password regularly and enabling 2FA.</p>
-                </div>
-                <button className="w-full bg-gradient-to-tr from-primary to-primary-container text-white py-4 rounded-lg font-bold tracking-tight hover:opacity-90 transition-all scale-95 active:scale-100">
-                  Change Password
-                </button>
-              </div>
-
-              {/* Addresses Card */}
-              <div className="bg-surface-container-lowest rounded-xl p-8 shadow-[0_20px_40px_rgba(86,66,61,0.06)] border border-outline-variant/10">
-                <div className="flex justify-between items-start mb-6">
-                  <h3 className="text-xl font-bold">Saved Addresses</h3>
-                  <button className="text-primary">
-                    <span className="material-symbols-outlined">add_circle</span>
-                  </button>
-                </div>
-                <div className="space-y-6">
-                  <div className="p-4 rounded-lg bg-surface-container-low/50 relative">
-                    <span className="absolute top-4 right-4 text-[10px] font-bold uppercase tracking-widest text-primary">Default</span>
-                    <p className="font-bold text-sm mb-1">Home</p>
-                    <p className="text-sm text-on-surface-variant leading-snug">
-                      742 Evergreen Terrace<br />
-                      Springfield, OR 97403<br />
-                      United States
-                    </p>
-                  </div>
-                  <div className="p-4 rounded-lg border border-outline-variant/20 relative hover:border-primary/30 transition-colors">
-                    <p className="font-bold text-sm mb-1 text-on-surface-variant">Studio</p>
-                    <p className="text-sm text-on-surface-variant/70 leading-snug">
-                      1200 Creative Way, Suite 400<br />
-                      Portland, OR 97201
-                    </p>
-                    <div className="mt-4 flex space-x-4">
-                      <button className="text-xs font-bold text-primary hover:underline">Edit</button>
-                      <button className="text-xs font-bold text-on-surface-variant/40 hover:text-error transition-colors">Delete</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
 
             {/* Featured Collection Banner */}
             <div className="relative h-[300px] rounded-xl overflow-hidden group">
