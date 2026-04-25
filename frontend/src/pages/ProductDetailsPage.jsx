@@ -170,7 +170,7 @@ const ProductDetailsPage = () => {
             <div className="md:col-span-4 sticky top-24 h-fit">
               <h2 className="text-3xl font-bold tracking-tighter text-on-surface mb-8">Craftsmanship &amp; Care</h2>
               <ul className="space-y-6">
-                {['Product Description', 'Materials & Care', 'Delivery & Returns'].map((tab, i) => (
+                {['Product Description'].map((tab, i) => (
                   <li key={tab}>
                     <button className={`text-xs font-bold tracking-[0.2em] uppercase flex items-center gap-4 group ${i === 0 ? 'text-primary' : 'text-outline hover:text-primary transition-colors'}`}>
                       <span className={`w-2 h-[1px] ${i === 0 ? 'bg-primary' : 'bg-outline group-hover:bg-primary'}`}></span>
@@ -232,7 +232,6 @@ const ProductDetailsPage = () => {
                     </div>
                   ))}
                 </div>
-                <button className="mt-12 w-full py-4 border border-outline/20 text-xs font-bold uppercase tracking-widest hover:border-primary transition-colors">Write a Review</button>
               </div>
               <div className="lg:w-2/3 space-y-12">
                 {[
@@ -258,23 +257,10 @@ const ProductDetailsPage = () => {
                     </div>
                   </div>
                 ))}
-                <button className="text-xs font-bold tracking-widest uppercase text-primary flex items-center gap-2 group">
-                  Read all 128 reviews
-                  <span className="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
-                </button>
               </div>
             </div>
           </div>
         </section>
-
-        {/* Related Products */}
-        <section className="mt-32">
-          <div className="flex justify-between items-end mb-12">
-            <h2 className="text-3xl font-bold tracking-tighter text-on-surface">You May Also Like</h2>
-            <Link to="/products" className="text-xs font-bold tracking-widest uppercase text-outline hover:text-primary transition-colors underline underline-offset-8">View Collection</Link>
-          </div>
-        </section>
-
       </main>
 
       {/* Footer */}
