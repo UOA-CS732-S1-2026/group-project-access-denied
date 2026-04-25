@@ -44,7 +44,7 @@ const HomePage = () => {
               </p>
               <a
                 className="inline-flex items-center px-10 py-5 primary-gradient text-on-primary rounded-lg font-semibold tracking-wide hover:opacity-90 transition-all scale-95 active:transition-transform"
-                href="#new-arrivals"
+                href="products"
               >
                 Shop New Arrivals
                 <span className="material-symbols-outlined ml-2">arrow_forward</span>
@@ -74,7 +74,7 @@ const HomePage = () => {
                 <div className="absolute bottom-10 left-10 text-white">
                   <h3 className="text-3xl font-bold mb-2">Women</h3>
                   <p className="text-sm tracking-widest uppercase opacity-80 mb-6">The New Silhouette</p>
-                  <button className="bg-white/10 backdrop-blur-md border border-white/20 px-6 py-3 rounded-lg text-sm font-semibold hover:bg-white hover:text-black transition-all">Explore Collection</button>
+                  <button className="bg-white/10 backdrop-blur-md border border-white/20 px-6 py-3 rounded-lg text-sm font-semibold hover:bg-white hover:text-black transition-all">View Product</button>
                 </div>
               </div>
               {/* Men & Accessories Column */}
