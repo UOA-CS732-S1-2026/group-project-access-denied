@@ -6,6 +6,7 @@ const {
   createChallenge,
   updateChallenge,
   deleteChallenge,
+  useHint,
 } = require('../controllers/challenge.controller');
 const { protect, adminOnly } = require('../middleware/auth.middleware');
 
@@ -14,6 +15,9 @@ router.get('/', protect, getChallenges);
 
 // GET  /api/challenges/:id      — get a single challenge
 router.get('/:id', protect, getChallenge);
+
+// Hint unlock — deducts cost from score on first use
+router.post('/:id/hint/:hintIdx', protect, useHint);
 
 // Admin-only routes
 router.post('/', protect, adminOnly, createChallenge);
