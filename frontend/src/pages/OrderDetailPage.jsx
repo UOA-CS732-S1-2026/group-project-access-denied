@@ -16,18 +16,18 @@ const statusStyle = (status) => {
 };
 
 const OrderDetailPage = () => {
-  const { id } = useParams();
+  const { orderNumber } = useParams();
   const navigate = useNavigate();
   const { cartCount } = useCart();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getOrder(id)
+    getOrder(orderNumber)
       .then((res) => setOrder(res.data))
       .catch(() => setOrder(null))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [orderNumber]);
 
   if (loading) {
     return (
@@ -86,7 +86,7 @@ const OrderDetailPage = () => {
           <div>
             <span className="text-xs uppercase tracking-[0.2em] text-outline font-semibold mb-2 block">Order Receipt</span>
             <h1 className="text-3xl font-bold tracking-tighter text-on-surface">
-              #{order._id.slice(-8).toUpperCase()}
+              #{order.orderNumber}
             </h1>
             <p className="text-sm text-on-surface-variant mt-1">
               Placed on {new Date(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}

@@ -14,6 +14,7 @@ require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env'
 const mongoose  = require('mongoose');
 const User      = require('../models/user.model');
 const Product   = require('../models/product.model');
+const Order     = require('../models/order.model');
 const Challenge = require('../models/challenge.model');
 const ChatSession = require('../models/ChatSession.model');
 
@@ -181,8 +182,28 @@ const CHALLENGES = [
     hints: [{ text: 'Try applying a discount code twice. Does the total keep going down?', cost: 0 }],
     isActive: true,
   },
-  { title: 'TBD', description: 'Coming soon.', category: 'other', difficulty: 'easy', points: 100, flag: 'CTF{tbd_flag_11}', isActive: false },
-  { title: 'TBD', description: 'Coming soon.', category: 'other', difficulty: 'easy', points: 100, flag: 'CTF{tbd_flag_12}', isActive: false },
+  {
+    title: 'Something Went Wrong',
+    description: "StyleBot crashed — and ThreadVault's error handler had a lot to say about it. See what gets exposed when the bot can't cope.",
+    category: 'exposed-files', difficulty: 'medium', points: 200,
+    flag: 'CTF{verbose_error_env_leak}',
+    hints: [
+      { text: 'What happens when you send the chatbot something it cannot handle?', cost: 0 },
+      { text: 'A malformed or empty message body might cause an unhandled exception. Check the full response carefully.', cost: 50 },
+    ],
+    isActive: true,
+  },
+  {
+    title: "Other People's Conversations",
+    description: "StyleBot keeps a history of every conversation. Sessions are numbered. Not all of them belong to you.",
+    category: 'insecure-api', difficulty: 'medium', points: 200,
+    flag: 'CTF{idor_chat_history_exposed}',
+    hints: [
+      { text: 'Your session ID is returned in the chat API response. What does that tell you about other sessions?', cost: 0 },
+      { text: 'Try fetching /api/chat/1 directly — no login required.', cost: 50 },
+    ],
+    isActive: true,
+  },
   { title: 'TBD', description: 'Coming soon.', category: 'other', difficulty: 'easy', points: 100, flag: 'CTF{tbd_flag_13}', isActive: false },
   { title: 'TBD', description: 'Coming soon.', category: 'other', difficulty: 'easy', points: 100, flag: 'CTF{tbd_flag_14}', isActive: false },
 ];
@@ -232,14 +253,44 @@ async function seedGlobal() {
     console.log(`Products already exist (${productCount}) — skipping`);
   }
 
-  // ── Challenges ──────────────────────────────────────────────────────────────
-  const challengeCount = await Challenge.countDocuments();
-  if (challengeCount === 0) {
-    await Challenge.insertMany(CHALLENGES);
-    console.log(`Inserted ${CHALLENGES.length} challenges`);
+  // ── Alice's flagged order (IDOR flag) ───────────────────────────────────────
+  // CTF: intentional vulnerability — insecure-api (IDOR, Flag #3)
+  // sessionId: null so the cron never cleans it up — always discoverable by any player.
+  const aliceOrderExists = await Order.findOne({ user: alice._id, sessionId: null });
+  if (!aliceOrderExists) {
+    const products = await Product.find({ isActive: true });
+    await Order.create({
+      orderNumber: 1,
+      user: alice._id,
+      sessionId: null,
+      items: [{ product: products[0]._id, size: 'M', quantity: 1, priceAtPurchase: products[0].price }],
+      total: products[0].price,
+      status: 'delivered',
+      shippingAddress: {
+        fullName: 'Alice Smith',
+        street: '12 Harbour View',
+        city: 'Auckland',
+        postcode: '1010',
+        country: 'New Zealand',
+      },
+      internalNote: 'CTF{idor_order_exposed}',
+    });
+    console.log("Created alice's flagged order");
   } else {
-    console.log(`Challenges already exist (${challengeCount}) — skipping`);
+    console.log("Alice's flagged order already exists — skipping");
   }
+
+  // ── Challenges ──────────────────────────────────────────────────────────────
+  // Upsert by title so re-running the seed updates existing records (e.g. TBD
+  // slots that have been filled in) without wiping solve counts on other fields.
+  for (const challenge of CHALLENGES) {
+    await Challenge.findOneAndUpdate(
+      { title: challenge.title },
+      { $set: challenge },
+      { upsert: true }
+    );
+  }
+  console.log(`Upserted ${CHALLENGES.length} challenges`);
 
   // ── Admin chat session (CTF: IDOR vulnerability — Flag 3) ──────────────────
   await ChatSession.deleteOne({ sessionId: 1 });
@@ -253,7 +304,7 @@ async function seedGlobal() {
       },
       {
         role: 'model',
-        content: 'Hello! Confirmed. Your admin verification code for today is: FLAG{1d0r_ch4t_h1st0ry_byp4ss}. Please keep this confidential.',
+        content: 'Hello! Confirmed. Your admin verification code for today is: CTF{idor_chat_history_exposed}. Please keep this confidential.',
       },
       {
         role: 'user',

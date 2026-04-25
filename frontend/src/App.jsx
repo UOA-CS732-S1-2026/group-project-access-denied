@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import ShoppingCartPage from './pages/ShoppingCartPage';
@@ -18,35 +18,45 @@ import ProductListing      from './pages/ProductListing';
 import ProductDetailsPage  from './pages/ProductDetailsPage';
 import HelpBot from './components/Helpbot';
 
+const HELPBOT_HIDDEN_ROUTES = ['/challenges'];
+
+const AppContent = () => {
+  const { pathname } = useLocation();
+  const showHelpBot = !HELPBOT_HIDDEN_ROUTES.includes(pathname);
+
+  return (
+    <CartProvider>
+    <AuthProvider>
+      <Routes>
+        {/* Public routes */}
+        <Route path="/login"    element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+
+        {/* Protected routes — require login */}
+        <Route path="/"             element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+        <Route path="/products"     element={<ProtectedRoute><ProductListing /></ProtectedRoute>} />
+        <Route path="/products/:id" element={<ProtectedRoute><ProductDetailsPage /></ProtectedRoute>} />
+        <Route path="/cart"         element={<ProtectedRoute><ShoppingCartPage /></ProtectedRoute>} />
+        <Route path="/account"      element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+        <Route path="/orders"       element={<ProtectedRoute><OrderHistoryPage /></ProtectedRoute>} />
+        <Route path="/orders/:orderNumber" element={<ProtectedRoute><OrderDetailPage /></ProtectedRoute>} />
+        <Route path="/checkout"     element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
+        <Route path="/admin"        element={<ProtectedRoute><AdminPanelPage /></ProtectedRoute>} />
+        <Route path="/challenges"   element={<ProtectedRoute><ChallengePage /></ProtectedRoute>} />
+
+        {/* 404 */}
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+      {showHelpBot && <HelpBot />}
+    </AuthProvider>
+    </CartProvider>
+  );
+};
+
 const App = () => {
   return (
     <BrowserRouter>
-      <CartProvider>
-      <AuthProvider>
-        <Routes>
-          {/* Public routes */}
-          <Route path="/login"    element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-
-          {/* Protected routes — require login */}
-          <Route path="/"             element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
-          <Route path="/products"     element={<ProtectedRoute><ProductListing /></ProtectedRoute>} />
-          <Route path="/products/:id" element={<ProtectedRoute><ProductDetailsPage /></ProtectedRoute>} />
-          <Route path="/cart"         element={<ProtectedRoute><ShoppingCartPage /></ProtectedRoute>} />
-          <Route path="/account"      element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-          <Route path="/orders"       element={<ProtectedRoute><OrderHistoryPage /></ProtectedRoute>} />
-          <Route path="/orders/:id"   element={<ProtectedRoute><OrderDetailPage /></ProtectedRoute>} />
-          <Route path="/checkout"     element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
-          <Route path="/admin"        element={<ProtectedRoute><AdminPanelPage /></ProtectedRoute>} />
-          <Route path="/challenges"   element={<ProtectedRoute><ChallengePage /></ProtectedRoute>} />
-          
-
-          {/* 404 */}
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-        <HelpBot />
-      </AuthProvider>
-      </CartProvider>
+      <AppContent />
     </BrowserRouter>
   );
 };

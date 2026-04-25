@@ -55,6 +55,12 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    usedHints: [
+      {
+        challenge: { type: mongoose.Schema.Types.ObjectId, ref: 'Challenge', required: true },
+        hintIdx:   { type: Number, required: true },
+      },
+    ],
   },
   { timestamps: true }
 );

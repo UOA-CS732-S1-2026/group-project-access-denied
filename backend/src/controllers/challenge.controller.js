@@ -1,4 +1,5 @@
 const Challenge = require('../models/challenge.model');
+const User      = require('../models/user.model');
 
 // GET /api/challenges
 const getChallenges = async (req, res, next) => {
@@ -56,4 +57,38 @@ const deleteChallenge = async (req, res, next) => {
   }
 };
 
-module.exports = { getChallenges, getChallenge, createChallenge, updateChallenge, deleteChallenge };
+// POST /api/challenges/:id/hint/:hintIdx
+const useHint = async (req, res, next) => {
+  try {
+    const { id, hintIdx } = req.params;
+    const idx = parseInt(hintIdx, 10);
+
+    const challenge = await Challenge.findById(id);
+    if (!challenge || !challenge.isActive) {
+      return res.status(404).json({ message: 'Challenge not found' });
+    }
+    if (idx < 0 || idx >= challenge.hints.length) {
+      return res.status(404).json({ message: 'Hint not found' });
+    }
+
+    const hint = challenge.hints[idx];
+    const user = await User.findById(req.user.id);
+
+    if (hint.cost > 0) {
+      const alreadyUsed = user.usedHints.some(
+        (h) => h.challenge.toString() === id && h.hintIdx === idx
+      );
+      if (!alreadyUsed) {
+        user.totalScore  = Math.max(0, user.totalScore - hint.cost);
+        user.usedHints.push({ challenge: challenge._id, hintIdx: idx });
+        await user.save();
+      }
+    }
+
+    res.json({ text: hint.text, cost: hint.cost, totalScore: user.totalScore });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getChallenges, getChallenge, createChallenge, updateChallenge, deleteChallenge, useHint };
