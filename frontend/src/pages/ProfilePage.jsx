@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 import { profileBanner } from '../assets/images';
 
 const NAV_ITEMS = [
@@ -12,12 +13,14 @@ const NAV_ITEMS = [
 
 const ProfilePage = () => {
   const { user, logout } = useAuth();
+  const { clearCart } = useCart();
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('profile');
 
   const displayName = user?.username ?? 'Guest';
 
   const handleLogout = () => {
+    clearCart();
     logout();
     navigate('/login');
   };
