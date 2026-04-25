@@ -27,14 +27,11 @@ const Navbar = ({ activePage = 'home' }) => {
 
         {/* Desktop Navigation Links */}
         <div className="hidden md:flex items-center space-x-12">
+           <Link to="/" className={navLinkClass('home')}>
+            Home
+          </Link>
           <Link to="/products" className={navLinkClass('products')}>
-            Clothes
-          </Link>
-          <Link to="/products" className={navLinkClass('shoes')}>
-            Shoes
-          </Link>
-          <Link to="/#new-arrivals" className={navLinkClass('arrivals')}>
-            New Arrivals
+            Products
           </Link>
         </div>
 

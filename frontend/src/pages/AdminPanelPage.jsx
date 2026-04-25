@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useCart } from '../context/CartContext';
-import { cartBadge } from '../components/common/navbarStyles';
 import { getProducts } from '../api/product.api';
+import Navbar from '../components/common/Navbar';
 
 const STATS = [
   { icon: 'payments',     label: 'Total Revenue',    value: '$124,592.00', badge: '+12.5%', badgeColor: 'text-tertiary bg-tertiary/10' },
@@ -35,7 +34,6 @@ const PAGE_SIZE = 5;
 
 const AdminPanelPage = () => {
   const { user } = useAuth();
-  const { cartCount } = useCart();
   const [activeNav, setActiveNav]   = useState('products');
   const [products, setProducts]     = useState([]);
 
@@ -74,38 +72,7 @@ const AdminPanelPage = () => {
 
   return (
     <div className="bg-background text-on-background min-h-screen flex flex-col font-body">
-
-      {/* TopNavBar */}
-      <header className="fixed top-0 w-full z-50 bg-[#fcf9f8]/80 backdrop-blur-md">
-        <div className="flex justify-between items-center px-8 py-4 max-w-full mx-auto">
-          <Link to="/" className="text-2xl font-bold tracking-tighter text-[#1c1b1b]">ATELIER</Link>
-          <div className="hidden md:flex items-center space-x-8">
-            <Link to="/products" className="text-[#56423d] hover:text-[#994127] transition-colors">Clothes</Link>
-            <Link to="/products" className="text-[#56423d] hover:text-[#994127] transition-colors">Shoes</Link>
-            <Link to="/#new-arrivals" className="text-[#56423d] hover:text-[#994127] transition-colors">New Arrivals</Link>
-          </div>
-          <div className="flex items-center space-x-6">
-            <div className="hidden md:block relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
-              <input
-                className="bg-surface-container-low border-none text-sm py-2 pl-10 pr-4 w-64 focus:ring-1 focus:ring-primary rounded-lg transition-all"
-                placeholder="Search inventory..."
-                value={search}
-                onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-              />
-            </div>
-            <Link to="/account" className="text-on-surface hover:opacity-80 transition-opacity">
-              <span className="material-symbols-outlined">person</span>
-            </Link>
-            <Link to="/cart" className="text-on-surface hover:opacity-80 transition-opacity relative">
-              <span className="material-symbols-outlined">shopping_bag</span>
-              {cartCount > 0 && (
-                <span className={cartBadge}>{cartCount}</span>
-              )}
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Navbar activePage="products" />
 
       <div className="flex pt-20 min-h-screen">
 
@@ -177,6 +144,15 @@ const AdminPanelPage = () => {
               </p>
             </div>
             <div className="flex items-center space-x-3">
+              <div className="hidden md:block relative">
+                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+                <input
+                  className="bg-surface-container-low border border-outline-variant/20 text-sm py-2 pl-10 pr-4 w-64 focus:ring-1 focus:ring-primary rounded-lg transition-all"
+                  placeholder="Search inventory..."
+                  value={search}
+                  onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+                />
+              </div>
               <button
                 onClick={() => setShowAddModal(true)}
                 className="bg-gradient-to-br from-primary to-primary-container text-white px-5 py-2.5 text-sm font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center shadow-lg shadow-primary/20"
