@@ -200,31 +200,18 @@ const HomePage = () => {
           <div className="space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-widest text-[#1c1b1b] dark:text-[#fcf9f8]">Support</h4>
             <ul className="space-y-2 text-sm">
-              <li><a className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors" href="#">Shipping</a></li>
-              <li><a className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors" href="#">Returns</a></li>
-              <li><a className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors" href="#">Order Status</a></li>
+              <li><a className="text-[#56423d] dark:text-[#dcc1ba]">Shipping</a></li>
+              <li><a className="text-[#56423d] dark:text-[#dcc1ba]">Returns</a></li>
+              <li><a className="text-[#56423d] dark:text-[#dcc1ba]">Order Status</a></li>
             </ul>
           </div>
           <div className="space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-widest text-[#1c1b1b] dark:text-[#fcf9f8]">Legal</h4>
             <ul className="space-y-2 text-sm">
-              <li><a className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors" href="#">Privacy Policy</a></li>
-              <li><a className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors" href="#">Terms of Service</a></li>
+              <li><a className="text-[#56423d] dark:text-[#dcc1ba]">Privacy Policy</a></li>
+              <li><a className="text-[#56423d] dark:text-[#dcc1ba]">Terms of Service</a></li>
             </ul>
           </div>
-        </div>
-        <div className="space-y-6">
-          <h4 className="text-xs font-bold uppercase tracking-widest text-[#1c1b1b] dark:text-[#fcf9f8]">Newsletter</h4>
-          <p className="text-sm text-[#56423d] dark:text-[#dcc1ba]">Join our inner circle for early access and editorial stories.</p>
-          <form className="flex flex-col space-y-3">
-            <input
-              className="bg-surface-container-low border-none focus:ring-1 focus:ring-[#994127] text-sm py-3 px-4 rounded-lg outline-none transition-all"
-              placeholder="Email address"
-              type="email"
-            />
-            <button className="bg-[#994127] text-white py-3 px-6 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity">Subscribe</button>
-          </form>
-          <p className="text-[#56423d] dark:text-[#dcc1ba] text-xs pt-4 opacity-60">© 2024 Atelier Editorial. All rights reserved.</p>
         </div>
       </footer>
 
