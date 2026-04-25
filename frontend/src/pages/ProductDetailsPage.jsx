@@ -111,25 +111,11 @@ const ProductDetailsPage = () => {
               ${product.price}.00
             </div>
 
-            {/* Color Selection */}
-            <div className="mb-8">
-              <div className="flex justify-between items-end mb-4">
-                <span className="text-xs font-bold tracking-widest uppercase text-on-surface">
-                  Color / <span className="text-outline">Midnight Black</span>
-                </span>
-              </div>
-              <div className="flex gap-3">
-                <button className="w-8 h-8 rounded-full bg-on-background ring-2 ring-offset-2 ring-primary transition-all"></button>
-                <button className="w-8 h-8 rounded-full bg-[#3d2b1f] ring-1 ring-outline/20 hover:ring-primary/50 transition-all"></button>
-                <button className="w-8 h-8 rounded-full bg-[#2a303c] ring-1 ring-outline/20 hover:ring-primary/50 transition-all"></button>
-              </div>
-            </div>
 
             {/* Size Selection */}
             <div className="mb-10">
               <div className="flex justify-between items-end mb-4">
                 <span className="text-xs font-bold tracking-widest uppercase text-on-surface">Select Size</span>
-                <button className="text-[10px] uppercase font-bold tracking-widest text-outline hover:text-primary transition-colors underline underline-offset-4">Size Guide</button>
               </div>
               <div className="grid grid-cols-4 gap-2">
                 {product.sizes.map((size) => (
@@ -155,10 +141,6 @@ const ProductDetailsPage = () => {
                 className="w-full py-5 bg-gradient-to-tr from-primary to-primary-container text-white font-bold tracking-widest uppercase text-xs transition-transform active:scale-[0.98] hover:opacity-90"
               >
                 Add to Bag
-              </button>
-              <button className="w-full py-5 border border-outline/20 hover:border-primary/40 transition-colors flex items-center justify-center gap-2 font-bold tracking-widest uppercase text-xs">
-                <span className="material-symbols-outlined text-sm">favorite</span>
-                Add to Wishlist
               </button>
             </div>
 
