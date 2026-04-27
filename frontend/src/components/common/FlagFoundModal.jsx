@@ -5,7 +5,6 @@ const FlagFoundModal = ({
   flag,
   title = 'CTF Found!',
   message = 'Congratulations, you found a hidden flag.',
-  onClose,
   primaryLabel = 'Close',
   primaryAction,
 }) => {
@@ -67,7 +66,6 @@ FlagFoundModal.propTypes = {
   flag: PropTypes.string.isRequired,
   title: PropTypes.string,
   message: PropTypes.string,
-  onClose: PropTypes.func,
   primaryLabel: PropTypes.string,
   primaryAction: PropTypes.func,
 };
