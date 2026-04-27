@@ -7,12 +7,9 @@ const FlagFoundModal = ({
   message = 'Congratulations, you found a hidden flag.',
   onClose,
   primaryLabel = 'Close',
+  primaryAction,
 }) => {
   const [copied, setCopied] = useState(false);
-
-  const handleClose = () => {
-    if (onClose) onClose();
-  };
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(flag);
@@ -54,7 +51,7 @@ const FlagFoundModal = ({
           
           {/* RIGHT = configurable */}
           <button
-            onClick={onClose}
+            onClick={handlePrimary}
             className="flex-1 rounded-lg border border-outline/20 px-4 py-3 text-sm font-semibold hover:border-primary/40 transition-colors"
           >
             {primaryLabel || 'Close'}
@@ -70,8 +67,9 @@ FlagFoundModal.propTypes = {
   flag: PropTypes.string.isRequired,
   title: PropTypes.string,
   message: PropTypes.string,
-  onClose: PropTypes.func, // no longer required
+  onClose: PropTypes.func,
   primaryLabel: PropTypes.string,
+  primaryAction: PropTypes.func,
 };
 
 export default FlagFoundModal;
