@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { login as loginService } from '../api/auth.api';
-import { heroImage } from '../assets/images';
+const heroImage = 'https://res.cloudinary.com/dhyxvn66a/image/upload/v1777123195/Super_Ajith_luwks7.jpg';
 
 const LoginPage = () => {
   const { login } = useAuth();

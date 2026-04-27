@@ -65,7 +65,7 @@ const Navbar = ({ activePage = 'home' }) => {
 };
 
 Navbar.propTypes = {
-  activePage: PropTypes.oneOf(['home', 'products', 'shoes', 'arrivals', 'orders', 'account', 'cart']),
+  activePage: PropTypes.oneOf(['home', 'products', 'orders', 'account', 'cart']),
 };
 
 export default Navbar;
