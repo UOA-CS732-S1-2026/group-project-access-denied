@@ -73,13 +73,13 @@ const LoginPage = () => {
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="email" className="text-xs font-semibold uppercase tracking-widest text-[#56423d]">
-                Email
+                Email or Username
               </label>
               <input
                 id="email"
                 name="email"
-                type="email"
-                placeholder="you@example.com"
+                type="text"
+                placeholder="you@example.com or username"
                 value={form.email}
                 onChange={handleChange}
                 required
