@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { getProducts } from '../api/product.api';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
-import FlagFoundModal from '../components/FlagFoundModal';
+import FlagFoundModal from '../components/common/FlagFoundModal';
 
 const STATS = [
   { icon: 'payments',     label: 'Total Revenue',    value: '$124,592.00', badge: '+12.5%', badgeColor: 'text-tertiary bg-tertiary/10' },

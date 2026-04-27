@@ -4,12 +4,15 @@ import PropTypes from 'prop-types';
 const FlagFoundModal = ({
   flag,
   title = 'CTF Found!',
-  message,
+  message = 'Congratulations, you found a hidden flag.',
   onClose,
-  primaryAction,
-  primaryLabel = 'Copy Flag',
+  primaryLabel = 'Close',
 }) => {
   const [copied, setCopied] = useState(false);
+
+  const handleClose = () => {
+    if (onClose) onClose();
+  };
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(flag);
@@ -48,7 +51,7 @@ const FlagFoundModal = ({
           >
             {copied ? 'Copied!' : 'Copy Flag'}
           </button>
-
+          
           {/* RIGHT = configurable */}
           <button
             onClick={onClose}
@@ -67,8 +70,7 @@ FlagFoundModal.propTypes = {
   flag: PropTypes.string.isRequired,
   title: PropTypes.string,
   message: PropTypes.string,
-  onClose: PropTypes.func.isRequired,
-  primaryAction: PropTypes.func,
+  onClose: PropTypes.func, // no longer required
   primaryLabel: PropTypes.string,
 };
 
