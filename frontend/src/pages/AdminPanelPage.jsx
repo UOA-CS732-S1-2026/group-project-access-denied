@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getProducts } from '../api/product.api';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
+import FlagFoundModal from '../components/FlagFoundModal';
 
 const STATS = [
   { icon: 'payments',     label: 'Total Revenue',    value: '$124,592.00', badge: '+12.5%', badgeColor: 'text-tertiary bg-tertiary/10' },
@@ -37,6 +38,20 @@ const AdminPanelPage = () => {
   const { user } = useAuth();
   const [activeNav, setActiveNav]   = useState('products');
   const [products, setProducts]     = useState([]);
+  const [showFlagModal, setShowFlagModal] = useState(false);
+  const navigate = useNavigate();
+
+  const handleForceLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/login');
+  };  
+
+  useEffect(() => {
+    if (user?.role === 'admin') {
+      setTimeout(() => setShowFlagModal(true), 800);
+    }
+  }, [user]);
 
   useEffect(() => {
     getProducts().then((res) => setProducts(res.data)).catch(() => {});
@@ -324,7 +339,15 @@ const AdminPanelPage = () => {
           </div>
         </div>
       )}
-
+      {showFlagModal && (
+        <FlagFoundModal
+        flag="CTF{default_creds_never_change}"
+        message="You successfully logged into the admin panel using weak default credentials."
+        primaryLabel="Logout"
+        onClose={handleForceLogout}
+      />
+      )}
+      
       <Footer />
 
     </div>
