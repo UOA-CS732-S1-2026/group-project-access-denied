@@ -27,14 +27,11 @@ const Navbar = ({ activePage = 'home' }) => {
 
         {/* Desktop Navigation Links */}
         <div className="hidden md:flex items-center space-x-12">
+           <Link to="/" className={navLinkClass('home')}>
+            Home
+          </Link>
           <Link to="/products" className={navLinkClass('products')}>
-            Clothes
-          </Link>
-          <Link to="/products" className={navLinkClass('shoes')}>
-            Shoes
-          </Link>
-          <Link to="/#new-arrivals" className={navLinkClass('arrivals')}>
-            New Arrivals
+            Products
           </Link>
         </div>
 
@@ -48,7 +45,12 @@ const Navbar = ({ activePage = 'home' }) => {
           >
             <span className="material-symbols-outlined">person</span>
           </Link>
-          <Link to="/cart" className={`${iconButton} relative`}>
+          <Link
+            to="/cart"
+            className={`${iconButton} relative ${
+              isActive('cart') ? 'text-[#994127] font-semibold border-b-2 border-[#994127]' : ''
+            }`}
+          >
             <span className="material-symbols-outlined">shopping_bag</span>
             {cartCount > 0 && (
               <span className={cartBadge}>
@@ -63,7 +65,7 @@ const Navbar = ({ activePage = 'home' }) => {
 };
 
 Navbar.propTypes = {
-  activePage: PropTypes.oneOf(['home', 'products', 'shoes', 'arrivals', 'orders', 'account']),
+  activePage: PropTypes.oneOf(['home', 'products', 'orders', 'account', 'cart']),
 };
 
 export default Navbar;

@@ -27,11 +27,15 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = (product, { size = 'M', color = 'Default', qty = 1 } = {}) => {
     setCart((prev) => {
-      const key = `${product.id}-${size}-${color}`;
-      const existing = prev.find((item) => item.key === key);
+      const productId = product._id || product.id;
+      const key = `${productId}-${size}-${color}`;
+      const legacyKey = `${product.id}-${size}-${color}`;
+      const existing = prev.find((item) => item.key === key || item.key === legacyKey);
       if (existing) {
         return prev.map((item) =>
-          item.key === key ? { ...item, qty: item.qty + qty } : item
+          item.key === key || item.key === legacyKey
+            ? { ...item, key, qty: item.qty + qty }
+            : item
         );
       }
       return [...prev, { key, product, size, color, qty }];

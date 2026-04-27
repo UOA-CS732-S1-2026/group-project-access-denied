@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { getProduct } from '../api/product.api';
+import Navbar from '../components/common/Navbar';
+import Footer from '../components/common/Footer';
 
 const ProductDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToCart, cartCount } = useCart();
+  const { addToCart } = useCart();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState('');
@@ -49,29 +51,7 @@ const ProductDetailsPage = () => {
 
   return (
     <div className="bg-background text-on-background font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
-
-      {/* TopNavBar */}
-      <header className="fixed top-0 w-full z-50 bg-[#fcf9f8]/80 dark:bg-[#1c1b1b]/80 backdrop-blur-md">
-        <nav className="flex justify-between items-center px-8 py-4 max-w-full mx-auto">
-          <Link to="/" className="text-2xl font-bold tracking-tighter text-[#1c1b1b] dark:text-[#fcf9f8]">ATELIER</Link>
-          <div className="hidden md:flex items-center space-x-10">
-            <Link to="/products" className="text-[#994127] font-semibold border-b-2 border-[#994127] pb-1 font-['Manrope'] tracking-tight">Clothes</Link>
-            <Link to="/products" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">Shoes</Link>
-            <Link to="/#new-arrivals" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">New Arrivals</Link>
-          </div>
-          <div className="flex items-center space-x-6">
-            <Link to="/account" className="hover:opacity-80 transition-opacity duration-300">
-              <span className="material-symbols-outlined text-[#994127] dark:text-[#c05e42]">person</span>
-            </Link>
-            <Link to="/cart" className="hover:opacity-80 transition-opacity duration-300 relative">
-              <span className="material-symbols-outlined text-[#994127] dark:text-[#c05e42]">shopping_bag</span>
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-[10px] text-white rounded-full w-4 h-4 flex items-center justify-center">{cartCount}</span>
-              )}
-            </Link>
-          </div>
-        </nav>
-      </header>
+      <Navbar activePage="products" />
 
       <main className="pt-24 pb-20 max-w-7xl mx-auto px-6 lg:px-8">
 
@@ -132,25 +112,11 @@ const ProductDetailsPage = () => {
               ${product.price}.00
             </div>
 
-            {/* Color Selection */}
-            <div className="mb-8">
-              <div className="flex justify-between items-end mb-4">
-                <span className="text-xs font-bold tracking-widest uppercase text-on-surface">
-                  Color / <span className="text-outline">Midnight Black</span>
-                </span>
-              </div>
-              <div className="flex gap-3">
-                <button className="w-8 h-8 rounded-full bg-on-background ring-2 ring-offset-2 ring-primary transition-all"></button>
-                <button className="w-8 h-8 rounded-full bg-[#3d2b1f] ring-1 ring-outline/20 hover:ring-primary/50 transition-all"></button>
-                <button className="w-8 h-8 rounded-full bg-[#2a303c] ring-1 ring-outline/20 hover:ring-primary/50 transition-all"></button>
-              </div>
-            </div>
 
             {/* Size Selection */}
             <div className="mb-10">
               <div className="flex justify-between items-end mb-4">
                 <span className="text-xs font-bold tracking-widest uppercase text-on-surface">Select Size</span>
-                <button className="text-[10px] uppercase font-bold tracking-widest text-outline hover:text-primary transition-colors underline underline-offset-4">Size Guide</button>
               </div>
               <div className="grid grid-cols-4 gap-2">
                 {product.sizes.map((size) => (
@@ -176,10 +142,6 @@ const ProductDetailsPage = () => {
                 className="w-full py-5 bg-gradient-to-tr from-primary to-primary-container text-white font-bold tracking-widest uppercase text-xs transition-transform active:scale-[0.98] hover:opacity-90"
               >
                 Add to Bag
-              </button>
-              <button className="w-full py-5 border border-outline/20 hover:border-primary/40 transition-colors flex items-center justify-center gap-2 font-bold tracking-widest uppercase text-xs">
-                <span className="material-symbols-outlined text-sm">favorite</span>
-                Add to Wishlist
               </button>
             </div>
 
@@ -209,7 +171,7 @@ const ProductDetailsPage = () => {
             <div className="md:col-span-4 sticky top-24 h-fit">
               <h2 className="text-3xl font-bold tracking-tighter text-on-surface mb-8">Craftsmanship &amp; Care</h2>
               <ul className="space-y-6">
-                {['Product Description', 'Materials & Care', 'Delivery & Returns'].map((tab, i) => (
+                {['Product Description'].map((tab, i) => (
                   <li key={tab}>
                     <button className={`text-xs font-bold tracking-[0.2em] uppercase flex items-center gap-4 group ${i === 0 ? 'text-primary' : 'text-outline hover:text-primary transition-colors'}`}>
                       <span className={`w-2 h-[1px] ${i === 0 ? 'bg-primary' : 'bg-outline group-hover:bg-primary'}`}></span>
@@ -271,7 +233,6 @@ const ProductDetailsPage = () => {
                     </div>
                   ))}
                 </div>
-                <button className="mt-12 w-full py-4 border border-outline/20 text-xs font-bold uppercase tracking-widest hover:border-primary transition-colors">Write a Review</button>
               </div>
               <div className="lg:w-2/3 space-y-12">
                 {[
@@ -297,50 +258,13 @@ const ProductDetailsPage = () => {
                     </div>
                   </div>
                 ))}
-                <button className="text-xs font-bold tracking-widest uppercase text-primary flex items-center gap-2 group">
-                  Read all 128 reviews
-                  <span className="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
-                </button>
               </div>
             </div>
           </div>
         </section>
-
-        {/* Related Products */}
-        <section className="mt-32">
-          <div className="flex justify-between items-end mb-12">
-            <h2 className="text-3xl font-bold tracking-tighter text-on-surface">You May Also Like</h2>
-            <Link to="/products" className="text-xs font-bold tracking-widest uppercase text-outline hover:text-primary transition-colors underline underline-offset-8">View Collection</Link>
-          </div>
-        </section>
-
       </main>
 
-      {/* Footer */}
-      <footer className="w-full mt-auto bg-[#f6f3f2] dark:bg-[#1c1b1b]">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-12 py-16 border-t border-[#dcc1ba]/15 max-w-7xl mx-auto">
-          <div>
-            <div className="text-lg font-bold text-[#1c1b1b] dark:text-[#fcf9f8] mb-6">ATELIER</div>
-            <p className="text-sm text-[#56423d] dark:text-[#dcc1ba] leading-relaxed font-['Manrope']">Defining modern luxury through artisanal craftsmanship and sustainable storytelling. Each piece is a testament to timeless design and human touch.</p>
-          </div>
-          <div className="flex flex-col gap-4">
-            <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-on-surface mb-2">Customer Care</span>
-            {['Shipping', 'Returns', 'Privacy Policy', 'Terms of Service'].map((link) => (
-              <a key={link} className="text-sm text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-wide" href="#">{link}</a>
-            ))}
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-on-surface mb-6">Join the Atelier</span>
-            <div className="relative">
-              <input className="w-full bg-transparent border-b border-outline-variant/30 py-2 text-sm focus:outline-none focus:border-primary transition-colors" placeholder="Enter your email" type="email" />
-              <button className="absolute right-0 bottom-2 text-primary font-bold text-xs uppercase tracking-widest">Subscribe</button>
-            </div>
-            <div className="mt-auto pt-10 text-[10px] text-[#56423d] dark:text-[#dcc1ba] tracking-wide">
-              © 2024 Atelier Editorial. All rights reserved.
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
     </div>
   );

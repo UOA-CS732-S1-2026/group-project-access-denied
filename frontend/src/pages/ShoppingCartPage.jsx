@@ -1,14 +1,19 @@
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
+import Footer from '../components/common/Footer';
 import { useCart } from '../context/CartContext';
+
+const STANDARD_SHIPPING_FEE = 25;
 
 const ShoppingCartPage = () => {
   const { cart, removeFromCart, updateQty, cartCount, cartTotal } = useCart();
   const navigate = useNavigate();
+  const shipping = cartTotal >= 500 ? 0 : STANDARD_SHIPPING_FEE;
+  const orderTotal = cartTotal + shipping;
 
   return (
     <div className="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
-      <Navbar />
+      <Navbar activePage="cart" />
 
       <main className="pt-32 pb-24 px-8 max-w-7xl mx-auto min-h-screen">
         <header className="mb-16">
@@ -36,7 +41,7 @@ const ShoppingCartPage = () => {
                   <div key={item.key} className="flex gap-8 pb-12 border-b border-outline-variant/15 last:border-0">
                     <div
                       className="w-32 h-44 bg-surface-container-highest overflow-hidden flex-shrink-0 cursor-pointer"
-                      onClick={() => navigate(`/products/${item.product.id}`)}
+                      onClick={() => navigate(`/products/${item.product._id || item.product.id}`)}
                     >
                       <img
                         alt={item.product.name}
@@ -95,18 +100,14 @@ const ShoppingCartPage = () => {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-on-surface-variant">Shipping</span>
-                    <span className="text-on-surface">{cartTotal >= 500 ? 'Free' : 'Calculated at next step'}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-on-surface-variant">Estimated Tax</span>
-                    <span className="text-on-surface">$0.00</span>
+                    <span className="text-on-surface">{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
                   </div>
                 </div>
                 <div className="pt-6 border-t border-outline-variant/30 mb-10">
                   <div className="flex justify-between items-baseline">
                     <span className="text-lg font-semibold text-on-surface">Total</span>
                     <span className="text-2xl font-bold text-on-surface tracking-tight">
-                      ${cartTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      ${orderTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </span>
                   </div>
                 </div>
@@ -133,39 +134,7 @@ const ShoppingCartPage = () => {
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="w-full mt-auto bg-[#f6f3f2] dark:bg-[#1c1b1b]">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-12 py-16 border-t border-[#dcc1ba]/15">
-          <div>
-            <div className="text-lg font-bold text-[#1c1b1b] dark:text-[#fcf9f8] mb-4">ATELIER</div>
-            <p className="text-[#56423d] dark:text-[#dcc1ba] text-sm leading-relaxed max-w-xs">
-              Curating the finest essential wardrobe pieces with an artisanal focus on quality and timeless design.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-3">
-              <h4 className="text-[10px] font-bold tracking-widest text-[#994127] uppercase">Shop</h4>
-              <Link to="/products" className="text-[#56423d] dark:text-[#dcc1ba] text-sm hover:text-[#994127] transition-colors">Clothes</Link>
-              <Link to="/products" className="text-[#56423d] dark:text-[#dcc1ba] text-sm hover:text-[#994127] transition-colors">Shoes</Link>
-              <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] text-sm hover:text-[#994127] transition-colors">Archive</a>
-            </div>
-            <div className="flex flex-col gap-3">
-              <h4 className="text-[10px] font-bold tracking-widest text-[#994127] uppercase">Help</h4>
-              <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] text-sm hover:text-[#994127] transition-colors">Shipping</a>
-              <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] text-sm hover:text-[#994127] transition-colors">Returns</a>
-            </div>
-          </div>
-          <div className="flex flex-col justify-between items-start md:items-end">
-            <div className="flex gap-4">
-              <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors text-sm">Privacy Policy</a>
-              <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors text-sm">Terms</a>
-            </div>
-            <p className="text-[#56423d] dark:text-[#dcc1ba] text-xs font-['Manrope'] tracking-wide mt-4 md:mt-0">
-              © 2024 Atelier Editorial. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
     </div>
   );

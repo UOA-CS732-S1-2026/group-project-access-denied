@@ -1,3 +1,4 @@
+
 /**
  * ThreadVault global seed
  *
@@ -10,90 +11,94 @@
  * Teammates: add new persistent fixtures here (new products, challenges, etc.)
  */
 
+
 require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env') });
 const mongoose  = require('mongoose');
 const User      = require('../models/user.model');
 const Product   = require('../models/product.model');
-const Order     = require('../models/order.model');
 const Challenge = require('../models/challenge.model');
 const ChatSession = require('../models/ChatSession.model');
 
+
 // ─── Products ─────────────────────────────────────────────────────────────────
+
 
 const PRODUCTS = [
   {
     name: 'Draped Silk Blouse',
     description: 'A luxuriously light silk blouse with elegant draping, perfect for effortless day-to-evening dressing.',
     price: 245, category: 'clothing', sizes: ['XS', 'S', 'M', 'L', 'XL'],
-    images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuDnV6wob3RAE4eWK5R51dcf-5Mx_0KLLIqlL4aZ6_VsJYg6Lj5Ytq-kIhGwzjMNd1D6b_gLNmjSo_4TxNhTEfh9eB3E8Yj43xh7vwiIKmVPkZOQ668O7A_MvAYjHURGp3pKjKoSOX-7YZxXz1-ppCy3sAp0GNkpBFD_XdGjUITH4MM83jhqfClthmBAUDsBIOLQGL65suT4JfyugsnihepNW-Ftnz3prcDGCzkQbjN8MDZbQYjXfJ0UttIa1AlxUpGji37dTA9HSDA'],
+    images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122158/Draped_Silk_Blouse_foae3t.png'],
     stock: 34, isActive: true, isNew: false, featured: true,
   },
   {
     name: 'Aero-Luxe Runner',
     description: 'High-performance running shoe engineered with responsive cushioning and a breathable upper.',
     price: 180, category: 'shoes', sizes: ['38', '39', '40', '41', '42', '43', '44', '45'],
-    images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuCPYonEKVxQrpe7JyKoOBJxanMi6mw7fFT2rnpbGfnfLVMQZLVD0azn6nPn2I0nhL7CxD-VaQVLEYpCJmMkjSru0pd5dRuFqchVhEP3XdscWSuV7sYsrUBsCljFtLO6daUgmqX-LyK5Z4BwRShW6-qSC56r1zfEDNM2pr6WRL5t2xlNDbf2ONhWF_-XyfTB8v-SRTTmItCIE1LjyDiJsN6pQVpYmDhUgBshXlmv-NpjpoQFa9RQ37p33W-Rv3iRj8BQFjkcYxyZ61g'],
+    images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122157/Aero-Luxe_Runner_oaz5cx.png'],
     stock: 18, isActive: true, isNew: false, featured: true,
   },
   {
     name: 'Sculpted Trench',
     description: 'A structured trench coat with tailored proportions, crafted from a premium water-resistant fabric.',
     price: 495, category: 'clothing', sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
-    images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuACZ67ThldhMay2zcJCf38Y5Tu03fComC9FvY2fJwKapvmH_ynMKbhDUIqB6P3CAAT6TnG13xnV_hwRc8aOxSXwvKezwfdMJPK1sokWQC7e-WNC1AtKOZEG6hBhCKHfCPmczQOJk-yHs9iSwDQpp7syDt2pzhmH3vtNzhey1gQJ-TG1tllpodtrmi2_MYlq9BH77nodOUTJkas9KettenC_Go4bQFU6Qz_zytLfVtmAaegZR26fcA1W_4VENap1G_pUYxFayyHhgMc'],
+    images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122157/Sculpted_Trench_kzrfko.png'],
     stock: 12, isActive: true, isNew: false, featured: true,
   },
   {
     name: 'Heritage Chelsea Boot',
     description: 'Hand-crafted chelsea boot in deep walnut leather with an elastic gore for an effortless fit.',
     price: 320, category: 'shoes', sizes: ['38', '39', '40', '41', '42', '43'],
-    images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuCxkG_E-Y33RcglSMcwZm_hB3IbgsFZ9ntjtPTW4buRuUAJQQ5wR3aCfQ6h7MGZRERl42POeGi9JlxShV5BzdJwldPU0eMBUkcDptAWiiHVCdHFSpwQKXjX3cicAQre8WvShPjyKa0juPYCzdZn4WDpgdTlq_oiU4UQRgN7mm7SW7ssaCFJnXUADnxUPviOmMoXoSIGrN_XMCBzVIbAN_0kkd_NBzN5V4DV-thoPpJmoAV2ewQVEP72C0SrOuomdFTYwecuk2bi5Y8'],
+    images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122157/Heritage_Chelsea_Boot_ddxgfx.png'],
     stock: 27, isActive: true, isNew: false, featured: true,
   },
   {
     name: 'Structured Wool Overcoat',
     description: 'A weighty, double-faced wool overcoat with a sharp silhouette and concealed button placket.',
     price: 890, category: 'clothing', sizes: ['XS', 'S', 'M', 'L', 'XL'],
-    images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuBwdZruDpswbrpa_mdweAcNv7bE2GMcoL99GkgdH45M94L9EsdKzZXLVwAszObexPQ2TvHPbT-4oEppEd84Kcp0pWRRZ99OisxBE4RzTFFgkrRYb1IixBnC0Egjl__DoPF6Pbh0VT2yx87i7k0hNKMiIKEqe3Jhw5mf-484UJiSl4ofuVd-fkLjmQtHVO6PLvfKB3M6n1Ci6ihgj_6S7cnm98nZcjZbkTTm2tCyHBJF4l6SgNYdSsgHxNAn-qxpl2fsJemrPZ6XkJM'],
+    images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122157/Structured_Wool_Overcoat_cqjp2z.png'],
     stock: 9, isActive: true, isNew: false, featured: false,
   },
   {
     name: 'Minimalist Chelsea Boot',
     description: 'A pared-back chelsea boot in smooth black leather, built on a lightweight rubber sole.',
     price: 550, category: 'shoes', sizes: ['38', '39', '40', '41', '42', '43', '44'],
-    images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuAYECk5JbOjtJM9IL08MzpFybLXkyvAhgUUvJ5joQ8CS_P9yTWWjse4q7QuYWT6Tjhm4RyJe-9Q3HR9j_m_PwAHuRzQ7EI29vQE4E1iqk-niTxLpucW4FUstOlv-e2rqi27E2AvoVDVQCrgahAJ7nTyVwZRP9Qqkl4zoxYr1TNXwUwzjDygaBPIAHXKLjPxrfKUHwN7_mc_O4qiAyPldDjYWC_eWK3T98G6-3GZU2-rYBMngDJ5qltqbuuw6O9GPjgEuc3J-R_Gy4w'],
+    images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122157/Minimalist_Chelsea_Boot_dh6jxy.png'],
     stock: 6, isActive: true, isNew: true, featured: false,
   },
   {
     name: 'Heavyweight Cotton Tee',
     description: 'An oversized 280gsm cotton tee with a relaxed boxy fit and reinforced seams for longevity.',
     price: 120, category: 'clothing', sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
-    images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuDXS-mWLJBDJINpcBKHQlinY3aP_JPG_kx3TX5ggRFLi4A6kYceMwrQbUPSVvMMjcA-FYoK7gUFlwg51EdoJe0mGsXPO_i8uJvbDb7MAtCk9pS6S4keS_bbB9mPS9gaq32Oxtwbp--8Be-qq12fWKUniKE3ptMU1AG7rn7vUABaaiFFrjTYp9aR_bIffkuZTONZae111M50kZK1EZFyghh0QJovfAQASnNtQAwYrGtOPmH_LJY-_80tOj7qNbtvsNIEYcdw7nVs-qM'],
+    images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122158/Heavyweight_Cotton_Tee_gopxid.png'],
     stock: 85, isActive: true, isNew: false, featured: false,
   },
   {
     name: 'Tailored Linen Trouser',
     description: 'Crisp linen trousers with a high-rise waistband and wide-leg cut for an elevated casual look.',
     price: 340, category: 'clothing', sizes: ['XS', 'S', 'M', 'L', 'XL'],
-    images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuBOBxQThs5RXnku0C_9qWRWws__PDFbuTSsLRGXzT7YPmWGORUuLy8w1jNoNpoA9TeFuvifggMLrQ0u1lTdZfX83MbXA-3gYx-eetTO5z0VVOPVpsdyhBc3wypDCsMxfghM1V0FJK8axOBPCRh3u1_0B6qQJcajdLVG6_3eEpmk0m7mQb7w-1wNhWEFqvU68cRGVB9g20pNWflAMCkWfQVFjdOvCRqyegZZ-wHNO6KSK7BApyDEJuDlcjdbv6o5Im0MFswbGyYPQqM'],
+    images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122156/Tailored_Linen_Trouser_oetztl.png'],
     stock: 31, isActive: true, isNew: false, featured: false,
   },
   {
     name: 'Silk-Cashmere Knit',
     description: 'An ultra-soft knit blending 70% silk and 30% cashmere for warmth without weight.',
     price: 420, category: 'clothing', sizes: ['XS', 'S', 'M', 'L', 'XL'],
-    images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuCHV28vMgj5LFwyVUDKkUCqSh0VsZwz0NBbEnz8dbTgALpAk36cdkcX7TFwKPy_CysvRIpugRzEREC35q4aCjQj_my5BTjRDmD2Ll3XE0S8ipOExHs3R-8shOvMn9W1hIw1BwhKkjARMCmGdRizfzw6vPU5P35peGIcyK83GzwPrSFEZyjM0J_3pJWTQxu4x-MFKYWCFymg2aYd68dmHKEQ4vn4PYNNs_45av_XoXJGMjlCvwH7HVvCsuSUrN0VbmDl3vBxXhZkq4M'],
+    images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122156/Silk-Cashmere_Knit_sskq0w.png'],
     stock: 15, isActive: true, isNew: false, featured: false,
   },
   {
     name: 'Day-to-Night Tote',
     description: 'A structured tote in full-grain leather with a zip-top closure and suede lining.',
     price: 675, category: 'clothing', sizes: ['One Size'],
-    images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuCcTQZykfv5eOIRv6Nz6s9HxLn5LtxKG4-dJaz9mNuJ4BsZaP47qTHL1dbALpcTa7Ftiz3YwOcLekNS58z4KPk1Yb3X6Y_ubekFwZ2C4Sq60D_OXBfttsHQyD6bpRtiSv5dDLw4M_HuZvb3yqKqQkspgKFcgJ-O5q93DG8NJoZfZpZob3LHdj0Xz98ljAxyJQj-5PS0KhChNfsYkSduTsZBsJ5661ikQnvFOzweYZKUP1e4bp2WZjlN37gUWEqV5p8_t__thXi5gi4'],
+    images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122156/Day-to-Night_Tote_mxwc8s.png'],
     stock: 42, isActive: true, isNew: false, featured: false,
   },
 ];
 
+
 // ─── Challenges ───────────────────────────────────────────────────────────────
+
 
 const CHALLENGES = [
   {
@@ -208,10 +213,12 @@ const CHALLENGES = [
   { title: 'TBD', description: 'Coming soon.', category: 'other', difficulty: 'easy', points: 100, flag: 'CTF{tbd_flag_14}', isActive: false },
 ];
 
+
 // ─── Run ──────────────────────────────────────────────────────────────────────
 
+
 async function seedGlobal() {
-  
+ 
   // ── Admin user ──────────────────────────────────────────────────────────────
   let admin = await User.findOne({ username: 'admin' });
   if (!admin) {
@@ -227,6 +234,7 @@ async function seedGlobal() {
   } else {
     console.log('Admin already exists — skipping');
   }
+
 
   // ── Victim user "alice" ─────────────────────────────────────────────────────
   let alice = await User.findOne({ username: 'alice' });
@@ -244,6 +252,7 @@ async function seedGlobal() {
     console.log('Alice already exists — skipping');
   }
 
+
   // ── Products ────────────────────────────────────────────────────────────────
   const productCount = await Product.countDocuments();
   if (productCount === 0) {
@@ -253,32 +262,6 @@ async function seedGlobal() {
     console.log(`Products already exist (${productCount}) — skipping`);
   }
 
-  // ── Alice's flagged order (IDOR flag) ───────────────────────────────────────
-  // CTF: intentional vulnerability — insecure-api (IDOR, Flag #3)
-  // sessionId: null so the cron never cleans it up — always discoverable by any player.
-  const aliceOrderExists = await Order.findOne({ user: alice._id, sessionId: null });
-  if (!aliceOrderExists) {
-    const products = await Product.find({ isActive: true });
-    await Order.create({
-      orderNumber: 1,
-      user: alice._id,
-      sessionId: null,
-      items: [{ product: products[0]._id, size: 'M', quantity: 1, priceAtPurchase: products[0].price }],
-      total: products[0].price,
-      status: 'delivered',
-      shippingAddress: {
-        fullName: 'Alice Smith',
-        street: '12 Harbour View',
-        city: 'Auckland',
-        postcode: '1010',
-        country: 'New Zealand',
-      },
-      internalNote: 'CTF{idor_order_exposed}',
-    });
-    console.log("Created alice's flagged order");
-  } else {
-    console.log("Alice's flagged order already exists — skipping");
-  }
 
   // ── Challenges ──────────────────────────────────────────────────────────────
   // Upsert by title so re-running the seed updates existing records (e.g. TBD
@@ -291,6 +274,7 @@ async function seedGlobal() {
     );
   }
   console.log(`Upserted ${CHALLENGES.length} challenges`);
+
 
   // ── Admin chat session (CTF: IDOR vulnerability — Flag 3) ──────────────────
   await ChatSession.deleteOne({ sessionId: 1 });
@@ -318,8 +302,10 @@ async function seedGlobal() {
   });
   console.log('Admin chat session seeded (sessionId: 1) with Flag 3');
 
+
   console.log('\nGlobal seed complete.');
 }
+
 
 // Allow running manually: node seed.global.js
 if (require.main === module) {
@@ -335,4 +321,6 @@ if (require.main === module) {
     });
 }
 
+
 module.exports = seedGlobal;
+
