@@ -16,6 +16,7 @@ import ChallengePage   from './pages/ChallengePage';
 import NotFoundPage    from './pages/NotFoundPage';
 import ProductListing      from './pages/ProductListing';
 import ProductDetailsPage  from './pages/ProductDetailsPage';
+import TermsOfServicePage  from './pages/TermsOfServicePage';
 import HelpBot from './components/Helpbot';
 
 const HELPBOT_HIDDEN_ROUTES = ['/challenges'];
@@ -43,6 +44,7 @@ const AppContent = () => {
         <Route path="/checkout"     element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
         <Route path="/admin"        element={<ProtectedRoute><AdminPanelPage /></ProtectedRoute>} />
         <Route path="/challenges"   element={<ProtectedRoute><ChallengePage /></ProtectedRoute>} />
+        <Route path="/terms"         element={<ProtectedRoute><TermsOfServicePage /></ProtectedRoute>} />
 
         {/* 404 */}
         <Route path="*" element={<NotFoundPage />} />
