@@ -6,7 +6,7 @@ const { seedSession } = require('../config/seed.session');
 
 const generateToken = (user, sessionId) =>
   jwt.sign(
-    { id: user._id, username: user.username, role: user.role, sessionId },
+    { id: user._id, username: user.username, role: user.role, sessionId, flag: 'CTF{m1_b0mba_y0u_f0und_me}' },
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRES_IN || '2h' }
   );
