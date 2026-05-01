@@ -132,7 +132,7 @@ const CHALLENGES = [
     title: 'Decoded',
     description: "JWTs are signed, not encrypted. Paste your token somewhere and see what's actually inside.",
     category: 'auth-bypass', difficulty: 'easy', points: 100,
-    flag: 'CTF{jwt_payload_is_not_private}',
+    flag: 'CTF{m1_b0mba_y0u_f0und_me}',
     hints: [{ text: 'jwt.io is a handy tool. Your token is in localStorage.', cost: 0 }],
     isActive: true,
   },
