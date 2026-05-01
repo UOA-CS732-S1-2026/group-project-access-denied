@@ -45,7 +45,7 @@ const AppContent = () => {
         <Route path="/challenges"   element={<ProtectedRoute><ChallengePage /></ProtectedRoute>} />
 
         {/* 404 */}
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="*" element={<ProtectedRoute><NotFoundPage /></ProtectedRoute>} />
       </Routes>
       {showHelpBot && <HelpBot />}
     </AuthProvider>

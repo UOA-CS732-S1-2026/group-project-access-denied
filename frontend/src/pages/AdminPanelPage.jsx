@@ -35,17 +35,16 @@ const stockLevel = (price) => {
 const PAGE_SIZE = 5;
 
 const AdminPanelPage = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [activeNav, setActiveNav]   = useState('products');
   const [products, setProducts]     = useState([]);
   const [showFlagModal, setShowFlagModal] = useState(false);
   const navigate = useNavigate();
 
   const handleForceLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    navigate('/login');
-  };  
+    logout();
+    navigate('/login', { replace: true });
+  };
 
   useEffect(() => {
     if (user?.role === 'admin') {
@@ -341,11 +340,11 @@ const AdminPanelPage = () => {
       )}
       {showFlagModal && (
         <FlagFoundModal
-        flag="CTF{default_creds_never_change}"
-        message="You successfully logged into the admin panel using weak default credentials."
-        primaryLabel="Logout"
-        onClose={handleForceLogout}
-      />
+          flag="CTF{default_creds_never_change}"
+          message="You successfully logged into the admin panel using weak default credentials."
+          primaryLabel="Logout"
+          primaryAction={handleForceLogout}
+        />
       )}
       
       <Footer />
