@@ -123,7 +123,7 @@ const HomePage = () => {
                 <h2 className="text-5xl font-extrabold tracking-tighter text-on-surface mb-8 leading-tight">Crafting the Future of Wardrobes</h2>
                 <div className="space-y-6 text-lg text-on-surface-variant font-light leading-relaxed">
                   <p>
-                    ATELIER was founded on the belief that clothing should be a reflection of intent. We reject the cycle of disposable trends in favor of enduring quality and architectural silhouettes.
+                    APAPPAREL was founded on the belief that clothing should be a reflection of intent. We reject the cycle of disposable trends in favor of enduring quality and architectural silhouettes.
                   </p>
                   <p>
                     Every piece is sourced from ethical mills and crafted by artisans who share our obsession with detail. From the weight of a silk blouse to the tension of a seam, we believe luxury is felt, not seen.

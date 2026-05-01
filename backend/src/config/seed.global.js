@@ -1,6 +1,6 @@
 
 /**
- * ThreadVault global seed
+ * APapparel global seed
  *
  * Run once manually to populate shared read-only data:
  *   products, challenges, admin user, alice user.
@@ -103,7 +103,7 @@ const PRODUCTS = [
 const CHALLENGES = [
   {
     title: 'Hidden in Plain Sight',
-    description: "Sometimes developers leave notes where they shouldn't. Take a closer look at the ThreadVault homepage — not the page, the source.",
+    description: "Sometimes developers leave notes where they shouldn't. Take a closer look at the APapparel homepage — not the page, the source.",
     category: 'other', difficulty: 'easy', points: 100,
     flag: 'CTF{html_comments_are_not_secrets}',
     hints: [{ text: 'Your browser can show you what the server actually sent. Right-click → View Page Source.', cost: 0 }],
@@ -111,7 +111,7 @@ const CHALLENGES = [
   },
   {
     title: 'The Fine Print',
-    description: "ThreadVault's legal team hid something in the Terms & Conditions. Most users never read it — maybe you should.",
+    description: "APapparel's legal team hid something in the Terms & Conditions. Most users never read it — maybe you should.",
     category: 'other', difficulty: 'easy', points: 100,
     flag: 'CTF{nobody_reads_the_terms}',
     hints: [{ text: 'Try scrolling all the way to the bottom of the Terms & Conditions page.', cost: 0 }],
@@ -138,7 +138,7 @@ const CHALLENGES = [
   },
   {
     title: 'The Helpful Assistant',
-    description: "ThreadVault's AI shopping assistant is very helpful. Maybe too helpful. See if you can get it to reveal something it shouldn't.",
+    description: "APapparel's AI shopping assistant is very helpful. Maybe too helpful. See if you can get it to reveal something it shouldn't.",
     category: 'prompt-injection', difficulty: 'medium', points: 200,
     flag: 'CTF{prompt_injection_unlocked}',
     hints: [{ text: 'Try asking the assistant to ignore its previous instructions.', cost: 0 }],
@@ -146,7 +146,7 @@ const CHALLENGES = [
   },
   {
     title: 'Welcome, Administrator',
-    description: "The ThreadVault admin panel is locked. Or is it? Try the obvious before you try the clever.",
+    description: "The APapparel admin panel is locked. Or is it? Try the obvious before you try the clever.",
     category: 'default-credentials', difficulty: 'easy', points: 100,
     flag: 'CTF{default_creds_never_change}',
     hints: [{ text: 'admin / admin is a classic for a reason.', cost: 0 }],
@@ -154,7 +154,7 @@ const CHALLENGES = [
   },
   {
     title: 'The Search Bar Speaks',
-    description: "ThreadVault's product search passes your input somewhere it probably shouldn't. What happens when you ask it something unusual?",
+    description: "APapparel's product search passes your input somewhere it probably shouldn't. What happens when you ask it something unusual?",
     category: 'sql-injection', difficulty: 'medium', points: 200,
     flag: 'CTF{sql_i_found_the_vault}',
     hints: [
@@ -165,7 +165,7 @@ const CHALLENGES = [
   },
   {
     title: 'Verbose Errors',
-    description: "ThreadVault's login endpoint is a little too talkative when things go wrong. See what you can learn from a failed login.",
+    description: "APapparel's login endpoint is a little too talkative when things go wrong. See what you can learn from a failed login.",
     category: 'other', difficulty: 'easy', points: 100,
     flag: 'CTF{error_messages_leak_info}',
     hints: [{ text: 'Try logging in with a real email address but the wrong password. Then try a fake email.', cost: 0 }],
@@ -173,7 +173,7 @@ const CHALLENGES = [
   },
   {
     title: 'Social Engineering 101',
-    description: "ThreadVault's forgot password flow asks a security question. The answer is out there — you just have to find it.",
+    description: "APapparel's forgot password flow asks a security question. The answer is out there — you just have to find it.",
     category: 'auth-bypass', difficulty: 'easy', points: 100,
     flag: 'CTF{social_profile_exposed_answer}',
     hints: [{ text: 'Check the About page. The founder likes to overshare.', cost: 0 }],
@@ -181,7 +181,7 @@ const CHALLENGES = [
   },
   {
     title: 'Stack the Savings',
-    description: "ThreadVault's checkout applies discount codes at face value. What happens if you apply more than one?",
+    description: "APapparel's checkout applies discount codes at face value. What happens if you apply more than one?",
     category: 'logic-flaw', difficulty: 'easy', points: 100,
     flag: 'CTF{discount_stacking_exploit}',
     hints: [{ text: 'Try applying a discount code twice. Does the total keep going down?', cost: 0 }],
@@ -189,7 +189,7 @@ const CHALLENGES = [
   },
   {
     title: 'Something Went Wrong',
-    description: "StyleBot crashed — and ThreadVault's error handler had a lot to say about it. See what gets exposed when the bot can't cope.",
+    description: "StyleBot crashed — and APapparel's error handler had a lot to say about it. See what gets exposed when the bot can't cope.",
     category: 'exposed-files', difficulty: 'medium', points: 200,
     flag: 'CTF{verbose_error_env_leak}',
     hints: [
@@ -224,7 +224,7 @@ async function seedGlobal() {
   if (!admin) {
     admin = await User.create({
       username: 'admin',
-      email: 'admin@threadvault.com',
+      email: 'admin@apapparel.com',
       password: 'admin',        // CTF: intentional vulnerability — default-credentials
       role: 'admin',
       securityQuestion: "What is your pet's name?",
@@ -241,7 +241,7 @@ async function seedGlobal() {
   if (!alice) {
     alice = await User.create({
       username: 'alice',
-      email: 'alice@threadvault.com',
+      email: 'alice@apapparel.com',
       password: 'alice1234',
       role: 'user',
       securityQuestion: 'What was your first car?',

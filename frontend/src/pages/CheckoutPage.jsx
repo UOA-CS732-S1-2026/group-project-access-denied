@@ -62,7 +62,7 @@ const CheckoutPage = () => {
       {/* Navbar */}
       <nav className="fixed top-0 w-full z-50 bg-[#fcf9f8]/80 dark:bg-[#1c1b1b]/80 backdrop-blur-md">
         <div className="flex justify-between items-center px-8 py-4 max-w-full mx-auto">
-          <Link to="/" className="text-2xl font-bold tracking-tighter text-[#1c1b1b] dark:text-[#fcf9f8]">ATELIER</Link>
+          <Link to="/" className="text-2xl font-bold tracking-tighter text-[#1c1b1b] dark:text-[#fcf9f8]">APAPPAREL</Link>
           <div className="hidden md:flex items-center space-x-8 text-xs font-bold tracking-[0.2em] uppercase text-on-surface-variant">
             {STEPS.map((s, i) => (
               <span key={s} className={`flex items-center gap-2 ${i <= step ? 'text-primary' : ''}`}>

@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer className="w-full mt-auto bg-[#f6f3f2] dark:bg-[#1c1b1b] grid grid-cols-1 md:grid-cols-3 gap-8 px-12 py-16 border-t border-[#dcc1ba]/15 font-['Manrope']">
       <div className="space-y-6">
-        <div className="text-lg font-bold text-[#1c1b1b] dark:text-[#fcf9f8]">ATELIER</div>
+        <div className="text-lg font-bold text-[#1c1b1b] dark:text-[#fcf9f8]">APAPPAREL</div>
         <p className="text-[#56423d] dark:text-[#dcc1ba] max-w-xs text-sm leading-relaxed">
           Elevating the digital commerce experience through editorial curation and artisanal focus.
         </p>

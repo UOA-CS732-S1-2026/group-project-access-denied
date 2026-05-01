@@ -58,7 +58,7 @@ const OrderDetailPage = () => {
       {/* Navbar */}
       <nav className="fixed top-0 w-full z-50 bg-[#fcf9f8]/80 dark:bg-[#1c1b1b]/80 backdrop-blur-md">
         <div className="flex justify-between items-center px-8 py-4 max-w-full mx-auto">
-          <Link to="/" className="text-2xl font-bold tracking-tighter text-[#1c1b1b] dark:text-[#fcf9f8]">ATELIER</Link>
+          <Link to="/" className="text-2xl font-bold tracking-tighter text-[#1c1b1b] dark:text-[#fcf9f8]">APAPPAREL</Link>
           <div className="flex items-center space-x-6 text-[#994127]">
             <Link to="/account" className="hover:opacity-80 transition-opacity">
               <span className="material-symbols-outlined">person</span>
