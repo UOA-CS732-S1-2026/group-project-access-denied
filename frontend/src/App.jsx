@@ -53,7 +53,7 @@ const AppContent = () => {
         <Route path="/terms"         element={<ProtectedRoute><TermsOfServicePage /></ProtectedRoute>} />
 
         {/* 404 */}
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="*" element={<ProtectedRoute><NotFoundPage /></ProtectedRoute>} />
       </Routes>
       {showHelpBot && <HelpBot />}
     </AuthProvider>
