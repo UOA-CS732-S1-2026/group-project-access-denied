@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
@@ -23,6 +24,11 @@ const HELPBOT_HIDDEN_ROUTES = ['/challenges'];
 
 const AppContent = () => {
   const { pathname } = useLocation();
+
+  // Scroll to top on every route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
   const showHelpBot = !HELPBOT_HIDDEN_ROUTES.includes(pathname);
 
   return (
