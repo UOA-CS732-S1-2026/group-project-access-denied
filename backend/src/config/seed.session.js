@@ -1,5 +1,5 @@
 /**
- * ThreadVault session seed
+ * APapparel session seed
  *
  * Called automatically when a new session is created (register/login).
  * Creates per-session writable data scoped to the sessionId:

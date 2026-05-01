@@ -22,7 +22,7 @@ const Navbar = ({ activePage = 'home' }) => {
         
         {/* Logo */}
         <Link to="/" className={logoText}>
-          ATELIER
+          APAPPAREL
         </Link>
 
         {/* Desktop Navigation Links */}

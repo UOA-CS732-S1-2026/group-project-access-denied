@@ -1,4 +1,4 @@
-# ThreadVault — Interactive Web CTF Lab
+# APapparel — Interactive Web CTF Lab
 
 > A hands-on Capture the Flag platform where the entire website is the challenge.  
 > Built with the MERN stack (MongoDB, Express, React, Node.js).

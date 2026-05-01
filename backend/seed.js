@@ -1,5 +1,5 @@
 /**
- * ThreadVault seed script
+ * APapparel seed script
  * Run: node backend/seed.js
  *
  * Populates the database with:
@@ -95,7 +95,7 @@ const PRODUCTS = [
   {
     id: 5,
     name: "Structured Wool Overcoat",
-    brand: "Atelier Studio",
+    brand: "APapparel Studio",
     category: "clothing",
     description:
       "A weighty, double-faced wool overcoat with a sharp silhouette and concealed button placket.",
@@ -202,7 +202,7 @@ const CHALLENGES = [
   {
     title: "Hidden in Plain Sight",
     description:
-      "Sometimes developers leave notes where they shouldn't. Take a closer look at the ThreadVault homepage — not the page, the source.",
+      "Sometimes developers leave notes where they shouldn't. Take a closer look at the APapparel homepage — not the page, the source.",
     category: "other",
     difficulty: "easy",
     points: 100,
@@ -218,7 +218,7 @@ const CHALLENGES = [
   {
     title: "The Fine Print",
     description:
-      "ThreadVault's legal team hid something in the Terms & Conditions. Most users never read it — maybe you should.",
+      "APapparel's legal team hid something in the Terms & Conditions. Most users never read it — maybe you should.",
     category: "other",
     difficulty: "easy",
     points: 100,
@@ -270,7 +270,7 @@ const CHALLENGES = [
   {
     title: "The Helpful Assistant",
     description:
-      "ThreadVault's AI shopping assistant is very helpful. Maybe too helpful. See if you can get it to reveal something it shouldn't.",
+      "APapparel's AI shopping assistant is very helpful. Maybe too helpful. See if you can get it to reveal something it shouldn't.",
     category: "prompt-injection",
     difficulty: "medium",
     points: 200,
@@ -286,7 +286,7 @@ const CHALLENGES = [
   {
     title: "Welcome, Administrator",
     description:
-      "The ThreadVault admin panel is locked. Or is it? Try the obvious before you try the clever.",
+      "The APapparel admin panel is locked. Or is it? Try the obvious before you try the clever.",
     category: "default-credentials",
     difficulty: "easy",
     points: 100,
@@ -297,7 +297,7 @@ const CHALLENGES = [
   {
     title: "The Search Bar Speaks",
     description:
-      "ThreadVault's product search passes your input somewhere it probably shouldn't. What happens when you ask it something unusual?",
+      "APapparel's product search passes your input somewhere it probably shouldn't. What happens when you ask it something unusual?",
     category: "sql-injection",
     difficulty: "medium",
     points: 200,
@@ -314,7 +314,7 @@ const CHALLENGES = [
   {
     title: "Verbose Errors",
     description:
-      "ThreadVault's login endpoint is a little too talkative when things go wrong. See what you can learn from a failed login.",
+      "APapparel's login endpoint is a little too talkative when things go wrong. See what you can learn from a failed login.",
     category: "other",
     difficulty: "easy",
     points: 100,
@@ -330,7 +330,7 @@ const CHALLENGES = [
   {
     title: "Social Engineering 101",
     description:
-      "ThreadVault's forgot password flow asks a security question. The answer is out there — you just have to find it.",
+      "APapparel's forgot password flow asks a security question. The answer is out there — you just have to find it.",
     category: "auth-bypass",
     difficulty: "easy",
     points: 100,
@@ -346,7 +346,7 @@ const CHALLENGES = [
   {
     title: "Stack the Savings",
     description:
-      "ThreadVault's checkout applies discount codes at face value. What happens if you apply more than one?",
+      "APapparel's checkout applies discount codes at face value. What happens if you apply more than one?",
     category: "logic-flaw",
     difficulty: "easy",
     points: 100,
@@ -408,7 +408,7 @@ async function seed() {
   if (!admin) {
     admin = await User.create({
       username: "admin",
-      email: "admin@threadvault.com",
+      email: "admin@apapparel.com",
       password: "admin", // CTF: intentional vulnerability — default-credentials
       role: "admin",
       securityQuestion: "What is your pet's name?",
@@ -423,7 +423,7 @@ async function seed() {
   if (!alice) {
     alice = await User.create({
       username: "alice",
-      email: "alice@threadvault.com",
+      email: "alice@apapparel.com",
       password: "alice1234",
       role: "user",
       securityQuestion: "What was your first car?",

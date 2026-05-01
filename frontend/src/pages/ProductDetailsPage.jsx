@@ -158,7 +158,7 @@ const ProductDetailsPage = () => {
                 <span className="material-symbols-outlined text-primary">verified</span>
                 <div>
                   <p className="text-xs font-bold uppercase tracking-widest text-on-surface">Authenticity Guaranteed</p>
-                  <p className="text-xs text-on-surface-variant mt-1">Certified atelier-crafted leather with serial verification.</p>
+                  <p className="text-xs text-on-surface-variant mt-1">Certified apapparel-crafted leather with serial verification.</p>
                 </div>
               </div>
             </div>

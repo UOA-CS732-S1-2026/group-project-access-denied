@@ -60,7 +60,7 @@ const ChallengePage = () => {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-green-400 mb-1">Challenges</h1>
           <p className="text-gray-400">
-            Find and exploit the vulnerabilities hidden in the ThreadVault store.
+            Find and exploit the vulnerabilities hidden in the APapparel store.
           </p>
         </div>
 

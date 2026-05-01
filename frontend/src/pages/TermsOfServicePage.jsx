@@ -22,12 +22,12 @@ const TermsOfServicePage = () => {
           <section>
             <h2 className="text-xl font-bold text-on-surface mb-4">1. Acceptance of Terms</h2>
             <p>
-              By accessing or using the Atelier website, mobile application, or any related services
+              By accessing or using the APapparel website, mobile application, or any related services
               (collectively, the &quot;Services&quot;), you acknowledge that you have read, understood, and
               agree to be bound by these Terms of Service (&quot;Terms&quot;). If you do not agree with any
               part of these Terms, you must discontinue use of the Services immediately. These Terms
               constitute a legally binding agreement between you (&quot;User,&quot; &quot;you,&quot; or &quot;your&quot;) and
-              Atelier Limited (&quot;Atelier,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;), a company incorporated under
+              APapparel Limited (&quot;APapparel,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;), a company incorporated under
               the laws of New Zealand. By continuing to browse, scroll, click, hover, breathe near,
               or think about any page on this website, you irrevocably agree to all terms listed
               herein, including those you have not read, those that have not yet been written, and
@@ -49,10 +49,10 @@ const TermsOfServicePage = () => {
               enter into a binding agreement. If you are using the Services on behalf of an
               organisation, you represent that you have authority to bind that organisation to these
               Terms. Additionally, users must confirm that they have never unironically worn socks
-              with sandals to a formal event, as this is considered a violation of Atelier&apos;s core
+              with sandals to a formal event, as this is considered a violation of APapparel&apos;s core
               brand philosophy. Users who have committed such fashion offences may still use the
               Services but do so under probationary status and are subject to mandatory style
-              counselling at any time. By using Atelier, you also confirm that you understand the
+              counselling at any time. By using APapparel, you also confirm that you understand the
               difference between &quot;your&quot; and &quot;you&apos;re&quot; and pledge to use them correctly in all
               communications with our support team. Failure to do so may result in gentle but
               persistent grammatical correction from our customer support AI.
@@ -66,14 +66,14 @@ const TermsOfServicePage = () => {
               You agree to provide accurate, current, and complete information during the
               registration process and to update such information to keep it accurate and complete.
               You are solely responsible for safeguarding your account credentials and for all
-              activity that occurs under your account. You agree to notify Atelier immediately of any
-              unauthorised use of your account or any other breach of security. Atelier will not be
+              activity that occurs under your account. You agree to notify APapparel immediately of any
+              unauthorised use of your account or any other breach of security. APapparel will not be
               liable for any loss arising from your failure to comply with this section. Under no
               circumstances should you use &quot;admin,&quot; &quot;root,&quot; your pet&apos;s name, or any
               variation of &quot;letmein&quot; as your password. If our systems detect that your password is
               embarrassingly weak, we reserve the right to silently judge you. You agree that your
               account username shall not contain profanity, political statements, or references to
-              pineapple on pizza, a topic on which Atelier takes no official stance but considers
+              pineapple on pizza, a topic on which APapparel takes no official stance but considers
               deeply divisive. Each user is entitled to exactly one (1) account.
             </p>
           </section>
@@ -84,7 +84,7 @@ const TermsOfServicePage = () => {
               All product descriptions, images, and pricing information on the Services are provided
               for informational purposes only. We endeavour to display product colours and details as
               accurately as possible; however, we cannot guarantee that your device&apos;s display will
-              accurately reflect the actual colour or detail of the products. Atelier reserves the
+              accurately reflect the actual colour or detail of the products. APapparel reserves the
               right to modify pricing, discontinue products, or correct any errors or inaccuracies at
               any time without prior notice. In the event of a pricing error, we reserve the right to
               cancel any orders placed at the incorrect price and will notify you promptly. If a
@@ -92,7 +92,7 @@ const TermsOfServicePage = () => {
               We have tried this loophole ourselves and can confirm it does not work. Product colours
               described as &quot;midnight obsidian,&quot; &quot;whispered ivory,&quot; or &quot;melancholic taupe&quot; are
               creative interpretations and should not be taken as precise colour specifications.
-              Atelier reserves the right to name colours in increasingly poetic and incomprehensible
+              APapparel reserves the right to name colours in increasingly poetic and incomprehensible
               ways as our marketing team sees fit. Any resemblance between our product photos and the
               actual item is entirely intentional, though lighting, screen calibration, and the
               general unfairness of digital photography may introduce minor variations.
@@ -103,12 +103,12 @@ const TermsOfServicePage = () => {
             <h2 className="text-xl font-bold text-on-surface mb-4">5. Orders and Payment</h2>
             <p>
               When you place an order through the Services, you are making an offer to purchase the
-              selected products. All orders are subject to acceptance by Atelier, and we reserve the
+              selected products. All orders are subject to acceptance by APapparel, and we reserve the
               right to refuse or cancel any order for any reason, including but not limited to
               product availability, errors in product or pricing information, or suspected fraudulent
               activity. Payment must be made at the time of purchase using the payment methods
               available on the Services. You represent and warrant that you have the legal right to
-              use any payment method you provide. Atelier accepts most major credit cards, debit
+              use any payment method you provide. APapparel accepts most major credit cards, debit
               cards, and prayers to the fashion gods. Payment in livestock, cryptocurrency mined on
               a Raspberry Pi, or &quot;exposure&quot; is not accepted at this time. By completing a purchase,
               you confirm that the funds used were obtained through legitimate means and not through
@@ -123,10 +123,10 @@ const TermsOfServicePage = () => {
           <section>
             <h2 className="text-xl font-bold text-on-surface mb-4">6. Shipping and Delivery</h2>
             <p>
-              Atelier ships to addresses within the regions specified on our shipping information
+              APapparel ships to addresses within the regions specified on our shipping information
               page. Delivery estimates are provided as approximations and are not guaranteed. Risk of
               loss and title for items purchased from the Services pass to you upon delivery of the
-              items to the carrier. Atelier is not responsible for delays caused by carriers, customs
+              items to the carrier. APapparel is not responsible for delays caused by carriers, customs
               authorities, natural disasters, or other circumstances beyond our reasonable control.
               Additional charges such as customs duties or import taxes are the responsibility of the
               recipient. We also cannot be held responsible for parcels that are intercepted by
@@ -144,7 +144,7 @@ const TermsOfServicePage = () => {
           <section>
             <h2 className="text-xl font-bold text-on-surface mb-4">7. Returns and Refunds</h2>
             <p>
-              Atelier accepts returns of unused, unworn items in their original condition with all
+              APapparel accepts returns of unused, unworn items in their original condition with all
               tags attached within 30 days of delivery. To initiate a return, please contact our
               customer support team through the Services. Certain items, including final sale
               products, personalised items, and intimate apparel, are non-returnable. Refunds will be
@@ -167,18 +167,18 @@ const TermsOfServicePage = () => {
             <p>
               All content on the Services, including but not limited to text, graphics, logos,
               images, audio clips, video clips, data compilations, and software, is the property of
-              Atelier or its content suppliers and is protected by international copyright,
+              APapparel or its content suppliers and is protected by international copyright,
               trademark, and other intellectual property laws. The compilation of all content on the
-              Services is the exclusive property of Atelier. You may not reproduce, distribute,
+              Services is the exclusive property of APapparel. You may not reproduce, distribute,
               modify, create derivative works of, publicly display, publicly perform, republish,
               download, store, or transmit any of the material on the Services without the prior
-              written consent of Atelier, except as permitted by applicable law. This includes but
+              written consent of APapparel, except as permitted by applicable law. This includes but
               is not limited to screenshotting our product images and passing them off as your own
               designs on social media, printing our website and submitting it as a university
               assignment, or tattooing our logo on any part of your body without prior written
-              approval from our brand team (though we would be flattered). The Atelier name, logo,
+              approval from our brand team (though we would be flattered). The APapparel name, logo,
               and all related names, logos, product and service names, designs, and slogans are
-              trademarks of Atelier Limited. Any use of our font choices, colour palette, or general
+              trademarks of APapparel Limited. Any use of our font choices, colour palette, or general
               aesthetic vibe in competing products will be met with strongly worded legal letters
               and, failing that, disappointed sighs.
             </p>
@@ -192,7 +192,7 @@ const TermsOfServicePage = () => {
               local, national, or international law or regulation; (b) to transmit or procure the
               sending of any advertising or promotional material, including &quot;junk mail,&quot; &quot;chain
               letters,&quot; &quot;spam,&quot; or any other similar solicitation; (c) to impersonate or attempt
-              to impersonate Atelier, an Atelier employee, another user, or any other person or
+              to impersonate APapparel, an APapparel employee, another user, or any other person or
               entity; (d) to engage in any conduct that restricts or inhibits anyone&apos;s use or
               enjoyment of the Services; or (e) to attempt to gain unauthorised access to any
               portion of the Services, other accounts, computer systems, or networks connected to the
@@ -230,14 +230,14 @@ const TermsOfServicePage = () => {
           <section>
             <h2 className="text-xl font-bold text-on-surface mb-4">11. Limitation of Liability</h2>
             <p>
-              To the fullest extent permitted by applicable law, Atelier and its officers, directors,
+              To the fullest extent permitted by applicable law, APapparel and its officers, directors,
               employees, agents, suppliers, and licensors shall not be liable for any indirect,
               incidental, special, consequential, or punitive damages, including without limitation
               loss of profits, data, use, goodwill, or other intangible losses, arising out of or
               relating to your access to or use of, or inability to access or use, the Services. In
-              no event shall Atelier&apos;s total liability to you for all claims arising out of or
-              relating to the use of the Services exceed the amount paid by you to Atelier during the
-              twelve (12) months preceding the event giving rise to such liability. Atelier is not
+              no event shall APapparel&apos;s total liability to you for all claims arising out of or
+              relating to the use of the Services exceed the amount paid by you to APapparel during the
+              twelve (12) months preceding the event giving rise to such liability. APapparel is not
               liable for any emotional distress caused by items being out of stock, for existential
               crises triggered by our seasonal colour palettes, or for the irreversible lifestyle
               inflation that may occur after browsing our premium collections. We are also not
@@ -245,7 +245,7 @@ const TermsOfServicePage = () => {
               result from purchases made on the Services. If our website goes down during a flash
               sale, we accept no liability for the resulting disappointment, rage-refreshing, or
               strongly worded social media posts. By using the Services, you acknowledge that fashion
-              is inherently subjective and agree not to hold Atelier liable if a garment does not
+              is inherently subjective and agree not to hold APapparel liable if a garment does not
               make you look &quot;exactly like the Instagram photo.&quot;
             </p>
           </section>
@@ -253,7 +253,7 @@ const TermsOfServicePage = () => {
           <section>
             <h2 className="text-xl font-bold text-on-surface mb-4">12. Indemnification</h2>
             <p>
-              You agree to defend, indemnify, and hold harmless Atelier and its affiliates,
+              You agree to defend, indemnify, and hold harmless APapparel and its affiliates,
               licensors, and service providers, and its and their respective officers, directors,
               employees, contractors, agents, licensors, suppliers, successors, and assigns from and
               against any claims, liabilities, damages, judgments, awards, losses, costs, expenses,
@@ -263,7 +263,7 @@ const TermsOfServicePage = () => {
               injuries sustained while attempting to replicate outfit combinations shown on our
               website (including but not limited to stiletto-related ankle incidents), and any claims
               arising from your decision to wear white after Labour Day in jurisdictions where such
-              conduct is frowned upon. You further agree to indemnify Atelier against any claims
+              conduct is frowned upon. You further agree to indemnify APapparel against any claims
               resulting from unsolicited fashion advice you give to other users while using the
               Services, particularly if such advice leads to regrettable haircut decisions.
             </p>
@@ -273,16 +273,16 @@ const TermsOfServicePage = () => {
             <h2 className="text-xl font-bold text-on-surface mb-4">13. Third-Party Links</h2>
             <p>
               The Services may contain links to third-party websites or services that are not owned
-              or controlled by Atelier. Atelier has no control over, and assumes no responsibility
+              or controlled by APapparel. APapparel has no control over, and assumes no responsibility
               for, the content, privacy policies, or practices of any third-party websites or
-              services. You acknowledge and agree that Atelier shall not be responsible or liable,
+              services. You acknowledge and agree that APapparel shall not be responsible or liable,
               directly or indirectly, for any damage or loss caused or alleged to be caused by or in
               connection with the use of or reliance on any such content, goods, or services
               available on or through any such websites or services. If a third-party link takes you
               to a website that autoplays music, we sincerely apologise but accept no responsibility.
               Links to external sizing guides are provided as a convenience and do not constitute an
               endorsement of their accuracy — we have seen some truly unhinged size charts out there.
-              Atelier is not responsible for the content of social media platforms where our products
+              APapparel is not responsible for the content of social media platforms where our products
               may be discussed, reviewed, or subjected to unboxing videos with questionable
               production values.
             </p>
@@ -291,7 +291,7 @@ const TermsOfServicePage = () => {
           <section>
             <h2 className="text-xl font-bold text-on-surface mb-4">14. Modifications to Terms</h2>
             <p>
-              Atelier reserves the right to revise and update these Terms from time to time at our
+              APapparel reserves the right to revise and update these Terms from time to time at our
               sole discretion. All changes are effective immediately when posted and apply to all
               access to and use of the Services thereafter. Your continued use of the Services
               following the posting of revised Terms means that you accept and agree to the changes.
@@ -348,17 +348,17 @@ const TermsOfServicePage = () => {
             <h2 className="text-xl font-bold text-on-surface mb-4">17. Entire Agreement</h2>
             <p>
               These Terms, together with the Privacy Policy and any other legal notices or
-              supplementary terms published by Atelier on the Services, constitute the entire
-              agreement between you and Atelier concerning the Services and supersede all prior or
+              supplementary terms published by APapparel on the Services, constitute the entire
+              agreement between you and APapparel concerning the Services and supersede all prior or
               contemporaneous communications and proposals, whether oral or written, between you and
-              Atelier. No verbal agreements, pinky promises, gentleman&apos;s handshakes, or blood oaths
+              APapparel. No verbal agreements, pinky promises, gentleman&apos;s handshakes, or blood oaths
               shall be considered binding unless expressly incorporated into these Terms in writing
-              and signed by an authorised representative of Atelier. Any promises made by our
+              and signed by an authorised representative of APapparel. Any promises made by our
               customer support chatbot that contradict these Terms are the chatbot&apos;s personal opinion
-              and do not reflect the official position of Atelier Limited. The headings in these
+              and do not reflect the official position of APapparel Limited. The headings in these
               Terms are for convenience only and shall not affect the interpretation of any provision,
               though we did spend an unreasonable amount of time choosing them. This agreement
-              represents the complete and final understanding between you and Atelier and may only be
+              represents the complete and final understanding between you and APapparel and may only be
               modified as described in Section 14 above, or by mutual agreement expressed through
               interpretive dance (notarised).
             </p>
@@ -370,10 +370,10 @@ const TermsOfServicePage = () => {
               If you have any questions about these Terms, please contact us at:
             </p>
             <div className="mt-4 p-6 bg-surface-container rounded-xl">
-              <p className="font-semibold text-on-surface">Atelier Limited</p>
+              <p className="font-semibold text-on-surface">APapparel Limited</p>
               <p>123 Queen Street, Auckland CBD</p>
               <p>Auckland 1010, New Zealand</p>
-              <p className="mt-2">Email: legal@atelier.co.nz</p>
+              <p className="mt-2">Email: legal@apapparel.co.nz</p>
               <p>Phone: +64 9 555 0123</p>
             </div>
           </section>
