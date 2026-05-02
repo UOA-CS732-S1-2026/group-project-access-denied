@@ -13,9 +13,9 @@
 
 
 require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env') });
-const mongoose  = require('mongoose');
-const User      = require('../models/user.model');
-const Product   = require('../models/product.model');
+const mongoose = require('mongoose');
+const User = require('../models/user.model');
+const Product = require('../models/product.model');
 const Challenge = require('../models/challenge.model');
 const ChatSession = require('../models/ChatSession.model');
 
@@ -105,7 +105,7 @@ const CHALLENGES = [
     title: 'Hidden in Plain Sight',
     description: "Sometimes developers leave notes where they shouldn't. Take a closer look at the APapparel homepage — not the page, the source.",
     category: 'other', difficulty: 'easy', points: 100,
-    flag: 'CTF{html_comments_are_not_secrets}',
+    flag: 'CTF{htm1_c0mments_are_n0t_s3crets}',
     hints: [{ text: 'Your browser can show you what the server actually sent. Right-click → View Page Source.', cost: 0 }],
     isActive: true,
   },
@@ -218,7 +218,7 @@ const CHALLENGES = [
 
 
 async function seedGlobal() {
- 
+
   // ── Admin user ──────────────────────────────────────────────────────────────
   let admin = await User.findOne({ username: 'admin' });
   if (!admin) {
