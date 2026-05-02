@@ -124,7 +124,7 @@ const SubmitModal = ({ challenge, solvedIds, onClose, onSuccess, onHintUsed }) =
           )}
 
           {/* Already solved banner */}
-          {alreadySolved ? (
+          {alreadySolved && status !== 'correct' ? (
             <div className="rounded-lg bg-green-900/30 border border-green-700 px-4 py-3 text-green-300 text-sm font-medium">
               ✓ You&apos;ve already solved this challenge!
             </div>

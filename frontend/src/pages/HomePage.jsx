@@ -67,7 +67,7 @@ const HomePage = () => {
                   <p className="text-sm tracking-widest uppercase opacity-80 mb-6">The New Silhouette</p>
                   <Link
                     className="inline-flex bg-white/10 backdrop-blur-md border border-white/20 px-6 py-3 rounded-lg text-sm font-semibold hover:bg-white hover:text-black transition-all"
-                    to="/products/69de38cad627e58a73a949d3"
+                    to="products/69ecbcf80a8ce07d57856da7"
                   >
                     View Product
                   </Link>
