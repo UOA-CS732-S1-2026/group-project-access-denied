@@ -176,7 +176,7 @@ const CHALLENGES = [
     description: "APapparel's forgot password flow asks a security question. The answer is out there — you just have to find it.",
     category: 'auth-bypass', difficulty: 'easy', points: 100,
     flag: 'CTF{social_profile_exposed_answer}',
-    hints: [{ text: 'Check the About page. The founder likes to overshare.', cost: 0 }],
+    hints: [{ text: 'The founder has quite the social media presence. Maybe their Instagram has some clues.', cost: 0 }],
     isActive: true,
   },
   {
@@ -227,12 +227,29 @@ async function seedGlobal() {
       email: 'admin@apapparel.com',
       password: 'admin',        // CTF: intentional vulnerability — default-credentials
       role: 'admin',
-      securityQuestion: "What is your pet's name?",
-      securityAnswer: 'biscuit', // CTF: discoverable via fictional social profile (Flag #9)
+      securityQuestion: 'What city were you born in?',
+      securityAnswer: 'mumbai',
     });
     console.log('Created admin user');
   } else {
     console.log('Admin already exists — skipping');
+  }
+
+
+  // ── CEO user "Ajith Patel" (CTF: Social Engineering 101 — Flag #9) ─────────
+  let ajith = await User.findOne({ username: 'ajithpatel' });
+  if (!ajith) {
+    ajith = await User.create({
+      username: 'ajithpatel',
+      email: 'AjithPatel@APapparel.com',
+      password: 'Ap$ecure2026!',  // strong password — not the attack vector
+      role: 'user',
+      securityQuestion: "What is your pet's name?",
+      securityAnswer: 'simba',    // CTF: discoverable via founder's Instagram
+    });
+    console.log('Created ajith (CEO)');
+  } else {
+    console.log('Ajith already exists — skipping');
   }
 
 

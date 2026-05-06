@@ -18,6 +18,7 @@ const Footer = () => {
         <div className="space-y-4">
           <h4 className="text-xs font-bold uppercase tracking-widest text-[#1c1b1b] dark:text-[#fcf9f8]">Support</h4>
           <ul className="space-y-2 text-sm">
+            <li><Link to="/about" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors">About Us</Link></li>
             <li><a className="text-[#56423d] dark:text-[#dcc1ba]">Shipping</a></li>
             <li><a className="text-[#56423d] dark:text-[#dcc1ba]">Returns</a></li>
             <li><a className="text-[#56423d] dark:text-[#dcc1ba]">Order Status</a></li>
@@ -26,8 +27,8 @@ const Footer = () => {
         <div className="space-y-4">
           <h4 className="text-xs font-bold uppercase tracking-widest text-[#1c1b1b] dark:text-[#fcf9f8]">Legal</h4>
           <ul className="space-y-2 text-sm">
-            <li><a className="text-[#56423d] dark:text-[#dcc1ba]">Privacy Policy</a></li>
             <li><Link to="/terms" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors">Terms of Service</Link></li>
+            <li><a className="text-[#56423d] dark:text-[#dcc1ba]">Privacy Policy</a></li>
           </ul>
         </div>
       </div>

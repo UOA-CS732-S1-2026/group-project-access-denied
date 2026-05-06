@@ -4,6 +4,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 
 const authRoutes = require('./routes/auth.routes');
+const forgotPasswordRoutes = require('./routes/forgotPassword.routes');
 const challengeRoutes = require('./routes/challenge.routes');
 const flagRoutes = require('./routes/flag.routes');
 const scoreboardRoutes = require('./routes/scoreboard.routes');
@@ -27,6 +28,7 @@ if (process.env.NODE_ENV !== 'test') {
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
 app.use('/api/auth', authRoutes);
+app.use('/api/auth', forgotPasswordRoutes);
 app.use('/api/challenges', challengeRoutes);
 app.use('/api/flags', flagRoutes);
 app.use('/api/scoreboard', scoreboardRoutes);
