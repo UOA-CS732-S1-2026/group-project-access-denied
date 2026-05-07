@@ -36,7 +36,9 @@ const createOrder = async (req, res, next) => {
   try {
     const { items, total, shippingAddress, discountApplied } = req.body;
 
-    if (!items || !items.length || !total || !shippingAddress) {
+    // CTF: intentional vulnerability — logic-flaw
+    // We trust client-supplied totals (including 0 for “free” orders).
+    if (!items || !items.length || total === undefined || total === null || !shippingAddress) {
       return res.status(400).json({ message: 'items, total and shippingAddress are required' });
     }
 

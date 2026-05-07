@@ -26,7 +26,6 @@ export default function PromoBanner() {
     }
   };
 
-  // Conditional render: when false, return null (React renders nothing).
   if (!visible) return null;
 
   return (

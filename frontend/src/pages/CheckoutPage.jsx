@@ -4,6 +4,7 @@ import { useCart } from '../context/CartContext';
 import { cartBadge } from '../components/common/navbarStyles';
 import Footer from '../components/common/Footer';
 import { createOrder } from '../api/order.api';
+import FlagFoundModal from '../components/common/FlagFoundModal';
 
 const STEPS = ['Shipping', 'Payment'];
 const STANDARD_SHIPPING_FEE = 25;
@@ -13,6 +14,8 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
+  const [stackCount, setStackCount] = useState(0);
+  const [showFlagModal, setShowFlagModal] = useState(false);
   const [form, setForm] = useState({
     firstName: '', lastName: '', email: '', phone: '',
     address: '', city: '', state: '', zip: '', country: 'United States',
@@ -20,7 +23,15 @@ const CheckoutPage = () => {
   });
 
   const shipping = cartTotal >= 500 ? 0 : STANDARD_SHIPPING_FEE;
-  const total = cartTotal + shipping;
+
+  // 10% of ORIGINAL subtotal per click, capped at 100%
+  const discountRate = Math.min(stackCount * 0.1, 1);
+  const discountApplied = cartTotal * discountRate;
+  const discountedSubtotal = Math.max(0, cartTotal - discountApplied);
+
+  const total = discountedSubtotal + shipping;
+  const discountedSubtotalCents = Math.round(discountedSubtotal * 100);
+  const isFreeItems = cartTotal > 0 && discountedSubtotalCents === 0;
 
   const handleChange = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
@@ -28,6 +39,15 @@ const CheckoutPage = () => {
     e.preventDefault();
     setSubmitting(true);
     try {
+      // Note: shipping fields are only rendered on step 0, so on the payment step
+      // they aren't present in the DOM. Use React state as the source of truth.
+      const firstName = form.firstName.trim();
+      const lastName = form.lastName.trim();
+      const address = form.address.trim();
+      const city = form.city.trim();
+      const zip = form.zip.trim();
+      const country = form.country.trim();
+
       await createOrder({
         items: cart.map((item) => ({
           product: item.product._id,
@@ -36,16 +56,22 @@ const CheckoutPage = () => {
           priceAtPurchase: item.product.price,
         })),
         total,
+        discountApplied,
         shippingAddress: {
-          fullName: `${form.firstName} ${form.lastName}`,
-          street: form.address,
-          city: form.city,
-          postcode: form.zip,
-          country: form.country,
+          fullName: `${firstName} ${lastName}`.trim(),
+          street: address,
+          city,
+          postcode: zip,
+          country,
         },
       });
+      if (isFreeItems) {
+        setShowFlagModal(true);
+      } else {
+        navigate('/orders');
+      }
+
       clearCart();
-      navigate('/orders');
     } catch (err) {
       console.error('Order failed:', err);
     } finally {
@@ -105,43 +131,43 @@ const CheckoutPage = () => {
                   <div className="grid grid-cols-2 gap-6">
                     <div>
                       <label className={labelClass}>First Name</label>
-                      <input name="firstName" value={form.firstName} onChange={handleChange} className={inputClass} placeholder="Julian" required />
+                      <input name="firstName" value={form.firstName} onChange={handleChange} onInput={handleChange} className={inputClass} placeholder="Julian" required />
                     </div>
                     <div>
                       <label className={labelClass}>Last Name</label>
-                      <input name="lastName" value={form.lastName} onChange={handleChange} className={inputClass} placeholder="Vance" required />
+                      <input name="lastName" value={form.lastName} onChange={handleChange} onInput={handleChange} className={inputClass} placeholder="Vance" required />
                     </div>
                   </div>
                   <div>
                     <label className={labelClass}>Email Address</label>
-                    <input name="email" type="email" value={form.email} onChange={handleChange} className={inputClass} placeholder="you@example.com" required />
+                    <input name="email" type="email" value={form.email} onChange={handleChange} onInput={handleChange} className={inputClass} placeholder="you@example.com" required />
                   </div>
                   <div>
                     <label className={labelClass}>Phone Number</label>
-                    <input name="phone" type="tel" value={form.phone} onChange={handleChange} className={inputClass} placeholder="+1 (555) 000-0000" />
+                    <input name="phone" type="tel" value={form.phone} onChange={handleChange} onInput={handleChange} className={inputClass} placeholder="+1 (555) 000-0000" />
                   </div>
                   <div>
                     <label className={labelClass}>Street Address</label>
-                    <input name="address" value={form.address} onChange={handleChange} className={inputClass} placeholder="742 Evergreen Terrace" required />
+                    <input name="address" value={form.address} onChange={handleChange} onInput={handleChange} className={inputClass} placeholder="742 Evergreen Terrace" required />
                   </div>
                   <div className="grid grid-cols-2 gap-6">
                     <div>
                       <label className={labelClass}>City</label>
-                      <input name="city" value={form.city} onChange={handleChange} className={inputClass} placeholder="Springfield" required />
+                      <input name="city" value={form.city} onChange={handleChange} onInput={handleChange} className={inputClass} placeholder="Springfield" required />
                     </div>
                     <div>
                       <label className={labelClass}>State / Province</label>
-                      <input name="state" value={form.state} onChange={handleChange} className={inputClass} placeholder="OR" required />
+                      <input name="state" value={form.state} onChange={handleChange} onInput={handleChange} className={inputClass} placeholder="OR" required />
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-6">
                     <div>
                       <label className={labelClass}>ZIP / Postal Code</label>
-                      <input name="zip" value={form.zip} onChange={handleChange} className={inputClass} placeholder="97403" required />
+                      <input name="zip" value={form.zip} onChange={handleChange} onInput={handleChange} className={inputClass} placeholder="97403" required />
                     </div>
                     <div>
                       <label className={labelClass}>Country</label>
-                      <input name="country" value={form.country} onChange={handleChange} className={inputClass} />
+                      <input name="country" value={form.country} onChange={handleChange} onInput={handleChange} className={inputClass} />
                     </div>
                   </div>
                 </div>
@@ -156,20 +182,20 @@ const CheckoutPage = () => {
                   </div>
                   <div>
                     <label className={labelClass}>Name on Card</label>
-                    <input name="cardName" value={form.cardName} onChange={handleChange} className={inputClass} placeholder="Julian Vance" required />
+                    <input name="cardName" value={form.cardName} onChange={handleChange} onInput={handleChange} className={inputClass} placeholder="Julian Vance" required />
                   </div>
                   <div>
                     <label className={labelClass}>Card Number</label>
-                    <input name="cardNumber" value={form.cardNumber} onChange={handleChange} className={inputClass} placeholder="•••• •••• •••• ••••" maxLength={19} required />
+                    <input name="cardNumber" value={form.cardNumber} onChange={handleChange} onInput={handleChange} className={inputClass} placeholder="•••• •••• •••• ••••" maxLength={19} required />
                   </div>
                   <div className="grid grid-cols-2 gap-6">
                     <div>
                       <label className={labelClass}>Expiry Date</label>
-                      <input name="expiry" value={form.expiry} onChange={handleChange} className={inputClass} placeholder="MM / YY" maxLength={7} required />
+                      <input name="expiry" value={form.expiry} onChange={handleChange} onInput={handleChange} className={inputClass} placeholder="MM / YY" maxLength={7} required />
                     </div>
                     <div>
                       <label className={labelClass}>Security Code</label>
-                      <input name="cvv" value={form.cvv} onChange={handleChange} className={inputClass} placeholder="CVV" maxLength={4} required />
+                      <input name="cvv" value={form.cvv} onChange={handleChange} onInput={handleChange} className={inputClass} placeholder="CVV" maxLength={4} required />
                     </div>
                   </div>
                   <div className="flex justify-center gap-6 opacity-40 pt-4">
@@ -243,6 +269,37 @@ const CheckoutPage = () => {
                   <span className="text-on-surface-variant">Subtotal</span>
                   <span>${cartTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                 </div>
+                
+                {/* Promo control */}
+                <div className="pt-2">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-semibold text-on-surface">Promo: 10% off</p>
+                    </div>
+                
+                    <button
+                      type="button"
+                      onClick={() => setStackCount((n) => Math.min(n + 1, 10))}
+                      disabled={stackCount >= 10 || cartTotal <= 0}
+                      className="px-3 py-2 rounded-lg bg-primary text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-50"
+                    >
+                      Apply
+                    </button>
+                  </div>
+                </div>
+                
+                {/* Discount row */}
+                {discountApplied > 0 && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-on-surface-variant">
+                      Discount (10%)
+                    </span>
+                    <span className="text-green-700">
+                      -${discountApplied.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    </span>
+                  </div>
+                )}
+
                 <div className="flex justify-between text-sm">
                   <span className="text-on-surface-variant">Shipping</span>
                   <span>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
@@ -267,6 +324,19 @@ const CheckoutPage = () => {
       </main>
 
       <Footer />
+
+      {showFlagModal && (
+        <FlagFoundModal
+          flag="CTF{discount_stacking_exploit}"
+          title="Discount Spamming!"
+          message="You stacked the 10% promo until the items were free. Submit this flag on the Challenges page."
+          primaryLabel="View Orders"
+          primaryAction={() => {
+            setShowFlagModal(false);
+            navigate('/orders');
+          }}
+        />
+      )}
 
     </div>
   );
