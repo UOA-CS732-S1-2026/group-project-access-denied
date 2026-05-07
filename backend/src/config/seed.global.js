@@ -95,10 +95,10 @@ const PRODUCTS = [
     stock: 42, isActive: true, isNew: false, featured: false,
   },
   {
-    name: 'Vault Prototype Slip-On',
+    name: 'Vault Prototype Trench Coat',
     description: 'Internal launch sample. Not ready for sale!',
     price: 0, category: 'shoes', sizes: ['39', '40', '41', '42', '43'],
-    images: ['TODO'],
+    images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1778120293/non-mustache_qokq3o.png'],
     stock: 0, isActive: false, isNew: false, featured: false,
   },
 ];
