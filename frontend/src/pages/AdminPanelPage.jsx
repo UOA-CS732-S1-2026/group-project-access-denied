@@ -204,14 +204,14 @@ const AdminPanelPage = () => {
               </div>
               <button
                 onClick={() => setShowImportModal(true)}
-                className="bg-surface-container-low border border-outline-variant/20 text-on-surface px-5 py-2.5 text-sm font-bold rounded-lg hover:bg-surface-container transition-colors flex items-center"
+                className="border-2 border-primary text-primary px-5 py-2.5 text-sm font-bold rounded-lg hover:bg-primary/5 transition-colors flex items-center"
               >
                 <span className="material-symbols-outlined text-sm mr-2">cloud_download</span>
                 Import from URL
               </button>
               <button
                 onClick={() => setShowAddModal(true)}
-                className="bg-gradient-to-br from-primary to-primary-container text-white px-5 py-2.5 text-sm font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center shadow-lg shadow-primary/20"
+                className="bg-primary text-white px-5 py-2.5 text-sm font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center shadow-lg shadow-primary/20"
               >
                 <span className="material-symbols-outlined text-sm mr-2">add</span>
                 Add New Product
