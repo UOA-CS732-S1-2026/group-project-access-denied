@@ -183,8 +183,7 @@ const ProductDetailsPage = () => {
             </div>
             <div className="md:col-span-8">
               <div className="prose prose-sm max-w-none text-on-surface-variant leading-relaxed space-y-8">
-                <p className="text-lg font-medium text-on-surface">A timeless investment piece designed for the modern individual who values artisanal quality over mass-produced trends.</p>
-                <p>Our {product.name} is handcrafted in our signature Tuscany workshop using locally sourced, vegetable-tanned leather. This specific process ensures that each piece develops a unique patina over time, telling the story of your journeys.</p>
+                <p className="text-lg font-medium text-on-surface">{product.description}</p>
                 <div className="grid grid-cols-2 gap-8 pt-4">
                   <div>
                     <h4 className="text-xs font-bold uppercase tracking-widest text-on-surface mb-2">Features</h4>

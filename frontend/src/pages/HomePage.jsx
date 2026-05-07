@@ -8,10 +8,6 @@ import {
   brandStory,
 } from '../assets/images';
 
-const categoryWomen = 'https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122158/category_women_placeholder.jpg';
-const categoryMen = 'https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122158/category_men_placeholder.jpg';
-const categoryAccessories = 'https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122158/category_accessories_placeholder.jpg';
-const brandStory = 'https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122157/Structured_Wool_Overcoat_cqjp2z.png';
 
 const HomePage = () => {
   return (

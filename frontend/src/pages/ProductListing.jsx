@@ -2,15 +2,12 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
-import FlagFoundModal from '../components/common/FlagFoundModal';
 import { getProducts } from '../api/product.api';
 
 const ProductListing = () => {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
-  const [foundFlag, setFoundFlag] = useState(null);
-  const sqlInjectionFlag = 'CTF{sql_i_found_the_vault}';
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -60,71 +57,41 @@ const ProductListing = () => {
                 <p className="text-on-surface-variant col-span-3 text-center py-24">Loading products...</p>
               ) : products.length === 0 ? (
                 <p className="text-on-surface-variant col-span-3 text-center py-24">No products found.</p>
-              ) : products.map((product) => {
-                const isUnlisted = !product.isActive;
-                const flagMatch = product.description?.match(/CTF\{[^}]+\}/);
-                const ProductCard = isUnlisted ? 'button' : Link;
-                const cardProps = isUnlisted
-                  ? {
-                      type: 'button',
-                      onClick: () => setFoundFlag(flagMatch?.[0] || sqlInjectionFlag),
-                    }
-                  : { to: `/products/${product._id}` };
-
-                return (
-                  <ProductCard key={product._id} {...cardProps} className="group relative block w-full text-left">
-                    <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden relative">
-                      <img
-                        className={`w-full h-full object-cover transition-transform duration-700 ${isUnlisted ? 'opacity-70' : 'group-hover:scale-105'}`}
-                        alt={product.name}
-                        src={product.images[0]}
-                      />
-                      {product.isNew && (
-                        <div className="absolute top-4 left-4 bg-primary px-3 py-1">
-                          <span className="text-[9px] font-bold text-white uppercase tracking-widest">New</span>
-                        </div>
-                      )}
-                      {isUnlisted && (
-                        <div className="absolute top-4 left-4 bg-on-surface px-3 py-1">
-                          <span className="text-[9px] font-bold text-surface uppercase tracking-widest">Unlisted</span>
-                        </div>
-                      )}
-                      <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                      {!isUnlisted && (
-                        <div className="absolute bottom-4 left-4 right-4 bg-surface/80 backdrop-blur-md p-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                          <span className="block w-full text-center text-[10px] font-bold uppercase tracking-[0.2em] py-2 bg-on-surface text-surface">View Product</span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="mt-6 space-y-1">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant/60">{product.brand}</p>
-                          <h4 className="text-sm font-bold text-on-surface">{product.name}</h4>
-                        </div>
-                        <p className="text-sm font-bold text-primary">${product.price}</p>
+              ) : products.map((product) => (
+                <Link key={product._id} to={`/products/${product._id}`} className="group relative block">
+                  <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden relative">
+                    <img
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      alt={product.name}
+                      src={product.images[0]}
+                    />
+                    {product.isNew && (
+                      <div className="absolute top-4 left-4 bg-primary px-3 py-1">
+                        <span className="text-[9px] font-bold text-white uppercase tracking-widest">New</span>
                       </div>
+                    )}
+                    <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div className="absolute bottom-4 left-4 right-4 bg-surface/80 backdrop-blur-md p-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                      <span className="block w-full text-center text-[10px] font-bold uppercase tracking-[0.2em] py-2 bg-on-surface text-surface">View Product</span>
                     </div>
-                  </ProductCard>
-                );
-              })}
+                  </div>
+                  <div className="mt-6 space-y-1">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant/60">{product.brand}</p>
+                        <h4 className="text-sm font-bold text-on-surface">{product.name}</h4>
+                      </div>
+                      <p className="text-sm font-bold text-primary">${product.price}</p>
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
         </div>
       </main>
 
       <Footer />
-
-      {foundFlag && (
-        <FlagFoundModal
-          flag={foundFlag}
-          title="CTF Found!"
-          message="You found an internal product that was not ready for the storefront."
-          copyLabel="Copy as text"
-          primaryLabel="Close popup"
-          primaryAction={() => setFoundFlag(null)}
-        />
-      )}
 
     </div>
   );
