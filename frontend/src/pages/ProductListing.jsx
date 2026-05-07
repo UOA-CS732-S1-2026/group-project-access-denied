@@ -75,7 +75,7 @@ const ProductListing = () => {
                   <ProductCard key={product._id} {...cardProps} className="group relative block w-full text-left">
                     <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden relative">
                       <img
-                        className={`w-full h-full object-cover transition-transform duration-700 ${isUnlisted ? 'grayscale opacity-45' : 'group-hover:scale-105'}`}
+                        className={`w-full h-full object-cover transition-transform duration-700 ${isUnlisted ? 'opacity-70' : 'group-hover:scale-105'}`}
                         alt={product.name}
                         src={product.images[0]}
                       />

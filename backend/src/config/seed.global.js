@@ -108,7 +108,7 @@ const PRODUCTS = [
 
 
 const SQLI_VAULT_PRODUCT = PRODUCTS.find(
-  (product) => product.name === 'Vault Prototype Slip-On'
+  (product) => product.name === 'Vault Prototype Trench Coat'
 );
 
 const CHALLENGES = [
