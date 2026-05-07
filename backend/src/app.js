@@ -17,8 +17,20 @@ const chatRoutes = require('./routes/chat');
 const app = express();
 
 // ─── Core Middleware ───────────────────────────────────────────────────────────
-// Allow the frontend dev server by default (Vite uses 5173)
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173' }));
+// Allow common local frontend dev origins by default.
+const defaultOrigins = ['http://localhost:3000', 'http://localhost:5173'];
+const configuredOrigins = process.env.CLIENT_URL
+  ? process.env.CLIENT_URL.split(',').map((o) => o.trim())
+  : defaultOrigins;
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || configuredOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
