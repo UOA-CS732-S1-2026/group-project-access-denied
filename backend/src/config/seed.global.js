@@ -209,7 +209,17 @@ const CHALLENGES = [
     ],
     isActive: true,
   },
-  { title: 'TBD', description: 'Coming soon.', category: 'other', difficulty: 'easy', points: 100, flag: 'CTF{tbd_flag_13}', isActive: false },
+  {
+    title: 'The Price is Wrong',
+    description: "APapparel trusts the cart too much. Can you change what the checkout thinks something costs?",
+    category: 'logic-flaw', difficulty: 'medium', points: 200,
+    flag: 'CTF{price_tampering}',
+    hints: [
+      { text: 'Your browser stores cart data locally. Check the Application tab before you pay.', cost: 0 },
+      { text: 'If the checkout trusts local values, changing a price may change the final response too.', cost: 50 },
+    ],
+    isActive: true,
+  },
   { title: 'TBD', description: 'Coming soon.', category: 'other', difficulty: 'easy', points: 100, flag: 'CTF{tbd_flag_14}', isActive: false },
 ];
 

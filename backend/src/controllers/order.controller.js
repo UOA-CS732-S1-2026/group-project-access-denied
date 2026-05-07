@@ -57,7 +57,7 @@ const createOrder = async (req, res, next) => {
 
     const out = order.toObject ? order.toObject() : order;
     // If the total is zero or negative, reveal the flag in the response.
-    if (Number(total) <= 0) {
+    if (Number(total) <= 25) {
       out.flag = 'CTF{price_tampering}';
     }
 
