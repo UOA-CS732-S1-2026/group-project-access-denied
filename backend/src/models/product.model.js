@@ -7,11 +7,6 @@ const productSchema = new mongoose.Schema(
       required: [true, 'Product name is required'],
       trim: true,
     },
-    brand: {
-      type: String,
-      trim: true,
-      default: 'APapparel',
-    },
     description: {
       type: String,
       required: [true, 'Product description is required'],

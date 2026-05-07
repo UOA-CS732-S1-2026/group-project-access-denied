@@ -57,35 +57,51 @@ const ProductListing = () => {
                 <p className="text-on-surface-variant col-span-3 text-center py-24">Loading products...</p>
               ) : products.length === 0 ? (
                 <p className="text-on-surface-variant col-span-3 text-center py-24">No products found.</p>
-              ) : products.map((product) => (
-                <Link key={product._id} to={`/products/${product._id}`} className="group relative block">
-                  <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden relative">
-                    <img
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      alt={product.name}
-                      src={product.images[0]}
-                    />
-                    {product.isNew && (
-                      <div className="absolute top-4 left-4 bg-primary px-3 py-1">
-                        <span className="text-[9px] font-bold text-white uppercase tracking-widest">New</span>
-                      </div>
-                    )}
-                    <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <div className="absolute bottom-4 left-4 right-4 bg-surface/80 backdrop-blur-md p-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                      <span className="block w-full text-center text-[10px] font-bold uppercase tracking-[0.2em] py-2 bg-on-surface text-surface">View Product</span>
+              ) : products.map((product) => {
+                const isUnlisted = !product.isActive;
+                const ProductCard = isUnlisted ? 'div' : Link;
+                const cardProps = isUnlisted ? {} : { to: `/products/${product._id}` };
+
+                return (
+                  <ProductCard key={product._id} {...cardProps} className="group relative block">
+                    <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden relative">
+                      <img
+                        className={`w-full h-full object-cover transition-transform duration-700 ${isUnlisted ? 'grayscale opacity-45' : 'group-hover:scale-105'}`}
+                        alt={product.name}
+                        src={product.images[0]}
+                      />
+                      {product.isNew && (
+                        <div className="absolute top-4 left-4 bg-primary px-3 py-1">
+                          <span className="text-[9px] font-bold text-white uppercase tracking-widest">New</span>
+                        </div>
+                      )}
+                      {isUnlisted && (
+                        <div className="absolute top-4 left-4 bg-on-surface px-3 py-1">
+                          <span className="text-[9px] font-bold text-surface uppercase tracking-widest">Unlisted</span>
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      {!isUnlisted && (
+                        <div className="absolute bottom-4 left-4 right-4 bg-surface/80 backdrop-blur-md p-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                          <span className="block w-full text-center text-[10px] font-bold uppercase tracking-[0.2em] py-2 bg-on-surface text-surface">View Product</span>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                  <div className="mt-6 space-y-1">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant/60">{product.brand}</p>
-                        <h4 className="text-sm font-bold text-on-surface">{product.name}</h4>
+                    <div className="mt-6 space-y-1">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant/60">{product.brand}</p>
+                          <h4 className="text-sm font-bold text-on-surface">{product.name}</h4>
+                        </div>
+                        <p className="text-sm font-bold text-primary">${product.price}</p>
                       </div>
-                      <p className="text-sm font-bold text-primary">${product.price}</p>
+                      {isUnlisted && (
+                        <p className="text-xs leading-5 text-on-surface-variant">{product.description}</p>
+                      )}
                     </div>
-                  </div>
-                </Link>
-              ))}
+                  </ProductCard>
+                );
+              })}
             </div>
           </div>
         </div>

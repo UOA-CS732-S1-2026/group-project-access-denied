@@ -96,11 +96,10 @@ const PRODUCTS = [
   },
   {
     name: 'Vault Prototype Slip-On',
-    description: 'Internal launch sample. Not ready for sale. Pricing placeholder locked at $0. CTF{sql_i_found_the_vault}',
+    description: 'Internal launch sample. Not ready for sale!',
     price: 0, category: 'shoes', sizes: ['39', '40', '41', '42', '43'],
     images: ['TODO'],
     stock: 0, isActive: false, isNew: false, featured: false,
-    brand: 'APapparel Vault',
   },
 ];
 
