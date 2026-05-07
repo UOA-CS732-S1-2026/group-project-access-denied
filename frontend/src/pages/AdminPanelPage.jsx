@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useCart } from '../context/CartContext';
 import { getProducts } from '../api/product.api';
+import Navbar from '../components/common/Navbar';
+import Footer from '../components/common/Footer';
+import FlagFoundModal from '../components/common/FlagFoundModal';
 
 const STATS = [
   { icon: 'payments',     label: 'Total Revenue',    value: '$124,592.00', badge: '+12.5%', badgeColor: 'text-tertiary bg-tertiary/10' },
@@ -33,10 +35,22 @@ const stockLevel = (price) => {
 const PAGE_SIZE = 5;
 
 const AdminPanelPage = () => {
-  const { user } = useAuth();
-  const { cartCount } = useCart();
+  const { user, logout } = useAuth();
   const [activeNav, setActiveNav]   = useState('products');
   const [products, setProducts]     = useState([]);
+  const [showFlagModal, setShowFlagModal] = useState(false);
+  const navigate = useNavigate();
+
+  const handleForceLogout = () => {
+    logout();
+    navigate('/login', { replace: true });
+  };
+
+  useEffect(() => {
+    if (user?.role === 'admin') {
+      setTimeout(() => setShowFlagModal(true), 800);
+    }
+  }, [user]);
 
   useEffect(() => {
     getProducts().then((res) => setProducts(res.data)).catch(() => {});
@@ -73,38 +87,7 @@ const AdminPanelPage = () => {
 
   return (
     <div className="bg-background text-on-background min-h-screen flex flex-col font-body">
-
-      {/* TopNavBar */}
-      <header className="fixed top-0 w-full z-50 bg-[#fcf9f8]/80 backdrop-blur-md">
-        <div className="flex justify-between items-center px-8 py-4 max-w-full mx-auto">
-          <Link to="/" className="text-2xl font-bold tracking-tighter text-[#1c1b1b]">ATELIER</Link>
-          <div className="hidden md:flex items-center space-x-8">
-            <Link to="/products" className="text-[#56423d] hover:text-[#994127] transition-colors">Clothes</Link>
-            <Link to="/products" className="text-[#56423d] hover:text-[#994127] transition-colors">Shoes</Link>
-            <Link to="/#new-arrivals" className="text-[#56423d] hover:text-[#994127] transition-colors">New Arrivals</Link>
-          </div>
-          <div className="flex items-center space-x-6">
-            <div className="hidden md:block relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
-              <input
-                className="bg-surface-container-low border-none text-sm py-2 pl-10 pr-4 w-64 focus:ring-1 focus:ring-primary rounded-lg transition-all"
-                placeholder="Search inventory..."
-                value={search}
-                onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-              />
-            </div>
-            <Link to="/account" className="text-on-surface hover:opacity-80 transition-opacity">
-              <span className="material-symbols-outlined">person</span>
-            </Link>
-            <Link to="/cart" className="text-on-surface hover:opacity-80 transition-opacity relative">
-              <span className="material-symbols-outlined">shopping_bag</span>
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">{cartCount}</span>
-              )}
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Navbar activePage="products" />
 
       <div className="flex pt-20 min-h-screen">
 
@@ -176,6 +159,15 @@ const AdminPanelPage = () => {
               </p>
             </div>
             <div className="flex items-center space-x-3">
+              <div className="hidden md:block relative">
+                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+                <input
+                  className="bg-surface-container-low border border-outline-variant/20 text-sm py-2 pl-10 pr-4 w-64 focus:ring-1 focus:ring-primary rounded-lg transition-all"
+                  placeholder="Search inventory..."
+                  value={search}
+                  onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+                />
+              </div>
               <button
                 onClick={() => setShowAddModal(true)}
                 className="bg-gradient-to-br from-primary to-primary-container text-white px-5 py-2.5 text-sm font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center shadow-lg shadow-primary/20"
@@ -346,30 +338,16 @@ const AdminPanelPage = () => {
           </div>
         </div>
       )}
-
-      {/* Footer */}
-      <footer className="w-full mt-auto bg-[#f6f3f2] dark:bg-[#1c1b1b] grid grid-cols-1 md:grid-cols-3 gap-8 px-12 py-16 border-t border-[#dcc1ba]/15">
-        <div>
-          <div className="text-lg font-bold text-[#1c1b1b] dark:text-[#fcf9f8] mb-4">ATELIER</div>
-          <p className="font-['Manrope'] text-sm tracking-wide text-[#56423d] dark:text-[#dcc1ba] max-w-xs">
-            Curating the finest garments and accessories for the modern aesthetic enthusiast.
-          </p>
-        </div>
-        <div className="flex flex-col space-y-3">
-          <span className="font-bold text-xs uppercase tracking-widest text-[#994127]">Legal &amp; Info</span>
-          <a href="#" className="font-['Manrope'] text-sm text-[#56423d] hover:text-[#994127] transition-colors">Shipping</a>
-          <a href="#" className="font-['Manrope'] text-sm text-[#56423d] hover:text-[#994127] transition-colors">Returns</a>
-          <a href="#" className="font-['Manrope'] text-sm text-[#56423d] hover:text-[#994127] transition-colors">Privacy Policy</a>
-          <a href="#" className="font-['Manrope'] text-sm text-[#56423d] hover:text-[#994127] transition-colors">Terms of Service</a>
-        </div>
-        <div className="flex flex-col items-start md:items-end space-y-4">
-          <div className="text-[#994127] text-sm">© 2024 Atelier Editorial. All rights reserved.</div>
-          <div className="flex space-x-4">
-            <span className="material-symbols-outlined text-[#56423d] cursor-pointer hover:text-[#994127]">share</span>
-            <span className="material-symbols-outlined text-[#56423d] cursor-pointer hover:text-[#994127]">mail</span>
-          </div>
-        </div>
-      </footer>
+      {showFlagModal && (
+        <FlagFoundModal
+          flag="CTF{default_creds_never_change}"
+          message="You successfully logged into the admin panel using weak default credentials."
+          primaryLabel="Logout"
+          primaryAction={handleForceLogout}
+        />
+      )}
+      
+      <Footer />
 
     </div>
   );

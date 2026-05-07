@@ -1,7 +1,12 @@
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
-import { getProducts } from '../api/product.api';
+import Navbar from '../components/common/Navbar';
+import Footer from '../components/common/Footer';
+import {
+  categoryWomen,
+  categoryMen,
+  categoryAccessories,
+  brandStory,
+} from '../assets/images';
 
 const categoryWomen = 'https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122158/category_women_placeholder.jpg';
 const categoryMen = 'https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122158/category_men_placeholder.jpg';
@@ -9,40 +14,9 @@ const categoryAccessories = 'https://res.cloudinary.com/dhyxvn66a/image/upload/v
 const brandStory = 'https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122157/Structured_Wool_Overcoat_cqjp2z.png';
 
 const HomePage = () => {
-  const { cartCount } = useCart();
-  const [featuredProducts, setFeaturedProducts] = useState([]);
-
-  useEffect(() => {
-    getProducts()
-      .then((res) => setFeaturedProducts(res.data.filter((p) => p.featured)))
-      .catch(() => setFeaturedProducts([]));
-  }, []);
-
   return (
     <div className="bg-surface text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
-
-      {/* TopAppBar */}
-      <header className="fixed top-0 w-full z-50 bg-[#fcf9f8]/80 dark:bg-[#1c1b1b]/80 backdrop-blur-md">
-        <nav className="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
-          <div className="text-2xl font-bold tracking-tighter text-[#1c1b1b] dark:text-[#fcf9f8]">ATELIER</div>
-          <div className="hidden md:flex items-center space-x-10">
-            <Link to="/products" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">Clothes</Link>
-            <Link to="/products" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">Shoes</Link>
-            <a className="text-[#994127] font-semibold border-b-2 border-[#994127] pb-1 font-['Manrope'] tracking-tight" href="#new-arrivals">New Arrivals</a>
-          </div>
-          <div className="flex items-center space-x-6">
-            <Link to="/account" className="hover:opacity-80 transition-opacity duration-300">
-              <span className="material-symbols-outlined text-[#1c1b1b] dark:text-[#fcf9f8]">person</span>
-            </Link>
-            <Link to="/cart" className="hover:opacity-80 transition-opacity duration-300 relative">
-              <span className="material-symbols-outlined text-[#1c1b1b] dark:text-[#fcf9f8]">shopping_bag</span>
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">{cartCount}</span>
-              )}
-            </Link>
-          </div>
-        </nav>
-      </header>
+      <Navbar activePage="home" />
 
       <main>
 
@@ -66,7 +40,7 @@ const HomePage = () => {
               </p>
               <a
                 className="inline-flex items-center px-10 py-5 primary-gradient text-on-primary rounded-lg font-semibold tracking-wide hover:opacity-90 transition-all scale-95 active:transition-transform"
-                href="#new-arrivals"
+                href="products"
               >
                 Shop New Arrivals
                 <span className="material-symbols-outlined ml-2">arrow_forward</span>
@@ -80,8 +54,8 @@ const HomePage = () => {
           <div className="max-w-7xl mx-auto px-8">
             <div className="flex flex-col md:flex-row justify-between items-end mb-16">
               <div>
-                <span className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-4 block">Categories</span>
-                <h2 className="text-4xl font-bold tracking-tight text-on-surface">Curated Collections</h2>
+                <span className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-4 block">Top This Season</span>
+                <h2 className="text-4xl font-bold tracking-tight text-on-surface">Curated Picks</h2>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
@@ -96,7 +70,12 @@ const HomePage = () => {
                 <div className="absolute bottom-10 left-10 text-white">
                   <h3 className="text-3xl font-bold mb-2">Women</h3>
                   <p className="text-sm tracking-widest uppercase opacity-80 mb-6">The New Silhouette</p>
-                  <button className="bg-white/10 backdrop-blur-md border border-white/20 px-6 py-3 rounded-lg text-sm font-semibold hover:bg-white hover:text-black transition-all">Explore Collection</button>
+                  <Link
+                    className="inline-flex bg-white/10 backdrop-blur-md border border-white/20 px-6 py-3 rounded-lg text-sm font-semibold hover:bg-white hover:text-black transition-all"
+                    to="products/69ecbcf80a8ce07d57856da7"
+                  >
+                    View Product
+                  </Link>
                 </div>
               </div>
               {/* Men & Accessories Column */}
@@ -130,35 +109,6 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* Featured Products (No Divider Grid) */}
-        <section className="py-16 md:py-24 bg-surface relative z-10" id="new-arrivals">
-          <div className="max-w-7xl mx-auto px-8">
-            <div className="text-center mb-12 md:mb-16">
-              <span className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-4 block">New Arrivals</span>
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-on-surface">The Seasonal Edit</h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
-              {featuredProducts.map((product) => (
-                <Link key={product._id} to={`/products/${product._id}`} className="group block">
-                  <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden mb-6 rounded-lg relative">
-                    <img
-                      alt={product.name}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      src={product.images[0]}
-                    />
-                    <div className="absolute inset-0 glass-panel opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <span className="primary-gradient text-white px-6 py-3 rounded-lg shadow-ambient text-sm font-semibold">View Product</span>
-                    </div>
-                  </div>
-                  <h3 className="text-lg font-semibold text-on-surface mb-1">{product.name}</h3>
-                  <p className="text-on-surface-variant mb-2">{product.brand}</p>
-                  <p className="text-primary font-bold">${product.price}.00</p>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* Brand Story (Asymmetric Layout) */}
         <section className="py-32 bg-surface-container-low overflow-hidden">
           <div className="max-w-7xl mx-auto px-8">
@@ -178,7 +128,7 @@ const HomePage = () => {
                 <h2 className="text-5xl font-extrabold tracking-tighter text-on-surface mb-8 leading-tight">Crafting the Future of Wardrobes</h2>
                 <div className="space-y-6 text-lg text-on-surface-variant font-light leading-relaxed">
                   <p>
-                    ATELIER was founded on the belief that clothing should be a reflection of intent. We reject the cycle of disposable trends in favor of enduring quality and architectural silhouettes.
+                    APAPPAREL was founded on the belief that clothing should be a reflection of intent. We reject the cycle of disposable trends in favor of enduring quality and architectural silhouettes.
                   </p>
                   <p>
                     Every piece is sourced from ethical mills and crafted by artisans who share our obsession with detail. From the weight of a silk blouse to the tension of a seam, we believe luxury is felt, not seen.
@@ -205,50 +155,7 @@ const HomePage = () => {
 
       </main>
 
-      {/* Footer */}
-      <footer className="w-full mt-auto bg-[#f6f3f2] dark:bg-[#1c1b1b] grid grid-cols-1 md:grid-cols-3 gap-8 px-12 py-16 border-t border-[#dcc1ba]/15 font-['Manrope']">
-        <div className="space-y-6">
-          <div className="text-lg font-bold text-[#1c1b1b] dark:text-[#fcf9f8]">ATELIER</div>
-          <p className="text-[#56423d] dark:text-[#dcc1ba] max-w-xs text-sm leading-relaxed">
-            Elevating the digital commerce experience through editorial curation and artisanal focus.
-          </p>
-          <div className="flex space-x-4">
-            <span className="material-symbols-outlined text-[#994127] cursor-pointer hover:opacity-80 transition-opacity">public</span>
-            <span className="material-symbols-outlined text-[#994127] cursor-pointer hover:opacity-80 transition-opacity">nest_eco_leaf</span>
-            <span className="material-symbols-outlined text-[#994127] cursor-pointer hover:opacity-80 transition-opacity">share</span>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-4">
-            <h4 className="text-xs font-bold uppercase tracking-widest text-[#1c1b1b] dark:text-[#fcf9f8]">Support</h4>
-            <ul className="space-y-2 text-sm">
-              <li><a className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors" href="#">Shipping</a></li>
-              <li><a className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors" href="#">Returns</a></li>
-              <li><a className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors" href="#">Order Status</a></li>
-            </ul>
-          </div>
-          <div className="space-y-4">
-            <h4 className="text-xs font-bold uppercase tracking-widest text-[#1c1b1b] dark:text-[#fcf9f8]">Legal</h4>
-            <ul className="space-y-2 text-sm">
-              <li><a className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors" href="#">Privacy Policy</a></li>
-              <li><a className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors" href="#">Terms of Service</a></li>
-            </ul>
-          </div>
-        </div>
-        <div className="space-y-6">
-          <h4 className="text-xs font-bold uppercase tracking-widest text-[#1c1b1b] dark:text-[#fcf9f8]">Newsletter</h4>
-          <p className="text-sm text-[#56423d] dark:text-[#dcc1ba]">Join our inner circle for early access and editorial stories.</p>
-          <form className="flex flex-col space-y-3">
-            <input
-              className="bg-surface-container-low border-none focus:ring-1 focus:ring-[#994127] text-sm py-3 px-4 rounded-lg outline-none transition-all"
-              placeholder="Email address"
-              type="email"
-            />
-            <button className="bg-[#994127] text-white py-3 px-6 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity">Subscribe</button>
-          </form>
-          <p className="text-[#56423d] dark:text-[#dcc1ba] text-xs pt-4 opacity-60">© 2024 Atelier Editorial. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
 
     </div>
   );

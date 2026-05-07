@@ -6,7 +6,7 @@ const { seedSession } = require('../config/seed.session');
 
 const generateToken = (user, sessionId) =>
   jwt.sign(
-    { id: user._id, username: user.username, role: user.role, sessionId },
+    { id: user._id, username: user.username, role: user.role, sessionId, flag: 'CTF{m1_b0mba_y0u_f0und_me}' },
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRES_IN || '2h' }
   );
@@ -50,10 +50,10 @@ const login = async (req, res, next) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ message: 'Email and password are required' });
+      return res.status(400).json({ message: 'Email/username and password are required' });
     }
 
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ $or: [{ email }, { username: email }] }).select('+password');
     if (!user || !user.password) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }

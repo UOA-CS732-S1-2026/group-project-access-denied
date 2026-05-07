@@ -53,13 +53,13 @@ const RegisterPage = () => {
       <div className="hidden lg:flex lg:w-2/5 relative overflow-hidden">
         <img
           src={heroImage}
-          alt="Atelier collection"
+          alt="APapparel collection"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-[#1c1b1b]/50" />
         <div className="absolute inset-0 flex flex-col justify-between p-12">
           <Link to="/" className="text-3xl font-extrabold tracking-tighter text-white">
-            ATELIER
+            APAPPAREL
           </Link>
           <div>
             <p className="text-[#dcc1ba] text-2xl font-light tracking-tight leading-snug max-w-xs">
@@ -74,7 +74,7 @@ const RegisterPage = () => {
 
         {/* Mobile-only brand */}
         <Link to="/" className="text-2xl font-extrabold tracking-tighter text-[#1c1b1b] mb-12 lg:hidden">
-          ATELIER
+          APAPPAREL
         </Link>
 
         <div className="w-full max-w-md mx-auto">

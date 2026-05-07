@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
+import Navbar from '../components/common/Navbar';
+import Footer from '../components/common/Footer';
 import { getOrders } from '../api/order.api';
 
 const TABS = ['All Orders', 'In Transit', 'Completed', 'Returns'];
@@ -19,7 +20,6 @@ const OrderHistoryPage = () => {
   const [activeTab, setActiveTab] = useState('All Orders');
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { cartCount } = useCart();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,29 +38,7 @@ const OrderHistoryPage = () => {
 
   return (
     <div className="bg-surface text-on-surface font-body min-h-screen flex flex-col">
-
-      {/* TopNavBar */}
-      <nav className="fixed top-0 w-full z-50 bg-[#fcf9f8]/80 dark:bg-[#1c1b1b]/80 backdrop-blur-md">
-        <div className="flex justify-between items-center px-8 py-4 max-w-full mx-auto">
-          <Link to="/" className="text-2xl font-bold tracking-tighter text-[#1c1b1b] dark:text-[#fcf9f8]">ATELIER</Link>
-          <div className="hidden md:flex items-center space-x-8">
-            <Link to="/products" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">Clothes</Link>
-            <Link to="/products" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">Shoes</Link>
-            <Link to="/#new-arrivals" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] tracking-tight">New Arrivals</Link>
-          </div>
-          <div className="flex items-center space-x-6 text-[#994127] dark:text-[#c05e42]">
-            <Link to="/account" className="hover:opacity-80 transition-opacity duration-300">
-              <span className="material-symbols-outlined">person</span>
-            </Link>
-            <Link to="/cart" className="hover:opacity-80 transition-opacity duration-300 relative">
-              <span className="material-symbols-outlined">shopping_bag</span>
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">{cartCount}</span>
-              )}
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar activePage="orders" />
 
       <main className="flex-grow pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto w-full">
 
@@ -121,7 +99,7 @@ const OrderHistoryPage = () => {
                       )}
                       <div className="flex flex-col justify-between">
                         <div>
-                          <h3 className="text-sm font-semibold tracking-wide text-outline mb-1 uppercase">Order #{order._id.slice(-8).toUpperCase()}</h3>
+                          <h3 className="text-sm font-semibold tracking-wide text-outline mb-1 uppercase">Order #{order.orderNumber}</h3>
                           <p className="text-xl font-bold text-on-surface mb-2 tracking-tight">{itemNames || 'Order'}</p>
                           <p className="text-sm text-on-surface-variant">Placed on {new Date(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                         </div>
@@ -137,7 +115,7 @@ const OrderHistoryPage = () => {
                         <span className="text-2xl font-extrabold text-on-surface">${order.total.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                       </div>
                       <button
-                        onClick={() => navigate(`/orders/${order._id}`)}
+                        onClick={() => navigate(`/orders/${order.orderNumber}`)}
                         className="px-6 py-3 bg-gradient-to-br from-primary to-primary-container text-white text-sm font-semibold tracking-tight rounded hover:opacity-90 transition-all flex items-center gap-2"
                       >
                         View Details
@@ -151,44 +129,9 @@ const OrderHistoryPage = () => {
           )}
         </div>
 
-        {/* Support Section */}
-        <section className="mt-24 p-12 bg-surface-container-low rounded-lg flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
-          <div>
-            <h2 className="text-2xl font-bold tracking-tight mb-2">Need assistance with an order?</h2>
-            <p className="text-on-surface-variant">Our concierge team is available 24/7 for size exchanges and returns.</p>
-          </div>
-          <div className="flex gap-4">
-            <button className="px-8 py-4 bg-on-surface text-surface text-sm font-bold tracking-widest uppercase rounded">Contact Support</button>
-            <button className="px-8 py-4 border border-outline/20 text-on-surface text-sm font-bold tracking-widest uppercase rounded hover:bg-surface transition-colors">Return Policy</button>
-          </div>
-        </section>
-
       </main>
 
-      {/* Footer */}
-      <footer className="bg-[#f6f3f2] dark:bg-[#1c1b1b] w-full mt-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-12 py-16 border-t border-[#dcc1ba]/15 max-w-7xl mx-auto">
-          <div>
-            <div className="text-lg font-bold text-[#1c1b1b] dark:text-[#fcf9f8] mb-4">ATELIER</div>
-            <p className="text-[#56423d] dark:text-[#dcc1ba] font-['Manrope'] text-sm tracking-wide leading-relaxed">
-              Elevating the digital commerce experience through editorial precision and artisanal focus.
-            </p>
-          </div>
-          <div className="flex flex-col space-y-3">
-            <h4 className="text-[#994127] dark:text-[#c05e42] font-semibold text-sm uppercase tracking-widest mb-2">Customer Care</h4>
-            <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] text-sm">Shipping</a>
-            <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] text-sm">Returns</a>
-          </div>
-          <div className="flex flex-col space-y-3">
-            <h4 className="text-[#994127] dark:text-[#c05e42] font-semibold text-sm uppercase tracking-widest mb-2">Legal</h4>
-            <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] text-sm">Privacy Policy</a>
-            <a href="#" className="text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors font-['Manrope'] text-sm">Terms of Service</a>
-          </div>
-        </div>
-        <div className="px-12 py-6 border-t border-[#dcc1ba]/10 text-center">
-          <span className="text-[#56423d] dark:text-[#dcc1ba] font-['Manrope'] text-xs tracking-widest">© 2024 Atelier Editorial. All rights reserved.</span>
-        </div>
-      </footer>
+      <Footer />
 
     </div>
   );

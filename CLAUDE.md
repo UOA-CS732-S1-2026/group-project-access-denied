@@ -5,11 +5,11 @@ code in this repository.
 
 ## Project Overview
 
-**ThreadVault** is a fictional trendy online fashion retailer selling clothing
+**APapparel** is a fictional trendy online fashion retailer selling clothing
 and shoes. The storefront looks and feels like a real e-commerce site — but it
 is intentionally riddled with security vulnerabilities for use as a CTF lab.
 
-Players browse ThreadVault as if they were real shoppers. Flags are hidden
+Players browse APapparel as if they were real shoppers. Flags are hidden
 inside the vulnerabilities woven into the store's features — a SQL injection on
 the search bar, XSS in product reviews, an exposed `.env` at a misconfigured
 route, default admin credentials, and so on. The goal is a beginner-friendly
@@ -18,11 +18,11 @@ than isolated puzzles.
 
 There are **7 team members, each implementing 2 flags = 14 flags total**. Each
 flag is `CTF{...}` format and must feel like it naturally belongs to the
-ThreadVault store, not bolted on.
+APapparel store, not bolted on.
 
 ### Store Pages
 
-The following pages make up the ThreadVault storefront. Every page must feel
+The following pages make up the APapparel storefront. Every page must feel
 like part of the same coherent store:
 
 | Page               | Route           | Auth   | Purpose                                     |
@@ -277,7 +277,7 @@ Both workflows trigger on push/PR to any branch.
 
 ## Design Consistency
 
-ThreadVault must look like a single product built by one team, not a patchwork
+APapparel must look like a single product built by one team, not a patchwork
 of individually styled pages. Treat visual consistency as a hard requirement,
 not a nice-to-have.
 
@@ -287,6 +287,36 @@ not a nice-to-have.
   `frontend/src/components/common/`. Before building a button, card, input,
   modal, badge, or layout wrapper from scratch, check if one already exists. If
   it doesn't exist yet, add it there so others can use it.
+  
+  **Components in `common/`:**
+  - `Navbar.jsx` — Reusable navbar for all store pages (HomePage, ProductListing, OrderHistoryPage, ProfilePage, ShoppingCartPage)
+  - `navbarStyles.js` — Extracted Tailwind utility class strings (navbarContainer, navLinkDefault, navLinkActive, cartBadge, logoText, iconButton)
+  - `FlagFoundModal.jsx` - reusable frontend modal for displaying discovered flags. 
+```jsx
+import { useState } from 'react';
+import FlagFoundModal from '../components/FlagFoundModal';
+
+const ExamplePage = () => {
+  const [showFlagModal, setShowFlagModal] = useState(false);
+
+  return (
+    <>
+      <button onClick={() => setShowFlagModal(true)}>
+        Trigger Flag
+      </button>
+
+      {showFlagModal && (
+        <FlagFoundModal
+          flag="CTF{example_flag_here}"
+          onClose={() => setShowFlagModal(false)}
+        />
+      )}
+    </>
+  );
+};
+
+export default ExamplePage;
+```
 - **Tailwind only**: No inline `style` props, no CSS modules, no separate `.css`
   files for component styling. All styling is Tailwind utility classes.
 - **Colour palette**: Use a consistent set of Tailwind colour tokens across the
@@ -309,7 +339,7 @@ against an existing page before opening a PR.
 ## Flag Design Principles
 
 Flags are the core mechanic of the CTF. They must feel like genuine security
-flaws in ThreadVault, not artificial puzzles.
+flaws in APapparel, not artificial puzzles.
 
 ### Format
 
@@ -329,7 +359,7 @@ All flags follow: `CTF{descriptive_snake_case_phrase}` — e.g.
   misconfiguration, default credentials), medium (chained requests, parameter
   tampering), and hard (multi-step exploit, requires reading response
   behaviour). Spread difficulty across the 14 flags.
-- **Hints match the tone**: Hints are written as if ThreadVault's fictional IT
+- **Hints match the tone**: Hints are written as if APapparel's fictional IT
   team left breadcrumbs — internal comments, vague error messages, suspiciously
   named routes. They should not say "try SQL injection here". Write hints a real
   attacker would find plausible.

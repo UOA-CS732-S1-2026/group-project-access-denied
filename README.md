@@ -1,4 +1,4 @@
-# ThreadVault — Interactive Web CTF Lab
+# APapparel — Interactive Web CTF Lab
 
 > A hands-on Capture the Flag platform where the entire website is the challenge.  
 > Built with the MERN stack (MongoDB, Express, React, Node.js).
@@ -62,7 +62,7 @@ group-project-access-denied/
 ### 1. Clone the repo
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/UOA-CS732-S1-2026/group-project-access-denied.git
 cd group-project-access-denied
 ```
 
@@ -75,26 +75,17 @@ npm install
 npm run dev   # runs on http://localhost:5001
 ```
 
-<<<<<<< HEAD
 Open `backend/.env` and set:
-- `JWT_SECRET` — any random string
+- `JWT_SECRET` — any random string — it does not need to match other teammates.
 - `MONGO_URI` — Atlas connection string from the team
-
-### 3. Set up the frontend
-=======
-`JWT_SECRET` can be any random string — it does not need to match other teammates.
-
 > The default `MONGO_URI` in `.env.example` already points to `localhost:27017` — no changes needed if you used the Docker command above.
 
-### 4. Set up the frontend
->>>>>>> main
-
+### 3. Set up the frontend
 Open a **second terminal**:
 
 ```bash
 cd frontend
 npm install
-<<<<<<< HEAD
 npm run dev   # runs on http://localhost:3000
 ```
 
@@ -104,18 +95,6 @@ VITE_API_URL=http://localhost:5001/api
 ```
 
 ### 4. Open the app
-=======
-npm run dev
-```
-
-Create `frontend/.env`:
-
-```
-VITE_API_URL=http://localhost:5001/api
-```
-
-### 5. Open the app
-
 Visit http://localhost:3000
 
 ---
@@ -135,8 +114,6 @@ docker compose up --build
 | Frontend  | http://localhost:3000      |
 | Backend   | http://localhost:5001      |
 | MongoDB   | mongodb://localhost:27017  |
->>>>>>> main
-
 Visit http://localhost:3000
 
 ---
@@ -179,8 +156,6 @@ bugfix/flag-submission-error
 ## Environment Variables
 
 ### Backend (`backend/.env`)
-
-<<<<<<< HEAD
 | Variable         | Description                   | Example                                      |
 |------------------|-------------------------------|----------------------------------------------|
 | `NODE_ENV`       | Environment mode              | `development`                                |
@@ -189,19 +164,8 @@ bugfix/flag-submission-error
 | `JWT_SECRET`     | Secret key for signing JWTs   | any long random string                       |
 | `JWT_EXPIRES_IN` | Token expiry duration         | `2h`                                         |
 | `CLIENT_URL`     | Frontend URL (for CORS)       | `http://localhost:3000`                      |
-=======
-| Variable            | Description                        | Example                          |
-|---------------------|------------------------------------|----------------------------------|
-| `NODE_ENV`          | Environment mode                   | `development`                    |
-| `PORT`              | Backend port                       | `5001` (5000 is taken by AirPlay on macOS) |
-| `MONGO_URI`         | MongoDB connection string          | `mongodb://localhost:27017/access-denied` |
-| `JWT_SECRET`        | Secret key for signing JWTs        | any long random string (can differ per developer)           |
-| `JWT_EXPIRES_IN`    | Token expiry duration              | `7d`                             |
-| `CLIENT_URL`        | Frontend URL (for CORS)            | `http://localhost:3000`          |
->>>>>>> main
 
 ### Frontend (`frontend/.env`)
-
 | Variable       | Description              | Example                        |
 |----------------|--------------------------|--------------------------------|
 | `VITE_API_URL` | Backend API base URL     | `http://localhost:5001/api`    |

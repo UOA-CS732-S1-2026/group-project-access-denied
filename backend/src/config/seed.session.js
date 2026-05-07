@@ -1,5 +1,5 @@
 /**
- * ThreadVault session seed
+ * APapparel session seed
  *
  * Called automatically when a new session is created (register/login).
  * Creates per-session writable data scoped to the sessionId:
@@ -12,7 +12,6 @@
 
 const User    = require('../models/user.model');
 const Product = require('../models/product.model');
-const Order   = require('../models/order.model');
 const Review  = require('../models/review.model');
 
 async function seedSession(sessionId) {
@@ -24,25 +23,6 @@ async function seedSession(sessionId) {
     console.warn('seedSession: global data missing — run seed.global.js first');
     return;
   }
-
-  // ── Alice's flagged order (IDOR flag) ───────────────────────────────────────
-  // CTF: intentional vulnerability — insecure-api (IDOR, Flag #3)
-  // internalNote is never rendered in the UI — players must hit the API directly.
-  await Order.create({
-    user: alice._id,
-    sessionId,
-    items: [{ product: products[0]._id, size: 'M', quantity: 1, priceAtPurchase: products[0].price }],
-    total: products[0].price,
-    status: 'delivered',
-    shippingAddress: {
-      fullName: 'Alice Smith',
-      street: '12 Harbour View',
-      city: 'Auckland',
-      postcode: '1010',
-      country: 'New Zealand',
-    },
-    internalNote: 'CTF{idor_order_exposed}',
-  });
 
   // ── Seeded reviews (admin username publicly visible — Flag #7 dependency) ───
   await Review.insertMany([

@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { getOrder } from '../api/order.api';
 import { useCart } from '../context/CartContext';
+import { cartBadge } from '../components/common/navbarStyles';
+import Footer from '../components/common/Footer';
 
 const statusStyle = (status) => {
   switch (status) {
@@ -14,18 +16,18 @@ const statusStyle = (status) => {
 };
 
 const OrderDetailPage = () => {
-  const { id } = useParams();
+  const { orderNumber } = useParams();
   const navigate = useNavigate();
   const { cartCount } = useCart();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getOrder(id)
+    getOrder(orderNumber)
       .then((res) => setOrder(res.data))
       .catch(() => setOrder(null))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [orderNumber]);
 
   if (loading) {
     return (
@@ -56,7 +58,7 @@ const OrderDetailPage = () => {
       {/* Navbar */}
       <nav className="fixed top-0 w-full z-50 bg-[#fcf9f8]/80 dark:bg-[#1c1b1b]/80 backdrop-blur-md">
         <div className="flex justify-between items-center px-8 py-4 max-w-full mx-auto">
-          <Link to="/" className="text-2xl font-bold tracking-tighter text-[#1c1b1b] dark:text-[#fcf9f8]">ATELIER</Link>
+          <Link to="/" className="text-2xl font-bold tracking-tighter text-[#1c1b1b] dark:text-[#fcf9f8]">APAPPAREL</Link>
           <div className="flex items-center space-x-6 text-[#994127]">
             <Link to="/account" className="hover:opacity-80 transition-opacity">
               <span className="material-symbols-outlined">person</span>
@@ -64,7 +66,7 @@ const OrderDetailPage = () => {
             <Link to="/cart" className="hover:opacity-80 transition-opacity relative">
               <span className="material-symbols-outlined">shopping_bag</span>
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">{cartCount}</span>
+                <span className={cartBadge}>{cartCount}</span>
               )}
             </Link>
           </div>
@@ -84,7 +86,7 @@ const OrderDetailPage = () => {
           <div>
             <span className="text-xs uppercase tracking-[0.2em] text-outline font-semibold mb-2 block">Order Receipt</span>
             <h1 className="text-3xl font-bold tracking-tighter text-on-surface">
-              #{order._id.slice(-8).toUpperCase()}
+              #{order.orderNumber}
             </h1>
             <p className="text-sm text-on-surface-variant mt-1">
               Placed on {new Date(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
@@ -151,12 +153,7 @@ const OrderDetailPage = () => {
 
       </main>
 
-      {/* Footer */}
-      <footer className="bg-[#f6f3f2] dark:bg-[#1c1b1b] w-full mt-auto">
-        <div className="px-12 py-6 border-t border-[#dcc1ba]/10 text-center">
-          <span className="text-[#56423d] dark:text-[#dcc1ba] font-['Manrope'] text-xs tracking-widest">© 2024 Atelier Editorial. All rights reserved.</span>
-        </div>
-      </footer>
+      <Footer />
 
     </div>
   );

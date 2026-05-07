@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema(
   {
+    orderNumber: {
+      type: Number,
+      unique: true,
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
