@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
-import { profileBanner } from '../assets/images';
+// import { profileBanner } from '../assets/images'; add image here
 
 const NAV_ITEMS = [
   { id: 'profile',   icon: 'person',           label: 'Profile' },
@@ -183,7 +183,7 @@ const ProfilePage = () => {
               <img
                 alt="Editorial Collection"
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                src={profileBanner}
+                // src={profileBanner}
               />
               <div className="absolute inset-0 bg-gradient-to-r from-on-background/80 to-transparent flex flex-col justify-center px-12">
                 <span className="text-primary-fixed text-xs font-bold tracking-[0.3em] uppercase mb-4">Curated For You</span>
