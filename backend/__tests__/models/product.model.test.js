@@ -1,8 +1,5 @@
 const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
 const Product = require('../../src/models/product.model');
-
-let mongod;
 
 const validProduct = {
   name: 'Draped Silk Blouse',
@@ -12,8 +9,7 @@ const validProduct = {
 };
 
 beforeAll(async () => {
-  mongod = await MongoMemoryServer.create();
-  await mongoose.connect(mongod.getUri());
+  await mongoose.connect(process.env.MONGO_URI_TEST);
 });
 
 afterEach(async () => {
@@ -23,7 +19,6 @@ afterEach(async () => {
 afterAll(async () => {
   await mongoose.connection.dropDatabase();
   await mongoose.disconnect();
-  await mongod.stop();
 });
 
 // ─── Schema defaults ──────────────────────────────────────────────────────────
