@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
+import PromoBanner from '../components/common/PromoBanner';
 import {
   categoryWomen,
   categoryMen,
@@ -12,6 +13,7 @@ const HomePage = () => {
   return (
     <div className="bg-surface text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
       <Navbar activePage="home" />
+      <PromoBanner />
 
       <main>
 
