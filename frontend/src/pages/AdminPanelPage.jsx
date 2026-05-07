@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getProducts } from '../api/product.api';
+import { importProductImage } from '../api/admin.api';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import FlagFoundModal from '../components/common/FlagFoundModal';
@@ -47,10 +48,15 @@ const AdminPanelPage = () => {
   };
 
   useEffect(() => {
-    if (user?.role === 'admin') {
+    if (user?.role === 'admin' && !sessionStorage.getItem('admin_flag_seen')) {
       setTimeout(() => setShowFlagModal(true), 800);
     }
   }, [user]);
+
+  const dismissFlagModal = () => {
+    sessionStorage.setItem('admin_flag_seen', '1');
+    setShowFlagModal(false);
+  };
 
   useEffect(() => {
     getProducts().then((res) => setProducts(res.data)).catch(() => {});
@@ -59,6 +65,11 @@ const AdminPanelPage = () => {
   const [page, setPage]             = useState(1);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newProduct, setNewProduct] = useState({ name: '', brand: '', category: 'Clothes', price: '', image: '', isNew: false, featured: false });
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [importUrl, setImportUrl] = useState('');
+  const [importLoading, setImportLoading] = useState(false);
+  const [importResult, setImportResult] = useState(null);
+  const [importError, setImportError] = useState(null);
 
   // Redirect non-admins
   if (user && user.role !== 'admin') return <Navigate to="/" replace />;
@@ -81,6 +92,29 @@ const AdminPanelPage = () => {
     setProducts((prev) => [...prev, { ...newProduct, _id: Date.now().toString(), price: Number(newProduct.price) }]);
     setNewProduct({ name: '', category: 'clothing', price: '', image: '', isNew: false, featured: false });
     setShowAddModal(false);
+  };
+
+  const handleImport = async (e) => {
+    e.preventDefault();
+    setImportLoading(true);
+    setImportError(null);
+    setImportResult(null);
+    try {
+      const productId = products[0]?._id || 'preview';
+      const { data } = await importProductImage(productId, importUrl);
+      setImportResult(data);
+    } catch (err) {
+      setImportError(err.response?.data || { message: err.message });
+    } finally {
+      setImportLoading(false);
+    }
+  };
+
+  const closeImportModal = () => {
+    setShowImportModal(false);
+    setImportUrl('');
+    setImportResult(null);
+    setImportError(null);
   };
 
   const inputClass = 'w-full bg-surface-container-low border border-outline-variant/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary transition-all';
@@ -168,6 +202,13 @@ const AdminPanelPage = () => {
                   onChange={(e) => { setSearch(e.target.value); setPage(1); }}
                 />
               </div>
+              <button
+                onClick={() => setShowImportModal(true)}
+                className="bg-surface-container-low border border-outline-variant/20 text-on-surface px-5 py-2.5 text-sm font-bold rounded-lg hover:bg-surface-container transition-colors flex items-center"
+              >
+                <span className="material-symbols-outlined text-sm mr-2">cloud_download</span>
+                Import from URL
+              </button>
               <button
                 onClick={() => setShowAddModal(true)}
                 className="bg-gradient-to-br from-primary to-primary-container text-white px-5 py-2.5 text-sm font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center shadow-lg shadow-primary/20"
@@ -338,15 +379,73 @@ const AdminPanelPage = () => {
           </div>
         </div>
       )}
+      {showImportModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-on-background/40 backdrop-blur-sm px-4">
+          <div className="bg-surface rounded-2xl shadow-2xl w-full max-w-2xl p-8">
+            <div className="flex justify-between items-center mb-2">
+              <h2 className="text-xl font-bold tracking-tight text-on-surface">Import Image from Supplier URL</h2>
+              <button onClick={closeImportModal} className="text-outline hover:text-on-surface transition-colors">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <p className="text-xs text-on-surface-variant mb-6">
+              Paste a URL from a supplier portal — APapparel will fetch and preview the image before adding it to a product.
+            </p>
+            <form onSubmit={handleImport} className="space-y-4">
+              <div>
+                <label className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/60 mb-1 block">Supplier Image URL</label>
+                <input
+                  required
+                  type="url"
+                  value={importUrl}
+                  onChange={(e) => setImportUrl(e.target.value)}
+                  className={inputClass}
+                  placeholder="https://cdn.supplier.com/products/jacket.jpg"
+                />
+              </div>
+              <div className="flex gap-3 pt-1">
+                <button type="button" onClick={closeImportModal} className="flex-1 py-3 border border-outline/20 hover:border-primary/40 text-sm font-semibold rounded-lg transition-colors">Cancel</button>
+                <button
+                  type="submit"
+                  disabled={importLoading}
+                  className="flex-1 py-3 bg-gradient-to-br from-primary to-primary-container text-white text-sm font-bold rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
+                >
+                  {importLoading ? 'Fetching…' : 'Fetch & Preview'}
+                </button>
+              </div>
+            </form>
+
+            {importError && (
+              <div className="mt-6 p-4 bg-error/5 border border-error/20 rounded-lg">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-error mb-2">Fetch failed</div>
+                <pre className="text-xs text-on-surface whitespace-pre-wrap break-all font-mono">
+                  {JSON.stringify(importError, null, 2)}
+                </pre>
+              </div>
+            )}
+
+            {importResult && (
+              <div className="mt-6 p-4 bg-surface-container-low border border-outline-variant/20 rounded-lg">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/60 mb-2">Server response</div>
+                <pre className="text-xs text-on-surface whitespace-pre-wrap break-all font-mono max-h-80 overflow-auto">
+                  {JSON.stringify(importResult, null, 2)}
+                </pre>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {showFlagModal && (
         <FlagFoundModal
           flag="CTF{default_creds_never_change}"
           message="You successfully logged into the admin panel using weak default credentials."
           primaryLabel="Logout"
           primaryAction={handleForceLogout}
+          onClose={dismissFlagModal}
         />
       )}
-      
+
       <Footer />
 
     </div>

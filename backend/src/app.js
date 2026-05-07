@@ -10,6 +10,8 @@ const flagRoutes = require('./routes/flag.routes');
 const scoreboardRoutes = require('./routes/scoreboard.routes');
 const productRoutes = require('./routes/product.routes');
 const orderRoutes   = require('./routes/order.routes');
+const adminRoutes = require('./routes/admin.routes');
+const internalRoutes = require('./routes/internal.routes');
 const { notFound, errorHandler } = require('./middleware/error.middleware');
 const logger = require('./utils/logger');
 const chatRoutes = require('./routes/chat');
@@ -47,7 +49,19 @@ app.use('/api/flags', flagRoutes);
 app.use('/api/scoreboard', scoreboardRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders',   orderRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/internal', internalRoutes);
+
+// CTF: intentional vulnerability — robots.txt advertises non-public paths
+app.get('/robots.txt', (_req, res) => {
+  res.type('text/plain').send(
+    'User-agent: *\n' +
+    'Disallow: /admin/\n' +
+    'Disallow: /internal/server-status\n' +
+    'Disallow: /api/admin/\n'
+  );
+});
 
 // Health check
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));

@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /internal/server-status
+Disallow: /api/admin/
