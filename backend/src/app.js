@@ -17,7 +17,8 @@ const chatRoutes = require('./routes/chat');
 const app = express();
 
 // ─── Core Middleware ───────────────────────────────────────────────────────────
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:3000' }));
+// Allow the frontend dev server by default (Vite uses 5173)
+app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 

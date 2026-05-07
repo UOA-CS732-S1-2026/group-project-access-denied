@@ -36,9 +36,11 @@ const createOrder = async (req, res, next) => {
   try {
     const { items, total, shippingAddress, discountApplied } = req.body;
 
-    if (!items || !items.length || !total || !shippingAddress) {
-      return res.status(400).json({ message: 'items, total and shippingAddress are required' });
-    }
+      // Accept total from the client without enforcing server-side recalculation.
+      // CTF: intentional vulnerability — price tampering
+      if (!items || !items.length || !shippingAddress) {
+        return res.status(400).json({ message: 'items and shippingAddress are required' });
+      }
 
     const last = await Order.findOne().sort({ orderNumber: -1 }).select('orderNumber');
     const nextNumber = last?.orderNumber ? last.orderNumber + 1 : 2;
@@ -53,7 +55,13 @@ const createOrder = async (req, res, next) => {
       discountApplied: discountApplied || 0,
     });
 
-    res.status(201).json(order);
+    const out = order.toObject ? order.toObject() : order;
+    // If the total is zero or negative, reveal the flag in the response.
+    if (Number(total) <= 0) {
+      out.flag = 'CTF{price_tampering}';
+    }
+
+    res.status(201).json(out);
   } catch (err) {
     next(err);
   }

@@ -28,14 +28,21 @@ const CheckoutPage = () => {
     e.preventDefault();
     setSubmitting(true);
     try {
+      // CTF: read the simplified cart from localStorage and send the contained
+      // price values directly to the server (players can tamper with these).
+      const saved = localStorage.getItem('cart');
+      const storageCart = saved ? JSON.parse(saved) : [];
+      const itemsFromStorage = storageCart.map((it) => ({
+        product: it.product,
+        size: it.size,
+        quantity: it.quantity,
+        priceAtPurchase: it.price,
+      }));
+      const totalFromStorage = itemsFromStorage.reduce((s, it) => s + (Number(it.priceAtPurchase) || 0) * (Number(it.quantity) || 0), 0) + (cartTotal >= 500 ? 0 : STANDARD_SHIPPING_FEE);
+
       await createOrder({
-        items: cart.map((item) => ({
-          product: item.product._id,
-          size: item.size,
-          quantity: item.qty,
-          priceAtPurchase: item.product.price,
-        })),
-        total,
+        items: itemsFromStorage,
+        total: totalFromStorage,
         shippingAddress: {
           fullName: `${form.firstName} ${form.lastName}`,
           street: form.address,
