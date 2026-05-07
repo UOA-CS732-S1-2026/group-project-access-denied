@@ -4,7 +4,12 @@ const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const isSqlInjectionSearch = (value) => {
   const normalised = value.toLowerCase().replace(/\s+/g, ' ').trim();
-  return normalised.includes("' or '1'='1") || normalised.includes('" or "1"="1');
+  return (
+    normalised.includes("' or '1'='1") ||
+    normalised.includes('" or "1"="1') ||
+    normalised.includes("' or 1=1--") ||
+    normalised.includes("' or price=0--")
+  );
 };
 
 // GET /api/products

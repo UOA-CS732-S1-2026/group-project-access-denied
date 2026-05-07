@@ -2,12 +2,15 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
+import FlagFoundModal from '../components/common/FlagFoundModal';
 import { getProducts } from '../api/product.api';
 
 const ProductListing = () => {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [foundFlag, setFoundFlag] = useState(null);
+  const sqlInjectionFlag = 'CTF{sql_i_found_the_vault}';
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -59,11 +62,17 @@ const ProductListing = () => {
                 <p className="text-on-surface-variant col-span-3 text-center py-24">No products found.</p>
               ) : products.map((product) => {
                 const isUnlisted = !product.isActive;
-                const ProductCard = isUnlisted ? 'div' : Link;
-                const cardProps = isUnlisted ? {} : { to: `/products/${product._id}` };
+                const flagMatch = product.description?.match(/CTF\{[^}]+\}/);
+                const ProductCard = isUnlisted ? 'button' : Link;
+                const cardProps = isUnlisted
+                  ? {
+                      type: 'button',
+                      onClick: () => setFoundFlag(flagMatch?.[0] || sqlInjectionFlag),
+                    }
+                  : { to: `/products/${product._id}` };
 
                 return (
-                  <ProductCard key={product._id} {...cardProps} className="group relative block">
+                  <ProductCard key={product._id} {...cardProps} className="group relative block w-full text-left">
                     <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden relative">
                       <img
                         className={`w-full h-full object-cover transition-transform duration-700 ${isUnlisted ? 'grayscale opacity-45' : 'group-hover:scale-105'}`}
@@ -95,9 +104,6 @@ const ProductListing = () => {
                         </div>
                         <p className="text-sm font-bold text-primary">${product.price}</p>
                       </div>
-                      {isUnlisted && (
-                        <p className="text-xs leading-5 text-on-surface-variant">{product.description}</p>
-                      )}
                     </div>
                   </ProductCard>
                 );
@@ -108,6 +114,17 @@ const ProductListing = () => {
       </main>
 
       <Footer />
+
+      {foundFlag && (
+        <FlagFoundModal
+          flag={foundFlag}
+          title="CTF Found!"
+          message="You found an internal product that was not ready for the storefront."
+          copyLabel="Copy as text"
+          primaryLabel="Close popup"
+          primaryAction={() => setFoundFlag(null)}
+        />
+      )}
 
     </div>
   );
