@@ -5,6 +5,7 @@ const FlagFoundModal = ({
   flag,
   title = 'CTF Found!',
   message = 'Congratulations, you found a hidden flag.',
+  copyLabel = 'Copy Flag',
   primaryLabel = 'Close',
   primaryAction,
 }) => {
@@ -45,7 +46,7 @@ const FlagFoundModal = ({
             onClick={handleCopy}
             className="flex-1 rounded-lg bg-primary px-4 py-3 text-sm font-bold text-white hover:opacity-90 transition-opacity"
           >
-            {copied ? 'Copied!' : 'Copy Flag'}
+            {copied ? 'Copied!' : copyLabel}
           </button>
           
           {/* RIGHT = configurable */}
@@ -66,6 +67,7 @@ FlagFoundModal.propTypes = {
   flag: PropTypes.string.isRequired,
   title: PropTypes.string,
   message: PropTypes.string,
+  copyLabel: PropTypes.string,
   primaryLabel: PropTypes.string,
   primaryAction: PropTypes.func,
 };
