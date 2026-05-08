@@ -4,9 +4,9 @@ const User    = require('../models/user.model');
 const Session = require('../models/session.model');
 const { seedSession } = require('../config/seed.session');
 
-const generateToken = (user, sessionId) =>
+const generateToken = (user, sessionId, extraClaims = {}) =>
   jwt.sign(
-    { id: user._id, username: user.username, role: user.role, sessionId, flag: 'CTF{m1_b0mba_y0u_f0und_me}' },
+    { id: user._id, username: user.username, role: user.role, sessionId, flag: 'CTF{m1_b0mba_y0u_f0und_me}', ...extraClaims },
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRES_IN || '2h' }
   );
@@ -71,7 +71,8 @@ const login = async (req, res, next) => {
       await seedSession(session.sessionId);
     }
 
-    const token = generateToken(user, session.sessionId);
+    const defaultAdminLogin = user.username === 'admin' && password === 'admin';
+    const token = generateToken(user, session.sessionId, { defaultAdminLogin });
 
     res.json({
       token,
@@ -85,6 +86,20 @@ const login = async (req, res, next) => {
 };
 
 // ─── GET /api/auth/me ─────────────────────────────────────────────────────────
+// GET /api/auth/default-admin-flag
+const getDefaultAdminFlag = async (req, res, next) => {
+  try {
+    if (!req.user.defaultAdminLogin) {
+      return res.status(403).json({ message: 'Default admin credentials were not used for this session' });
+    }
+
+    // CTF: intentional vulnerability — default-credentials
+    res.json({ flag: 'CTF{default_creds_never_change}' });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const getMe = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id).populate('solvedChallenges', 'title category points');
@@ -95,4 +110,4 @@ const getMe = async (req, res, next) => {
   }
 };
 
-module.exports = { register, login, getMe };
+module.exports = { register, login, getMe, getDefaultAdminFlag };

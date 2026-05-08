@@ -3,14 +3,13 @@ import { Link } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import FlagFoundModal from '../components/common/FlagFoundModal';
-import { getProducts } from '../api/product.api';
+import { getProducts, getSqlInjectionFlag } from '../api/product.api';
 
 const ProductListing = () => {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [foundFlag, setFoundFlag] = useState(null);
-  const sqlInjectionFlag = 'CTF{sql_i_found_the_vault}';
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -23,6 +22,15 @@ const ProductListing = () => {
 
     return () => window.clearTimeout(timeoutId);
   }, [search]);
+
+  const handleUnlistedProductClick = async (productId) => {
+    try {
+      const { data } = await getSqlInjectionFlag(productId);
+      setFoundFlag(data.flag);
+    } catch {
+      setFoundFlag(null);
+    }
+  };
 
   return (
     <div className="bg-surface text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
@@ -62,12 +70,11 @@ const ProductListing = () => {
                 <p className="text-on-surface-variant col-span-3 text-center py-24">No products found.</p>
               ) : products.map((product) => {
                 const isUnlisted = !product.isActive;
-                const flagMatch = product.description?.match(/CTF\{[^}]+\}/);
                 const ProductCard = isUnlisted ? 'button' : Link;
                 const cardProps = isUnlisted
                   ? {
                       type: 'button',
-                      onClick: () => setFoundFlag(flagMatch?.[0] || sqlInjectionFlag),
+                      onClick: () => handleUnlistedProductClick(product._id),
                     }
                   : { to: `/products/${product._id}` };
 

@@ -4,6 +4,7 @@ const { protect, adminOnly } = require('../middleware/auth.middleware');
 const {
   getProducts,
   getProduct,
+  getSqlInjectionFlag,
   createProduct,
   updateProduct,
   deleteProduct,
@@ -12,6 +13,7 @@ const { getReviews, createReview, deleteReview } = require('../controllers/revie
 
 // Product routes — require auth for db routing
 router.get('/', protect, getProducts);
+router.get('/sql-injection-flag', protect, getSqlInjectionFlag);
 router.get('/:id', protect, getProduct);
 
 // Admin-only product management

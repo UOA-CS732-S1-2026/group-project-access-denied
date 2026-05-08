@@ -61,6 +61,22 @@ const getProduct = async (req, res, next) => {
   }
 };
 
+// GET /api/products/sql-injection-flag
+const getSqlInjectionFlag = async (req, res, next) => {
+  try {
+    const product = await Product.findById(req.query.productId);
+
+    if (!product || product.isActive) {
+      return res.status(404).json({ message: 'Internal product not found' });
+    }
+
+    // CTF: intentional vulnerability — sql-injection
+    res.json({ flag: 'CTF{sql_i_found_the_vault}' });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // POST /api/products  (admin only)
 const createProduct = async (req, res, next) => {
   try {
@@ -96,4 +112,4 @@ const deleteProduct = async (req, res, next) => {
   }
 };
 
-module.exports = { getProducts, getProduct, createProduct, updateProduct, deleteProduct };
+module.exports = { getProducts, getProduct, getSqlInjectionFlag, createProduct, updateProduct, deleteProduct };

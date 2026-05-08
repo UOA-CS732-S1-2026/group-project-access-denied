@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { getDefaultAdminFlag } from '../api/auth.api';
 import { getProducts } from '../api/product.api';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
@@ -38,7 +39,7 @@ const AdminPanelPage = () => {
   const { user, logout } = useAuth();
   const [activeNav, setActiveNav]   = useState('products');
   const [products, setProducts]     = useState([]);
-  const [showFlagModal, setShowFlagModal] = useState(false);
+  const [adminFlag, setAdminFlag]   = useState('');
   const navigate = useNavigate();
 
   const handleForceLogout = () => {
@@ -47,9 +48,11 @@ const AdminPanelPage = () => {
   };
 
   useEffect(() => {
-    if (user?.role === 'admin') {
-      setTimeout(() => setShowFlagModal(true), 800);
-    }
+    if (user?.role !== 'admin') return;
+
+    getDefaultAdminFlag()
+      .then((res) => setTimeout(() => setAdminFlag(res.data.flag), 800))
+      .catch(() => {});
   }, [user]);
 
   useEffect(() => {
@@ -338,9 +341,9 @@ const AdminPanelPage = () => {
           </div>
         </div>
       )}
-      {showFlagModal && (
+      {adminFlag && (
         <FlagFoundModal
-          flag="CTF{default_creds_never_change}"
+          flag={adminFlag}
           message="You successfully logged into the admin panel using weak default credentials."
           primaryLabel="Logout"
           primaryAction={handleForceLogout}
