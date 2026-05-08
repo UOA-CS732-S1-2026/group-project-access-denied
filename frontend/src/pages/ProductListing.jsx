@@ -2,14 +2,12 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
-import FlagFoundModal from '../components/common/FlagFoundModal';
-import { getProducts, getSqlInjectionFlag } from '../api/product.api';
+import { getProducts } from '../api/product.api';
 
 const ProductListing = () => {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
-  const [foundFlag, setFoundFlag] = useState(null);
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -22,15 +20,6 @@ const ProductListing = () => {
 
     return () => window.clearTimeout(timeoutId);
   }, [search]);
-
-  const handleUnlistedProductClick = async (productId) => {
-    try {
-      const { data } = await getSqlInjectionFlag(productId);
-      setFoundFlag(data.flag);
-    } catch {
-      setFoundFlag(null);
-    }
-  };
 
   return (
     <div className="bg-surface text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
@@ -70,13 +59,8 @@ const ProductListing = () => {
                 <p className="text-on-surface-variant col-span-3 text-center py-24">No products found.</p>
               ) : products.map((product) => {
                 const isUnlisted = !product.isActive;
-                const ProductCard = isUnlisted ? 'button' : Link;
-                const cardProps = isUnlisted
-                  ? {
-                      type: 'button',
-                      onClick: () => handleUnlistedProductClick(product._id),
-                    }
-                  : { to: `/products/${product._id}` };
+                const ProductCard = Link;
+                const cardProps = { to: `/products/${product._id}` };
 
                 return (
                   <ProductCard key={product._id} {...cardProps} className="group relative block w-full text-left">
@@ -97,11 +81,9 @@ const ProductListing = () => {
                         </div>
                       )}
                       <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                      {!isUnlisted && (
-                        <div className="absolute bottom-4 left-4 right-4 bg-surface/80 backdrop-blur-md p-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                          <span className="block w-full text-center text-[10px] font-bold uppercase tracking-[0.2em] py-2 bg-on-surface text-surface">View Product</span>
-                        </div>
-                      )}
+                      <div className="absolute bottom-4 left-4 right-4 bg-surface/80 backdrop-blur-md p-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                        <span className="block w-full text-center text-[10px] font-bold uppercase tracking-[0.2em] py-2 bg-on-surface text-surface">View Product</span>
+                      </div>
                     </div>
                     <div className="mt-6 space-y-1">
                       <div className="flex justify-between items-start">
@@ -121,17 +103,6 @@ const ProductListing = () => {
       </main>
 
       <Footer />
-
-      {foundFlag && (
-        <FlagFoundModal
-          flag={foundFlag}
-          title="CTF Found!"
-          message="You found an internal product that was not ready for the storefront."
-          copyLabel="Copy as text"
-          primaryLabel="Close popup"
-          primaryAction={() => setFoundFlag(null)}
-        />
-      )}
 
     </div>
   );

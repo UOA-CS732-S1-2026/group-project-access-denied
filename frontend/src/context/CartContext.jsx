@@ -26,6 +26,10 @@ export const CartProvider = ({ children }) => {
   }, [cart]);
 
   const addToCart = (product, { size = 'M', color = 'Default', qty = 1 } = {}) => {
+    if (!product || product.isActive === false) {
+      return;
+    }
+
     setCart((prev) => {
       const productId = product._id || product.id;
       const key = `${productId}-${size}-${color}`;

@@ -96,7 +96,7 @@ const PRODUCTS = [
   },
   {
     name: 'Vault Prototype Trench Coat',
-    description: 'Internal launch sample. Not ready for sale!',
+    description: 'Internal launch sample. Not ready for sale! CTF{sql_i_found_the_vault}',
     price: 0, category: 'shoes', sizes: ['39', '40', '41', '42', '43'],
     images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1778120293/non-mustache_qokq3o.png'],
     stock: 0, isActive: false, isNew: false, featured: false,
