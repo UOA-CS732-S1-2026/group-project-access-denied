@@ -94,6 +94,17 @@ const PRODUCTS = [
     images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122156/Day-to-Night_Tote_mxwc8s.png'],
     stock: 42, isActive: true, isNew: false, featured: false,
   },
+  // CTF: intentional vulnerability — default-credentials (Flag 6).
+  // Inactive draft hidden from the public catalogue but listed in the admin panel.
+  // Only an attacker who logs in with admin/admin can see this product and discover
+  // the flag tucked inside the description's "Internal note".
+  {
+    name: 'Founder\'s Capsule — Internal Draft',
+    description: 'DO NOT PUBLISH. Placeholder entry used to validate the admin upload flow before the Founder\'s Capsule launches in Q4. Internal note from ops: admin login confirmed working with seeded credentials — verification token CTF{default_creds_never_change}. Remove this entry before going live.',
+    price: 0, category: 'clothing', sizes: ['One Size'],
+    images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122156/Day-to-Night_Tote_mxwc8s.png'],
+    stock: 0, isActive: false, isNew: false, featured: false,
+  },
 ];
 
 
@@ -281,13 +292,16 @@ async function seedGlobal() {
 
 
   // ── Products ────────────────────────────────────────────────────────────────
-  const productCount = await Product.countDocuments();
-  if (productCount === 0) {
-    await Product.insertMany(PRODUCTS);
-    console.log(`Inserted ${PRODUCTS.length} products`);
-  } else {
-    console.log(`Products already exist (${productCount}) — skipping`);
+  // Upsert by name so re-running the seed picks up new products (e.g. the
+  // Founder's Capsule draft for Flag 6) without wiping existing entries.
+  for (const product of PRODUCTS) {
+    await Product.findOneAndUpdate(
+      { name: product.name },
+      { $set: product },
+      { upsert: true }
+    );
   }
+  console.log(`Upserted ${PRODUCTS.length} products`);
 
 
   // ── Challenges ──────────────────────────────────────────────────────────────

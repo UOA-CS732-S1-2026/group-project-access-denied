@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { getProducts } from '../api/product.api';
-import { importProductImage } from '../api/admin.api';
+import { importProductImage, getAllProducts } from '../api/admin.api';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
-import FlagFoundModal from '../components/common/FlagFoundModal';
 
 const STATS = [
   { icon: 'payments',     label: 'Total Revenue',    value: '$124,592.00', badge: '+12.5%', badgeColor: 'text-tertiary bg-tertiary/10' },
@@ -29,30 +27,12 @@ const stockLevel = (price) => {
 const PAGE_SIZE = 5;
 
 const AdminPanelPage = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [activeNav, setActiveNav]   = useState('products');
   const [products, setProducts]     = useState([]);
-  const [showFlagModal, setShowFlagModal] = useState(false);
-  const navigate = useNavigate();
-
-  const handleForceLogout = () => {
-    logout();
-    navigate('/login', { replace: true });
-  };
 
   useEffect(() => {
-    if (user?.role === 'admin' && !sessionStorage.getItem('admin_flag_seen')) {
-      setTimeout(() => setShowFlagModal(true), 800);
-    }
-  }, [user]);
-
-  const dismissFlagModal = () => {
-    sessionStorage.setItem('admin_flag_seen', '1');
-    setShowFlagModal(false);
-  };
-
-  useEffect(() => {
-    getProducts().then((res) => setProducts(res.data)).catch(() => {});
+    getAllProducts().then((res) => setProducts(res.data)).catch(() => {});
   }, []);
   const [search, setSearch]         = useState('');
   const [page, setPage]             = useState(1);
@@ -238,9 +218,19 @@ const AdminPanelPage = () => {
                               <img className="w-full h-full object-cover" alt={product.name} src={product.images[0]} />
                             </div>
                           </td>
-                          <td className="px-6 py-4">
-                            <div className="text-sm font-bold text-on-surface">{product.name}</div>
+                          <td className="px-6 py-4 max-w-md">
+                            <div className="flex items-center gap-2">
+                              <div className="text-sm font-bold text-on-surface">{product.name}</div>
+                              {product.isActive === false && (
+                                <span className="text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-primary/10 text-primary">Draft</span>
+                              )}
+                            </div>
                             <div className="text-[10px] text-outline font-medium tracking-wide">{product.brand}</div>
+                            {product.description && (
+                              <div className="text-xs text-on-surface-variant mt-1 line-clamp-2" title={product.description}>
+                                {product.description}
+                              </div>
+                            )}
                           </td>
                           <td className="px-6 py-4">
                             <span className="text-xs text-on-surface-variant bg-surface-container px-2 py-1 rounded">{product.category}</span>
@@ -427,16 +417,6 @@ const AdminPanelPage = () => {
             )}
           </div>
         </div>
-      )}
-
-      {showFlagModal && (
-        <FlagFoundModal
-          flag="CTF{default_creds_never_change}"
-          message="You successfully logged into the admin panel using weak default credentials."
-          primaryLabel="Logout"
-          primaryAction={handleForceLogout}
-          onClose={dismissFlagModal}
-        />
       )}
 
       <div className="md:ml-64">
