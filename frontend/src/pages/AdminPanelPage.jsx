@@ -16,14 +16,7 @@ const STATS = [
 
 const NAV_SECTIONS = [
   { label: 'Store Management', items: [
-    { id: 'dashboard', icon: 'dashboard',    label: 'Dashboard' },
     { id: 'products',  icon: 'inventory_2',  label: 'Products',  fill: true },
-    { id: 'orders',    icon: 'shopping_cart', label: 'Orders' },
-    { id: 'users',     icon: 'group',        label: 'Users' },
-  ]},
-  { label: 'Insights', items: [
-    { id: 'analytics', icon: 'analytics', label: 'Sales Analytics' },
-    { id: 'settings',  icon: 'settings',  label: 'Store Settings' },
   ]},
 ];
 
@@ -446,7 +439,9 @@ const AdminPanelPage = () => {
         />
       )}
 
-      <Footer />
+      <div className="md:ml-64">
+        <Footer />
+      </div>
 
     </div>
   );
