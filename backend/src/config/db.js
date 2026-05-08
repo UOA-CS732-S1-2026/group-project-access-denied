@@ -3,7 +3,7 @@ const logger = require('../utils/logger');
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI, {
+    const conn = await mongoose.connect(jsprocess.env.MONGO_MONGODB_URI, {
       serverSelectionTimeoutMS: 5000,
       bufferCommands: false,
     });
