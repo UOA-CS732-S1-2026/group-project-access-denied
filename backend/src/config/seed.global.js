@@ -94,22 +94,19 @@ const PRODUCTS = [
     images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122156/Day-to-Night_Tote_mxwc8s.png'],
     stock: 42, isActive: true, isNew: false, featured: false,
   },
-  {
-    name: 'Vault Prototype Trench Coat',
-    description: 'Internal launch sample. Not ready for sale! CTF{sql_i_found_the_vault}',
-    price: 0, category: 'shoes', sizes: ['39', '40', '41', '42', '43'],
-    images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1778120293/non-mustache_qokq3o.png'],
-    stock: 0, isActive: false, isNew: false, featured: false,
-  },
 ];
 
 
 // ─── Challenges ───────────────────────────────────────────────────────────────
 
 
-const SQLI_VAULT_PRODUCT = PRODUCTS.find(
-  (product) => product.name === 'Vault Prototype Trench Coat'
-);
+const SQLI_VAULT_PRODUCT = {
+  name: 'Vault Prototype Trench Coat',
+  description: 'Internal launch sample. Not ready for sale! CTF{sql_i_found_the_vault}',
+  price: 0, category: 'shoes', sizes: ['39', '40', '41', '42', '43'],
+  images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1778120293/non-mustache_qokq3o.png'],
+  stock: 0, isActive: false, isNew: false, featured: false,
+};
 
 const CHALLENGES = [
   {
