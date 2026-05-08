@@ -4,7 +4,6 @@ import { useCart } from '../context/CartContext';
 import { cartBadge } from '../components/common/navbarStyles';
 import Footer from '../components/common/Footer';
 import { createOrder } from '../api/order.api';
-import FlagFoundModal from '../components/common/FlagFoundModal';
 
 const STEPS = ['Shipping', 'Payment'];
 const STANDARD_SHIPPING_FEE = 25;
@@ -15,7 +14,6 @@ const CheckoutPage = () => {
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [stackCount, setStackCount] = useState(0);
-  const [showFlagModal, setShowFlagModal] = useState(false);
   const [form, setForm] = useState({
     firstName: '', lastName: '', email: '', phone: '',
     address: '', city: '', state: '', zip: '', country: 'United States',
@@ -30,8 +28,6 @@ const CheckoutPage = () => {
   const discountedSubtotal = Math.max(0, cartTotal - discountApplied);
 
   const total = discountedSubtotal + shipping;
-  const discountedSubtotalCents = Math.round(discountedSubtotal * 100);
-  const isFreeItems = cartTotal > 0 && discountedSubtotalCents === 0;
 
   const handleChange = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
@@ -65,11 +61,9 @@ const CheckoutPage = () => {
           country,
         },
       });
-      if (isFreeItems) {
-        setShowFlagModal(true);
-      } else {
-        navigate('/orders');
-      }
+      // Flag is intentionally NOT rendered in the UI. It is leaked in the /api/orders
+      // response when the exploit condition is met (DevTools → Network).
+      navigate('/orders');
 
       clearCart();
     } catch (err) {
@@ -324,19 +318,6 @@ const CheckoutPage = () => {
       </main>
 
       <Footer />
-
-      {showFlagModal && (
-        <FlagFoundModal
-          flag="CTF{discount_stacking_exploit}"
-          title="Discount Spamming!"
-          message="You stacked the 10% promo until the items were free. Submit this flag on the Challenges page."
-          primaryLabel="View Orders"
-          primaryAction={() => {
-            setShowFlagModal(false);
-            navigate('/orders');
-          }}
-        />
-      )}
 
     </div>
   );

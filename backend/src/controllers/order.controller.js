@@ -1,4 +1,5 @@
 const Order = require('../models/order.model');
+const Challenge = require('../models/challenge.model');
 
 // GET /api/orders — returns current session's orders
 const getOrders = async (req, res, next) => {
@@ -55,7 +56,24 @@ const createOrder = async (req, res, next) => {
       discountApplied: discountApplied || 0,
     });
 
-    res.status(201).json(order);
+    // CTF: intentional vulnerability — logic-flaw
+    // If the player stacked discounts until items were free, we leak the flag in the response
+    // (discoverable via DevTools Network) instead of rendering it in the UI.
+    const rawSubtotal = Array.isArray(items)
+      ? items.reduce((sum, it) => sum + Number(it.priceAtPurchase || 0) * Number(it.quantity || 0), 0)
+      : 0;
+    const isFreeItemsExploit =
+      rawSubtotal > 0 && Number(discountApplied || 0) >= rawSubtotal;
+
+    if (isFreeItemsExploit) {
+      const challenge = await Challenge.findOne({ title: 'Stack the Savings' }).select('+flag');
+      return res.status(201).json({
+        order,
+        ctf: { challengeTitle: 'Stack the Savings', flag: challenge?.flag || null },
+      });
+    }
+
+    return res.status(201).json(order);
   } catch (err) {
     next(err);
   }
