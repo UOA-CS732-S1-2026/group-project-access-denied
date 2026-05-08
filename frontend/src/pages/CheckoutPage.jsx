@@ -7,6 +7,7 @@ import { createOrder } from '../api/order.api';
 
 const STEPS = ['Shipping', 'Payment'];
 const STANDARD_SHIPPING_FEE = 25;
+const PROMO_CODE = 'discount10%';
 
 const CheckoutPage = () => {
   const { cart, cartTotal, cartCount, clearCart } = useCart();
@@ -14,6 +15,8 @@ const CheckoutPage = () => {
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [stackCount, setStackCount] = useState(0);
+  const [promoInput, setPromoInput] = useState('');
+  const [promoError, setPromoError] = useState('');
   const [form, setForm] = useState({
     firstName: '', lastName: '', email: '', phone: '',
     address: '', city: '', state: '', zip: '', country: 'United States',
@@ -22,7 +25,7 @@ const CheckoutPage = () => {
 
   const shipping = cartTotal >= 500 ? 0 : STANDARD_SHIPPING_FEE;
 
-  // 10% of ORIGINAL subtotal per click, capped at 100%
+  // 10% of ORIGINAL subtotal per valid code entry, capped at 100%
   const discountRate = Math.min(stackCount * 0.1, 1);
   const discountApplied = cartTotal * discountRate;
   const discountedSubtotal = Math.max(0, cartTotal - discountApplied);
@@ -30,6 +33,20 @@ const CheckoutPage = () => {
   const total = discountedSubtotal + shipping;
 
   const handleChange = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+
+  const applyPromo = () => {
+    const code = promoInput.trim().toLowerCase();
+    if (!code) return;
+
+    if (code !== PROMO_CODE) {
+      setPromoError('Invalid promo code.');
+      return;
+    }
+
+    setPromoError('');
+    setPromoInput('');
+    setStackCount((n) => Math.min(n + 1, 10));
+  };
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
@@ -268,18 +285,32 @@ const CheckoutPage = () => {
                 <div className="pt-2">
                   <div className="flex items-center justify-between gap-3">
                     <div>
-                      <p className="text-sm font-semibold text-on-surface">Promo: 10% off</p>
+                      <p className="text-sm font-semibold text-on-surface">Promo code</p>
+                      <p className="text-xs text-on-surface-variant">Enter the code from the Products page.</p>
                     </div>
-                
+                  </div>
+
+                  <div className="mt-2 flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={promoInput}
+                      onChange={(e) => { setPromoInput(e.target.value); setPromoError(''); }}
+                      className="flex-1 bg-transparent border border-outline-variant/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary placeholder:text-on-surface-variant/50"
+                      disabled={stackCount >= 10 || cartTotal <= 0}
+                    />
                     <button
                       type="button"
-                      onClick={() => setStackCount((n) => Math.min(n + 1, 10))}
-                      disabled={stackCount >= 10 || cartTotal <= 0}
+                      onClick={applyPromo}
+                      disabled={stackCount >= 10 || cartTotal <= 0 || !promoInput.trim()}
                       className="px-3 py-2 rounded-lg bg-primary text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-50"
                     >
                       Apply
                     </button>
                   </div>
+
+                  {promoError && (
+                    <p className="mt-2 text-xs text-error font-semibold">{promoError}</p>
+                  )}
                 </div>
                 
                 {/* Discount row */}

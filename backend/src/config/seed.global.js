@@ -181,10 +181,13 @@ const CHALLENGES = [
   },
   {
     title: 'Stack the Savings',
-    description: "A 10% promo shows up while browsing products. It looks harmless — until you try applying it more than once at checkout.",
+    description: "A promo code appears while browsing products. Enter it at checkout — then try entering it more than once.",
     category: 'logic-flaw', difficulty: 'easy', points: 100,
     flag: 'CTF{discount_stacking_exploit}',
-    hints: [{ text: 'Spot the 10% promo on the Products page, then keep clicking apply at checkout. Watch the subtotal.', cost: 0 }],
+    hints: [
+      { text: 'Browse the Products page—there’s a promo code hidden in plain sight.', cost: 0 },
+      { text: 'Checkout accepts the same code more than once. Keep applying it and watch the items subtotal.', cost: 25 },
+    ],
     isActive: true,
   },
   {

@@ -41,7 +41,9 @@ export default function PromoBanner() {
                 10% off
               </span>
               <p className="text-sm text-on-surface leading-snug">
-                Limited-time promo on your bag. Stack savings at checkout.
+                Use code{' '}
+                <span className="font-mono font-semibold text-primary">discount10%</span>
+                {' '}at checkout.
               </p>
             </div>
 
