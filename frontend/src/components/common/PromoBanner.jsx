@@ -29,39 +29,40 @@ export default function PromoBanner() {
   if (!visible) return null;
 
   return (
-
     <section
-      className="fixed top-16 left-0 right-0 z-40 border-b border-primary/20 bg-primary/10 backdrop-blur-md px-4 py-2.5 text-on-surface"
+      className="w-full px-4 pt-24 pb-3"
       aria-label="Promotion"
     >
-      {/* max-w-7xl mx-auto — centered content, same max width as other store pages. */}
-      {/* flex-col on small screens; sm:flex-row and sm:justify-between from sm breakpoint up. */}
-      <div className="max-w-7xl mx-auto flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-        <p className="text-sm text-center sm:text-left">
-          <span className="font-semibold text-primary">10% off</span>
-          {/* {' '} — explicit space between JSX elements (newline would also work inside text). */}
-          {' '}
-          this week — add something you love and use the code at checkout.
-        </p>
-        <div className="flex items-center justify-center gap-3 shrink-0">
-          {/* to="/cart" — client-side route; same as <a href> but for React Router. */}
-          <Link
-            to="/cart"
-            className="text-xs font-bold uppercase tracking-widest text-primary hover:opacity-80"
-          >
-            Go to bag
-          </Link>
-          {/* type="button" — avoids submitting a parent <form> if this were nested in one. */}
-          {/* onClick={dismiss} — pass function reference (not dismiss() — that would run immediately). */}
-          <button
-            type="button"
-            onClick={dismiss}
-            className="rounded-md p-1 text-on-surface-variant hover:bg-on-surface/5 hover:text-on-surface"
-            aria-label="Dismiss promotion"
-          >
-            {/* Icon font class from Material Symbols (loaded globally in index.html or similar). */}
-            <span className="material-symbols-outlined text-lg leading-none">close</span>
-          </button>
+      <div className="max-w-7xl mx-auto">
+        <div className="rounded-xl border border-outline-variant/25 bg-surface-container-low/95 backdrop-blur-md shadow-sm">
+          <div className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.22em] text-primary">
+                10% off
+              </span>
+              <p className="text-sm text-on-surface leading-snug">
+                Limited-time promo on your bag. Stack savings at checkout.
+              </p>
+            </div>
+
+            <div className="flex items-center justify-between gap-3 sm:justify-end">
+              <Link
+                to="/cart"
+                className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-xs font-bold uppercase tracking-widest text-white shadow-sm hover:bg-primary/90 transition-colors"
+              >
+                <span>Go to bag</span>
+                <span className="material-symbols-outlined text-sm ml-2 align-middle">arrow_forward</span>
+              </Link>
+              <button
+                type="button"
+                onClick={dismiss}
+                className="rounded-lg border border-outline/20 p-2 text-on-surface-variant hover:border-primary/40 hover:text-on-surface transition-colors"
+                aria-label="Dismiss promotion"
+              >
+                <span className="material-symbols-outlined text-lg leading-none">close</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>

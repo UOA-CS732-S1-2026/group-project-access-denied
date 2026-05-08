@@ -181,10 +181,10 @@ const CHALLENGES = [
   },
   {
     title: 'Stack the Savings',
-    description: "APapparel's checkout applies discount codes at face value. What happens if you apply more than one and checkout?",
+    description: "A 10% promo shows up while browsing products. It looks harmless — until you try applying it more than once at checkout.",
     category: 'logic-flaw', difficulty: 'easy', points: 100,
     flag: 'CTF{discount_stacking_exploit}',
-    hints: [{ text: 'Try applying a discount code as many times as you can. Does the total keep going down?', cost: 0 }],
+    hints: [{ text: 'Spot the 10% promo on the Products page, then keep clicking apply at checkout. Watch the subtotal.', cost: 0 }],
     isActive: true,
   },
   {

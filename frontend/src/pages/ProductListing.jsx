@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
+import PromoBanner from '../components/common/PromoBanner';
 import { getProducts } from '../api/product.api';
 
 const ProductListing = () => {
@@ -18,8 +19,10 @@ const ProductListing = () => {
   return (
     <div className="bg-surface text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
       <Navbar activePage="products" />
+      <PromoBanner />
 
-      <main className="pt-24 min-h-screen">
+      {/* PromoBanner already includes top offset for the fixed navbar */}
+      <main className="pt-6 min-h-screen">
 
         {/* Editorial Header */}
         <header className="px-8 mb-12">
