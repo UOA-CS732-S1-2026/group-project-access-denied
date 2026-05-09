@@ -7,6 +7,7 @@ const FlagFoundModal = ({
   message = 'Congratulations, you found a hidden flag.',
   primaryLabel = 'Close',
   primaryAction,
+  onClose,
 }) => {
   const [copied, setCopied] = useState(false);
 
@@ -24,8 +25,23 @@ const FlagFoundModal = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-[1px] animate-fade-in px-4">
-      <div className="w-full max-w-md rounded-2xl bg-surface p-8 shadow-2xl border border-outline-variant/20 text-center">
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-[1px] animate-fade-in px-4"
+      onClick={onClose ? () => onClose() : undefined}
+    >
+      <div
+        className="relative w-full max-w-md rounded-2xl bg-surface p-8 shadow-2xl border border-outline-variant/20 text-center"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="absolute top-3 right-3 text-outline hover:text-on-surface transition-colors"
+            aria-label="Close"
+          >
+            <span className="material-symbols-outlined">close</span>
+          </button>
+        )}
 
         <h2 className="text-2xl font-extrabold text-on-surface mb-2">
           {title}
@@ -68,6 +84,7 @@ FlagFoundModal.propTypes = {
   message: PropTypes.string,
   primaryLabel: PropTypes.string,
   primaryAction: PropTypes.func,
+  onClose: PropTypes.func,
 };
 
 export default FlagFoundModal;
