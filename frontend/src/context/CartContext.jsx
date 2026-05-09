@@ -19,7 +19,7 @@ const loadCart = () => {
       const key = `${id}-${it.size}-Default`;
       return {
         key,
-        product: { _id: id, id, name: it.name || 'Unknown product', price: it.price || 0, images: [''] },
+        product: { _id: id, id, name: it.name || 'Unknown product', price: it.price || 0, images: [it.image || ''] },
         size: it.size || 'M',
         color: 'Default',
         qty: it.quantity || it.qty || 1,
@@ -42,6 +42,7 @@ export const CartProvider = ({ children }) => {
         size: item.size,
         quantity: item.qty,
         price: item.product.price,
+        image: item.product.images?.[0] || '',
       }));
       localStorage.setItem(STORAGE_KEY, JSON.stringify(simplified));
     } catch {
