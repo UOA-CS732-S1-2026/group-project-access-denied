@@ -67,7 +67,7 @@ const HomePage = () => {
                   <p className="text-sm tracking-widest uppercase opacity-80 mb-6">The New Silhouette</p>
                   <Link
                     className="inline-flex bg-white/10 backdrop-blur-md border border-white/20 px-6 py-3 rounded-lg text-sm font-semibold hover:bg-white hover:text-black transition-all"
-                    to="products/69ecbcf80a8ce07d57856da7"
+                    to="/products"
                   >
                     View Product
                   </Link>
@@ -87,7 +87,7 @@ const HomePage = () => {
                     <p className="text-xs tracking-widest uppercase opacity-80 mb-4">Tailored Precision</p>
                     <Link
                       className="inline-flex bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-lg text-xs font-semibold hover:bg-white hover:text-black transition-all"
-                      to="/products/69ecbcf80a8ce07d57856da8"
+                      to="/products"
                     >
                       View Product
                     </Link>
@@ -105,7 +105,7 @@ const HomePage = () => {
                     <p className="text-xs tracking-widest uppercase opacity-80 mb-4">The Finishing Touch</p>
                     <Link
                       className="inline-flex bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-lg text-xs font-semibold hover:bg-white hover:text-black transition-all"
-                      to="/products/69ecbcf80a8ce07d57856db0"
+                      to="/products"
                     >
                       View Product
                     </Link>
