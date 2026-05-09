@@ -384,9 +384,9 @@ Update the Status column as work progresses.
 | 8  | Login / API responses   | Error message over-disclosure                       | 🟢 Easy    | 🔴 Not started |
 | 9  | Forgot password flow    | Security question answer exposed via social profile | 🟢 Easy    | 🔴 Not started |
 | 10 | Checkout                | Discount code stacking / logic flaw                 | 🟢 Easy    | 🔴 Not started |
-| 11 | TBD                     | TBD                                                 | TBD        | 🔴 Not started |
-| 12 | TBD                     | TBD                                                 | TBD        | 🔴 Not started |
-| 13 | TBD                     | TBD                                                 | TBD        | 🔴 Not started |
+| 11 | Chatbot error handler   | Verbose error / env var leak                        | 🟡 Medium  | 🟢 Done        |
+| 12 | Chatbot session history | IDOR on sequential session IDs                      | 🟡 Medium  | 🟢 Done        |
+| 13 | Admin "Import from URL" | Server-Side Request Forgery (SSRF)                  | 🔴 Hard    | 🟢 Done        |
 | 14 | TBD                     | TBD                                                 | TBD        | 🔴 Not started |
 
 ### Cross-flag dependencies
