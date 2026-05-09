@@ -94,7 +94,7 @@ const AdminPanelPage = () => {
 
   return (
     <div className="bg-background text-on-background min-h-screen flex flex-col font-body">
-      <Navbar activePage="products" />
+      <Navbar activePage="admin" />
 
       <div className="flex pt-20 min-h-screen">
 

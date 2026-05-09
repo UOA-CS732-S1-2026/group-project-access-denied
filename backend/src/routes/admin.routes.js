@@ -11,7 +11,7 @@ const Product = require('../models/product.model');
 // and finds the flag while inspecting product entries here.
 router.get('/products', protect, adminOnly, async (_req, res, next) => {
   try {
-    const products = await Product.find({}).sort({ createdAt: -1 });
+    const products = await Product.find({ isActive: true }).sort({ createdAt: -1 });
     res.json(products);
   } catch (err) {
     next(err);
