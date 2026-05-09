@@ -2,6 +2,7 @@ const { getOrders, getOrder, createOrder, getAllOrders } = require('../../src/co
 const Order = require('../../src/models/order.model');
 
 jest.mock('../../src/models/order.model');
+jest.mock('../../src/models/product.model');
 
 const mockRes = () => {
   const res = {};
@@ -102,7 +103,7 @@ describe('createOrder', () => {
     await createOrder(req, res, jest.fn());
 
     expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({ message: 'items, total and shippingAddress are required' });
+    expect(res.json).toHaveBeenCalledWith({ message: 'items and shippingAddress are required' });
   });
 
   it('returns 400 when items array is empty', async () => {
@@ -124,7 +125,10 @@ describe('createOrder', () => {
         select: jest.fn().mockResolvedValue({ orderNumber: 5 }),
       }),
     });
-    Order.create.mockResolvedValue({ ...mockOrder, orderNumber: 6 });
+    Order.create.mockResolvedValue({ ...mockOrder, orderNumber: 6, toObject: () => ({ ...mockOrder, orderNumber: 6 }) });
+
+    const Product = require('../../src/models/product.model');
+    Product.findById.mockResolvedValue({ price: 150 });
 
     const req = {
       body: { items: [{ product: 'prod-1', qty: 1 }], total: 150, shippingAddress: mockOrder.shippingAddress },

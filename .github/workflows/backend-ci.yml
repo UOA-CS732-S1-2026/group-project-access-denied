@@ -32,4 +32,5 @@ jobs:
           NODE_ENV: test
           JWT_SECRET: super-secret-test-key-not-real
           PORT: 3000
+          GROQ_API_KEY: dummy-key-for-ci
         run: npm test
