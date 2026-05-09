@@ -8,11 +8,11 @@ const ChallengeCard = ({ challenge, isSolved, onSelect }) => {
 
   return (
     <button
-      onClick={() => !isSolved && onSelect(challenge)}
-      className={`w-full text-left rounded-xl border p-5 transition-all duration-200 group
+      onClick={() => onSelect(challenge)}
+      className={`w-full text-left rounded-xl border p-5 transition-all duration-200 group cursor-pointer
         ${isSolved
-          ? 'border-green-700 bg-green-900/20 opacity-70 cursor-default'
-          : 'border-gray-700 bg-gray-900 hover:border-indigo-500 hover:bg-gray-800 cursor-pointer'
+          ? 'border-green-700 bg-green-900/20 opacity-70 hover:opacity-100 hover:border-green-500'
+          : 'border-gray-700 bg-gray-900 hover:border-indigo-500 hover:bg-gray-800'
         }`}
     >
       <div className="flex items-start justify-between gap-3">

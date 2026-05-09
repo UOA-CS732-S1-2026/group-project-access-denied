@@ -11,16 +11,20 @@ import AdminPanelPage from './pages/AdminPanelPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import PublicRoute from './components/PublicRoute';
 
-import HomePage from './pages/HomePage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import ChallengePage from './pages/ChallengePage';
-import NotFoundPage from './pages/NotFoundPage';
-import ProductListing from './pages/ProductListing';
-import ProductDetailsPage from './pages/ProductDetailsPage';
-import TermsOfServicePage from './pages/TermsOfServicePage';
-import AboutPage from './pages/AboutPage';
+import HomePage        from './pages/HomePage';
+import LoginPage       from './pages/LoginPage';
+import RegisterPage    from './pages/RegisterPage';
+import ChallengePage   from './pages/ChallengePage';
+import NotFoundPage    from './pages/NotFoundPage';
+import ProductListing      from './pages/ProductListing';
+import ProductDetailsPage  from './pages/ProductDetailsPage';
+import TermsOfServicePage  from './pages/TermsOfServicePage';
+import AboutPage           from './pages/AboutPage';
+import ShippingPage        from './pages/ShippingPage';
+import ReturnsPage         from './pages/ReturnsPage';
+import PrivacyPolicyPage   from './pages/PrivacyPolicyPage';
 import HelpBot from './components/Helpbot';
+import ChallengesButton from './components/ChallengesButton';
 
 const HELPBOT_HIDDEN_ROUTES = ['/challenges'];
 
@@ -52,6 +56,10 @@ const AppContent = () => {
         <Route path="/challenges"          element={<ProtectedRoute allowedRoles={['user']}><ChallengePage /></ProtectedRoute>} />
         <Route path="/terms"               element={<ProtectedRoute allowedRoles={['user']}><TermsOfServicePage /></ProtectedRoute>} />
         <Route path="/about"               element={<ProtectedRoute allowedRoles={['user']}><AboutPage /></ProtectedRoute>} />
+        <Route path="/shipping"            element={<ProtectedRoute allowedRoles={['user']}><ShippingPage /></ProtectedRoute>} />
+        <Route path="/returns"             element={<ProtectedRoute allowedRoles={['user']}><ReturnsPage /></ProtectedRoute>} />
+        <Route path="/privacy"             element={<ProtectedRoute allowedRoles={['user']}><PrivacyPolicyPage /></ProtectedRoute>} />
+
 
         {/* Admin-only routes */}
         <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin']}><AdminPanelPage /></ProtectedRoute>} />
@@ -63,6 +71,7 @@ const AppContent = () => {
         <Route path="*" element={<ProtectedRoute><NotFoundPage /></ProtectedRoute>} />
       </Routes>
       {showHelpBot && <HelpBot />}
+      <ChallengesButton />
     </AuthProvider>
     </CartProvider>
   );

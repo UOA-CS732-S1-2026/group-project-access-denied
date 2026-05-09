@@ -17,6 +17,10 @@ const ChallengePage = () => {
   const [totalScore, setTotalScore] = useState(0);
 
   useEffect(() => {
+    if (user) localStorage.setItem(`ctf_unlocked_${user.id}`, '1');
+  }, [user]);
+
+  useEffect(() => {
     getChallenges()
       .then((res) => setChallenges(res.data))
       .catch(() => setError('Failed to load challenges. Make sure you are logged in.'))
