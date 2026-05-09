@@ -3,12 +3,13 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import ShoppingCartPage from './pages/ShoppingCartPage';
-import ProfilePage         from './pages/ProfilePage';
-import OrderHistoryPage   from './pages/OrderHistoryPage';
-import OrderDetailPage    from './pages/OrderDetailPage';
-import CheckoutPage       from './pages/CheckoutPage';
-import AdminPanelPage    from './pages/AdminPanelPage';
+import ProfilePage from './pages/ProfilePage';
+import OrderHistoryPage from './pages/OrderHistoryPage';
+import OrderDetailPage from './pages/OrderDetailPage';
+import CheckoutPage from './pages/CheckoutPage';
+import AdminPanelPage from './pages/AdminPanelPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import PublicRoute from './components/PublicRoute';
 
 import HomePage        from './pages/HomePage';
 import LoginPage       from './pages/LoginPage';
@@ -19,45 +20,58 @@ import ProductListing      from './pages/ProductListing';
 import ProductDetailsPage  from './pages/ProductDetailsPage';
 import TermsOfServicePage  from './pages/TermsOfServicePage';
 import AboutPage           from './pages/AboutPage';
+import ShippingPage        from './pages/ShippingPage';
+import ReturnsPage         from './pages/ReturnsPage';
+import PrivacyPolicyPage   from './pages/PrivacyPolicyPage';
 import HelpBot from './components/Helpbot';
+import ChallengesButton from './components/ChallengesButton';
 
 const HELPBOT_HIDDEN_ROUTES = ['/challenges'];
 
 const AppContent = () => {
   const { pathname } = useLocation();
 
-  // Scroll to top on every route change
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+
   const showHelpBot = !HELPBOT_HIDDEN_ROUTES.includes(pathname);
 
   return (
     <CartProvider>
     <AuthProvider>
       <Routes>
-        {/* Public routes */}
-        <Route path="/login"    element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        {/* Public routes — redirect away if already logged in */}
+        <Route path="/login"    element={<PublicRoute><LoginPage /></PublicRoute>} />
+        <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
 
-        {/* Protected routes — require login */}
-        <Route path="/"             element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
-        <Route path="/products"     element={<ProtectedRoute><ProductListing /></ProtectedRoute>} />
-        <Route path="/products/:id" element={<ProtectedRoute><ProductDetailsPage /></ProtectedRoute>} />
-        <Route path="/cart"         element={<ProtectedRoute><ShoppingCartPage /></ProtectedRoute>} />
-        <Route path="/account"      element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-        <Route path="/orders"       element={<ProtectedRoute><OrderHistoryPage /></ProtectedRoute>} />
-        <Route path="/orders/:orderNumber" element={<ProtectedRoute><OrderDetailPage /></ProtectedRoute>} />
-        <Route path="/checkout"     element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
-        <Route path="/admin"        element={<ProtectedRoute><AdminPanelPage /></ProtectedRoute>} />
-        <Route path="/challenges"   element={<ProtectedRoute><ChallengePage /></ProtectedRoute>} />
-        <Route path="/terms"         element={<ProtectedRoute><TermsOfServicePage /></ProtectedRoute>} />
-        <Route path="/about"         element={<ProtectedRoute><AboutPage /></ProtectedRoute>} />
+        {/* User-only routes */}
+        <Route path="/"                    element={<ProtectedRoute allowedRoles={['user']}><HomePage /></ProtectedRoute>} />
+        <Route path="/products"            element={<ProtectedRoute allowedRoles={['user']}><ProductListing /></ProtectedRoute>} />
+        <Route path="/products/:id"        element={<ProtectedRoute allowedRoles={['user']}><ProductDetailsPage /></ProtectedRoute>} />
+        <Route path="/cart"                element={<ProtectedRoute allowedRoles={['user']}><ShoppingCartPage /></ProtectedRoute>} />
+        <Route path="/orders"              element={<ProtectedRoute allowedRoles={['user']}><OrderHistoryPage /></ProtectedRoute>} />
+        <Route path="/orders/:orderNumber" element={<ProtectedRoute allowedRoles={['user']}><OrderDetailPage /></ProtectedRoute>} />
+        <Route path="/checkout"            element={<ProtectedRoute allowedRoles={['user']}><CheckoutPage /></ProtectedRoute>} />
+        <Route path="/challenges"          element={<ProtectedRoute allowedRoles={['user']}><ChallengePage /></ProtectedRoute>} />
+        <Route path="/terms"               element={<ProtectedRoute allowedRoles={['user']}><TermsOfServicePage /></ProtectedRoute>} />
+        <Route path="/about"               element={<ProtectedRoute allowedRoles={['user']}><AboutPage /></ProtectedRoute>} />
+        <Route path="/shipping"            element={<ProtectedRoute allowedRoles={['user']}><ShippingPage /></ProtectedRoute>} />
+        <Route path="/returns"             element={<ProtectedRoute allowedRoles={['user']}><ReturnsPage /></ProtectedRoute>} />
+        <Route path="/privacy"             element={<ProtectedRoute allowedRoles={['user']}><PrivacyPolicyPage /></ProtectedRoute>} />
+
+
+        {/* Admin-only routes */}
+        <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin']}><AdminPanelPage /></ProtectedRoute>} />
+
+        {/* Shared routes — all authenticated users */}
+        <Route path="/account" element={<ProtectedRoute allowedRoles={['user', 'admin']}><ProfilePage /></ProtectedRoute>} />
 
         {/* 404 */}
         <Route path="*" element={<ProtectedRoute><NotFoundPage /></ProtectedRoute>} />
       </Routes>
       {showHelpBot && <HelpBot />}
+      <ChallengesButton />
     </AuthProvider>
     </CartProvider>
   );

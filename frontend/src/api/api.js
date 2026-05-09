@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5001/api',
+  // Use same-origin API by default so Vite proxy can forward to backend.
+  baseURL: import.meta.env.VITE_API_URL || '/api',
 });
 
 // Attach JWT to every request if present

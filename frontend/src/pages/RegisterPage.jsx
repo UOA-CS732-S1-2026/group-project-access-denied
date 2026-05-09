@@ -13,9 +13,36 @@ const SECURITY_QUESTIONS = [
   "What was the make of your first car?",
 ];
 
+const validators = {
+  username: (v) => {
+    if (!v.trim()) return 'Username is required';
+    if (v.trim().length < 3) return 'Must be at least 3 characters';
+    if (v.trim().length > 20) return 'Must be 20 characters or fewer';
+    if (!/^[a-zA-Z0-9_]+$/.test(v.trim())) return 'Letters, numbers, and underscores only';
+    return '';
+  },
+  email: (v) => {
+    if (!v.trim()) return 'Email is required';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim())) return 'Please enter a valid email address';
+    return '';
+  },
+  password: (v) => {
+    if (!v) return 'Password is required';
+    if (v.length < 8) return 'Must be at least 8 characters';
+    if (!/[A-Z]/.test(v)) return 'Must contain at least one uppercase letter';
+    if (!/[0-9]/.test(v)) return 'Must contain at least one number';
+    return '';
+  },
+  securityAnswer: (v) => {
+    if (!v.trim()) return 'Security answer is required';
+    if (v.trim().length < 2) return 'Must be at least 2 characters';
+    return '';
+  },
+};
+
 const RegisterPage = () => {
   const { login } = useAuth();
-  const navigate   = useNavigate();
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     username: '',
     email: '',
@@ -23,28 +50,66 @@ const RegisterPage = () => {
     securityQuestion: SECURITY_QUESTIONS[0],
     securityAnswer: '',
   });
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
+  const [serverError, setServerError] = useState('');
 
-  const handleChange = (e) =>
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    if (touched[name]) {
+      setErrors((prev) => ({ ...prev, [name]: validators[name]?.(value) ?? '' }));
+    }
+  };
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    setErrors((prev) => ({ ...prev, [name]: validators[name]?.(value) ?? '' }));
+  };
+
+  const validateAll = () => {
+    const fields = ['username', 'email', 'password', 'securityAnswer'];
+    const newErrors = {};
+    const newTouched = {};
+    let valid = true;
+    fields.forEach((f) => {
+      newTouched[f] = true;
+      const err = validators[f]?.(form[f]) ?? '';
+      newErrors[f] = err;
+      if (err) valid = false;
+    });
+    setTouched((prev) => ({ ...prev, ...newTouched }));
+    setErrors((prev) => ({ ...prev, ...newErrors }));
+    return valid;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setServerError('');
+    if (!validateAll()) return;
     try {
       const { data } = await registerService(form);
       login(data.token, data.user);
       navigate(data.user.role === 'admin' ? '/admin' : '/');
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
+      setServerError(err.response?.data?.message || 'Registration failed');
     }
   };
 
-  const inputClass =
-    'bg-white border border-[#dcc1ba] text-[#1c1b1b] rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#994127] focus:ring-1 focus:ring-[#994127] placeholder:text-[#b09a96] transition-colors';
+  const inputClass = (name) =>
+    `bg-white border text-[#1c1b1b] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-1 placeholder:text-[#b09a96] transition-colors ${
+      errors[name] && touched[name]
+        ? 'border-red-400 focus:border-red-400 focus:ring-red-400'
+        : 'border-[#dcc1ba] focus:border-[#994127] focus:ring-[#994127]'
+    }`;
 
-  const labelClass =
-    'text-xs font-semibold uppercase tracking-widest text-[#56423d]';
+  const labelClass = 'text-xs font-semibold uppercase tracking-widest text-[#56423d]';
+
+  const renderError = (name) =>
+    errors[name] && touched[name]
+      ? <p className="text-xs text-red-500 mt-1">{errors[name]}</p>
+      : null;
 
   return (
     <div className="min-h-screen bg-[#fcf9f8] flex">
@@ -85,25 +150,26 @@ const RegisterPage = () => {
             Fill in the details below to get started.
           </p>
 
-          {error && (
+          {serverError && (
             <div className="mb-6 px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
-              {error}
+              {serverError}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="username" className={labelClass}>Username</label>
               <input
                 id="username"
                 name="username"
                 type="text"
-                placeholder="Your display name"
+                placeholder="3–20 characters, letters and numbers"
                 value={form.username}
                 onChange={handleChange}
-                required
-                className={inputClass}
+                onBlur={handleBlur}
+                className={inputClass('username')}
               />
+              {renderError('username')}
             </div>
 
             <div className="flex flex-col gap-1.5">
@@ -115,9 +181,10 @@ const RegisterPage = () => {
                 placeholder="you@example.com"
                 value={form.email}
                 onChange={handleChange}
-                required
-                className={inputClass}
+                onBlur={handleBlur}
+                className={inputClass('email')}
               />
+              {renderError('email')}
             </div>
 
             <div className="flex flex-col gap-1.5">
@@ -126,12 +193,13 @@ const RegisterPage = () => {
                 id="password"
                 name="password"
                 type="password"
-                placeholder="Min. 6 characters"
+                placeholder="Min. 8 characters, 1 uppercase, 1 number"
                 value={form.password}
                 onChange={handleChange}
-                required
-                className={inputClass}
+                onBlur={handleBlur}
+                className={inputClass('password')}
               />
+              {renderError('password')}
             </div>
 
             <div className="h-px bg-[#e8d5cf] my-1" />
@@ -143,8 +211,7 @@ const RegisterPage = () => {
                 name="securityQuestion"
                 value={form.securityQuestion}
                 onChange={handleChange}
-                required
-                className={inputClass}
+                className={inputClass('securityQuestion')}
               >
                 {SECURITY_QUESTIONS.map((q) => (
                   <option key={q} value={q}>{q}</option>
@@ -161,9 +228,10 @@ const RegisterPage = () => {
                 placeholder="Your answer (stored securely)"
                 value={form.securityAnswer}
                 onChange={handleChange}
-                required
-                className={inputClass}
+                onBlur={handleBlur}
+                className={inputClass('securityAnswer')}
               />
+              {renderError('securityAnswer')}
             </div>
 
             <button
