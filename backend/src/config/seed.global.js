@@ -244,7 +244,7 @@ async function seedGlobal() {
   if (!admin) {
     admin = await User.create({
       username: 'admin',
-      email: 'admin@apapparel.com',
+      email: 'CTF{default_creds_never_change}',
       password: 'admin',        // CTF: intentional vulnerability — default-credentials
       role: 'admin',
       securityQuestion: 'What city were you born in?',
