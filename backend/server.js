@@ -3,7 +3,8 @@ const { connectDB } = require('./src/config/db');
 const logger = require('./src/utils/logger');
 const seedGlobal = require('./src/config/seed.global');
 
-const PORT = process.env.PORT || 5000;
+// Default to 5001 (dev docs and macOS notes recommend 5001)
+const PORT = process.env.PORT || 5001;
 
 // Connect to MongoDB then start the server
 connectDB().then(async () => {
