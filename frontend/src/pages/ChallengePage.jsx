@@ -17,8 +17,8 @@ const ChallengePage = () => {
   const [totalScore, setTotalScore] = useState(0);
 
   useEffect(() => {
-    localStorage.setItem('ctf_unlocked', '1');
-  }, []);
+    if (user) localStorage.setItem(`ctf_unlocked_${user.id}`, '1');
+  }, [user]);
 
   useEffect(() => {
     getChallenges()
