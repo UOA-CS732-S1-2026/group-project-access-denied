@@ -8,11 +8,6 @@ const Footer = () => {
         <p className="text-[#56423d] dark:text-[#dcc1ba] max-w-xs text-sm leading-relaxed">
           Elevating the digital commerce experience through editorial curation and artisanal focus.
         </p>
-        <div className="flex space-x-4">
-          <span className="material-symbols-outlined text-[#994127]">public</span>
-          <span className="material-symbols-outlined text-[#994127]">nest_eco_leaf</span>
-          <span className="material-symbols-outlined text-[#994127]">share</span>
-        </div>
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-4">
