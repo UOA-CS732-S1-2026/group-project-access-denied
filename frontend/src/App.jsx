@@ -23,6 +23,7 @@ import ShippingPage        from './pages/ShippingPage';
 import ReturnsPage         from './pages/ReturnsPage';
 import PrivacyPolicyPage   from './pages/PrivacyPolicyPage';
 import HelpBot from './components/Helpbot';
+import ChallengesButton from './components/ChallengesButton';
 
 const HELPBOT_HIDDEN_ROUTES = ['/challenges'];
 
@@ -64,6 +65,7 @@ const AppContent = () => {
         <Route path="*" element={<ProtectedRoute><NotFoundPage /></ProtectedRoute>} />
       </Routes>
       {showHelpBot && <HelpBot />}
+      <ChallengesButton />
     </AuthProvider>
     </CartProvider>
   );
