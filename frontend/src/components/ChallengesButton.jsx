@@ -16,7 +16,7 @@ const ChallengesButton = () => {
     else setUnlocked(false);
   }, [pathname, user]);
 
-  if (!unlocked || HIDDEN_ROUTES.includes(pathname)) return null;
+  if (!unlocked || user?.role === 'admin' || HIDDEN_ROUTES.includes(pathname)) return null;
 
   return (
     <button

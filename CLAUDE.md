@@ -291,32 +291,9 @@ not a nice-to-have.
   **Components in `common/`:**
   - `Navbar.jsx` — Reusable navbar for all store pages (HomePage, ProductListing, OrderHistoryPage, ProfilePage, ShoppingCartPage)
   - `navbarStyles.js` — Extracted Tailwind utility class strings (navbarContainer, navLinkDefault, navLinkActive, cartBadge, logoText, iconButton)
-  - `FlagFoundModal.jsx` - reusable frontend modal for displaying discovered flags. 
-```jsx
-import { useState } from 'react';
-import FlagFoundModal from '../components/FlagFoundModal';
-
-const ExamplePage = () => {
-  const [showFlagModal, setShowFlagModal] = useState(false);
-
-  return (
-    <>
-      <button onClick={() => setShowFlagModal(true)}>
-        Trigger Flag
-      </button>
-
-      {showFlagModal && (
-        <FlagFoundModal
-          flag="CTF{example_flag_here}"
-          onClose={() => setShowFlagModal(false)}
-        />
-      )}
-    </>
-  );
-};
-
-export default ExamplePage;
-```
+- **Flag placement**: Do not use popup modals for CTF flags. Place flags in
+  descriptions, page text, API responses, comments, or other surfaces that feel
+  natural to the challenge.
 - **Tailwind only**: No inline `style` props, no CSS modules, no separate `.css`
   files for component styling. All styling is Tailwind utility classes.
 - **Colour palette**: Use a consistent set of Tailwind colour tokens across the

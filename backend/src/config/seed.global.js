@@ -111,6 +111,14 @@ const PRODUCTS = [
 // ─── Challenges ───────────────────────────────────────────────────────────────
 
 
+const SQLI_VAULT_PRODUCT = {
+  name: 'Vault Prototype Trench Coat',
+  description: 'Internal launch sample. Not ready for sale! CTF{sql_i_found_the_vault}',
+  price: 0, category: 'shoes', sizes: ['39', '40', '41', '42', '43'],
+  images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1778120293/non-mustache_qokq3o.png'],
+  stock: 0, isActive: false, isNew: false, featured: false,
+};
+
 const CHALLENGES = [
   {
     title: 'Hidden in Plain Sight',
@@ -165,11 +173,10 @@ const CHALLENGES = [
   },
   {
     title: 'The Search Bar Speaks',
-    description: "APapparel's product search passes your input somewhere it probably shouldn't. What happens when you ask it something unusual?",
+    description: "APapparel's product search passes user input is not sanitised, directly querying the database. Can you speak its language and find the hidden vault?",
     category: 'sql-injection', difficulty: 'medium', points: 200,
     flag: 'CTF{sql_i_found_the_vault}',
     hints: [
-      { text: 'Look at the reviews on any product. Who left them?', cost: 0 },
       { text: "The search endpoint doesn't sanitise input. Try a single quote.", cost: 50 },
     ],
     isActive: true,
@@ -307,6 +314,13 @@ async function seedGlobal() {
   // ── Challenges ──────────────────────────────────────────────────────────────
   // Upsert by title so re-running the seed updates existing records (e.g. TBD
   // slots that have been filled in) without wiping solve counts on other fields.
+  await Product.findOneAndUpdate(
+    { name: SQLI_VAULT_PRODUCT.name },
+    { $set: SQLI_VAULT_PRODUCT },
+    { upsert: true }
+  );
+  console.log('Ensured SQL injection vault product exists');
+
   for (const challenge of CHALLENGES) {
     await Challenge.findOneAndUpdate(
       { title: challenge.title },

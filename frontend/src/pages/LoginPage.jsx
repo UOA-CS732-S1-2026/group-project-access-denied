@@ -3,7 +3,6 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { login as loginService } from '../api/auth.api';
 import { getSecurityQuestion, verifySecurityAnswer } from '../api/forgotPassword.api';
-import FlagFoundModal from '../components/common/FlagFoundModal';
 const heroImage = 'https://res.cloudinary.com/dhyxvn66a/image/upload/v1777872498/ajith-in-suit_xlvzfj.png';
 
 const LoginPage = () => {
@@ -20,8 +19,7 @@ const LoginPage = () => {
   const [forgotError, setForgotError] = useState('');
   const [forgotLoading, setForgotLoading] = useState(false);
 
-  // ── Flag modal state ───────────────────────────────────────────────────────
-  const [showFlag, setShowFlag] = useState(false);
+  // ── Inline flag state ──────────────────────────────────────────────────────
   const [flagValue, setFlagValue] = useState('');
 
   const handleChange = (e) =>
@@ -63,10 +61,8 @@ const LoginPage = () => {
       const { data } = await verifySecurityAnswer({ email: forgotEmail, securityAnswer });
       // Log the user in
       login(data.token, data.user);
-      // Show the flag popup immediately
       if (data.flag) {
         setFlagValue(data.flag);
-        setShowFlag(true);
       } else {
         navigate(data.user.role === 'admin' ? '/admin' : '/');
       }
@@ -83,27 +79,11 @@ const LoginPage = () => {
     setSecurityQuestion('');
     setSecurityAnswer('');
     setForgotError('');
-  };
-
-  // ── Flag modal dismiss ─────────────────────────────────────────────────────
-  const handleFlagDismiss = () => {
-    setShowFlag(false);
-    navigate('/');
+    setFlagValue('');
   };
 
   return (
     <div className="min-h-screen bg-[#fcf9f8] flex">
-
-      {/* Flag modal */}
-      {showFlag && (
-        <FlagFoundModal
-          flag={flagValue}
-          title="🚩 Flag Captured!"
-          message="You successfully bypassed the forgot password flow using social engineering."
-          primaryLabel="Continue"
-          primaryAction={handleFlagDismiss}
-        />
-      )}
 
       {/* Left — brand image panel */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
@@ -274,6 +254,21 @@ const LoginPage = () => {
                 </div>
               )}
 
+              {flagValue && (
+                <div className="mb-6 px-4 py-3 rounded-lg bg-[#f5f0ee] border border-[#dcc1ba] text-[#1c1b1b] text-sm">
+                  <p className="font-semibold mb-2">Account recovery accepted. Internal recovery note:</p>
+                  <p className="font-mono break-all text-[#994127]">{flagValue}</p>
+                  <button
+                    type="button"
+                    onClick={() => navigate('/')}
+                    className="mt-4 w-full bg-[#994127] hover:bg-[#7a3420] text-white font-semibold py-3 rounded-lg tracking-tight transition-colors duration-200"
+                  >
+                    Continue
+                  </button>
+                </div>
+              )}
+
+              {!flagValue && (
               <form onSubmit={handleSecurityAnswerSubmit} className="flex flex-col gap-5">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold uppercase tracking-widest text-[#56423d]">
@@ -307,6 +302,7 @@ const LoginPage = () => {
                   {forgotLoading ? 'Verifying…' : 'Verify & Sign In'}
                 </button>
               </form>
+              )}
 
               <button
                 onClick={resetForgot}
