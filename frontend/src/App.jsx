@@ -38,8 +38,8 @@ const AppContent = () => {
   const showHelpBot = !HELPBOT_HIDDEN_ROUTES.includes(pathname);
 
   return (
-    <CartProvider>
     <AuthProvider>
+    <CartProvider>
       <Routes>
         {/* Public routes — redirect away if already logged in */}
         <Route path="/login"    element={<PublicRoute><LoginPage /></PublicRoute>} />
@@ -60,7 +60,6 @@ const AppContent = () => {
         <Route path="/returns"             element={<ProtectedRoute allowedRoles={['user']}><ReturnsPage /></ProtectedRoute>} />
         <Route path="/privacy"             element={<ProtectedRoute allowedRoles={['user']}><PrivacyPolicyPage /></ProtectedRoute>} />
 
-
         {/* Admin-only routes */}
         <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin']}><AdminPanelPage /></ProtectedRoute>} />
 
@@ -72,8 +71,8 @@ const AppContent = () => {
       </Routes>
       {showHelpBot && <HelpBot />}
       <ChallengesButton />
-    </AuthProvider>
     </CartProvider>
+    </AuthProvider>
   );
 };
 

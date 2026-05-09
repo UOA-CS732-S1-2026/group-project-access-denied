@@ -9,3 +9,9 @@ export const brandStory = 'https://res.cloudinary.com/dhyxvn66a/image/upload/v17
 
 // ProfilePage
 export const profileBanner = 'https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122157/Structured_Wool_Overcoat_cqjp2z.png';
+
+// LoginPage
+export const loginHeroImage = 'https://res.cloudinary.com/dhyxvn66a/image/upload/v1777872498/ajith-in-suit_xlvzfj.png';
+
+// AboutPage
+export const founderPhoto = 'https://res.cloudinary.com/dhyxvn66a/image/upload/v1777872496/Ajith-with-dog_ngrtxh.png';

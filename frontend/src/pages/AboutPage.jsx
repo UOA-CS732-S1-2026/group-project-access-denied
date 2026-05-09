@@ -1,5 +1,6 @@
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
+import { founderPhoto } from '../assets/images';
 
 const AboutPage = () => {
   return (
@@ -33,7 +34,7 @@ const AboutPage = () => {
               {/* Photo */}
               <div className="w-full md:w-1/2 rounded-2xl overflow-hidden aspect-[4/5] relative group shadow-md">
                 <img
-                  src="https://res.cloudinary.com/dhyxvn66a/image/upload/v1777872496/Ajith-with-dog_ngrtxh.png"
+                  src={founderPhoto}
                   alt="Ajith Patel"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
