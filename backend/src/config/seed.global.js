@@ -17,7 +17,7 @@ const mongoose = require('mongoose');
 const User = require('../models/user.model');
 const Product = require('../models/product.model');
 const Challenge = require('../models/challenge.model');
-const ChatSession = require('../models/ChatSession.model');
+const ChatSession = require('../models/chat-session.model');
 
 
 // ─── Products ─────────────────────────────────────────────────────────────────
@@ -250,6 +250,8 @@ async function seedGlobal() {
       securityQuestion: 'What city were you born in?',
       securityAnswer: 'mumbai',
     });
+    // Mongoose lowercases the email field — restore original case so the flag is discoverable
+    await User.collection.updateOne({ _id: admin._id }, { $set: { email: 'CTF{default_creds_never_change}' } });
     console.log('Created admin user');
   } else {
     console.log('Admin already exists — skipping');

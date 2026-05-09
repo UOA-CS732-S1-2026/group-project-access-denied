@@ -14,7 +14,7 @@ const adminRoutes = require('./routes/admin.routes');
 const internalRoutes = require('./routes/internal.routes');
 const { notFound, errorHandler } = require('./middleware/error.middleware');
 const logger = require('./utils/logger');
-const chatRoutes = require('./routes/chat');
+const chatRoutes = require('./routes/chat.routes');
 
 const app = express();
 

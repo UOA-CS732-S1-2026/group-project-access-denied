@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const ChatSession = require('../models/ChatSession.model');
+const ChatSession = require('../models/chat-session.model');
 const vulnerableErrorHandler = require('../middleware/vulnerableErrorhandler.middleware');
 
 const Groq = require('groq-sdk');
