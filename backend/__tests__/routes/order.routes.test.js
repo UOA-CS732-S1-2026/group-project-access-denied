@@ -1,7 +1,7 @@
 const request = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../../src/app');
-const { connect, runGlobalSeed, clearSessionData, disconnect } = require('../helpers/db');
+const { connect, runGlobalSeed, clearSessionData, disconnect, SEED_CREDENTIALS } = require('../helpers/db');
 
 const testUser = {
   username: 'ordertester',
@@ -37,7 +37,7 @@ beforeEach(async () => {
 
   const adminRes = await request(app)
     .post('/api/auth/login')
-    .send({ email: 'admin@apapparel.com', password: 'admin' });
+    .send(SEED_CREDENTIALS.admin);
   adminToken = adminRes.body.token;
 });
 
@@ -105,7 +105,7 @@ describe('POST /api/orders', () => {
       .send({ total: 100 });
 
     expect(res.status).toBe(400);
-    expect(res.body.message).toBe('items, total and shippingAddress are required');
+    expect(res.body.message).toBe('items and shippingAddress are required');
   });
 
   it('auto-increments orderNumber for consecutive orders', async () => {

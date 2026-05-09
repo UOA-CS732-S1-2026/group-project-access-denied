@@ -1,6 +1,6 @@
 const request = require('supertest');
 const app = require('../../src/app');
-const { connect, runGlobalSeed, clearSessionData, disconnect } = require('../helpers/db');
+const { connect, runGlobalSeed, clearSessionData, disconnect, SEED_CREDENTIALS } = require('../helpers/db');
 
 const testUser = {
   username: 'testuser',
@@ -117,7 +117,7 @@ describe('POST /api/auth/login', () => {
   it('logs in with the global seed admin credentials', async () => {
     const res = await request(app)
       .post('/api/auth/login')
-      .send({ email: 'admin@apapparel.com', password: 'admin' });
+      .send(SEED_CREDENTIALS.admin);
 
     expect(res.status).toBe(200);
     expect(res.body.user.role).toBe('admin');

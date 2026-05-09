@@ -3,6 +3,12 @@ const seedGlobal = require('../../src/config/seed.global');
 
 const SEED_USERS = ['admin', 'alice', 'ajithpatel'];
 
+// Login credentials for seeded users (username passed as email field — controller accepts both)
+const SEED_CREDENTIALS = {
+  admin: { email: 'admin', password: 'admin' },
+  alice: { email: 'alice', password: 'alice1234' },
+};
+
 async function connect() {
   await mongoose.connect(process.env.MONGO_URI_TEST);
 }
@@ -26,4 +32,4 @@ async function disconnect() {
   await mongoose.disconnect();
 }
 
-module.exports = { connect, runGlobalSeed, clearSessionData, disconnect };
+module.exports = { connect, runGlobalSeed, clearSessionData, disconnect, SEED_CREDENTIALS };
