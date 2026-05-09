@@ -94,10 +94,10 @@ const PRODUCTS = [
     images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122156/Day-to-Night_Tote_mxwc8s.png'],
     stock: 42, isActive: true, isNew: false, featured: false,
   },
-  // CTF: intentional vulnerability — default-credentials (Flag 6).
-  // Inactive draft hidden from the public catalogue but listed in the admin panel.
-  // Only an attacker who logs in with admin/admin can see this product and discover
-  // the flag tucked inside the description's "Internal note".
+  // CTF: intentional vulnerability — sql-injection (Flag 6).
+  // Inactive draft hidden from the public catalogue. The isActive filter is dropped
+  // when a NoSQL injection is detected in the search query, exposing this product
+  // in the listing. Clicking through to the product detail page reveals the flag.
   {
     name: 'Vault Prototype Trench Coat',
     description: 'Internal launch sample. Not ready for sale! CTF{sql_i_found_the_vault}',
@@ -110,14 +110,6 @@ const PRODUCTS = [
 
 // ─── Challenges ───────────────────────────────────────────────────────────────
 
-
-const SQLI_VAULT_PRODUCT = {
-  name: 'Vault Prototype Trench Coat',
-  description: 'Internal launch sample. Not ready for sale! CTF{sql_i_found_the_vault}',
-  price: 0, category: 'shoes', sizes: ['39', '40', '41', '42', '43'],
-  images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1778120293/non-mustache_qokq3o.png'],
-  stock: 0, isActive: false, isNew: false, featured: false,
-};
 
 const CHALLENGES = [
   {

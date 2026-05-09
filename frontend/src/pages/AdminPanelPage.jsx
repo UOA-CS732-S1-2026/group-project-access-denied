@@ -30,9 +30,12 @@ const AdminPanelPage = () => {
   const { user } = useAuth();
   const [activeNav, setActiveNav]   = useState('products');
   const [products, setProducts]     = useState([]);
+  const [productsError, setProductsError] = useState(null);
 
   useEffect(() => {
-    getAllProducts().then((res) => setProducts(res.data)).catch(() => {});
+    getAllProducts()
+      .then((res) => setProducts(res.data))
+      .catch((err) => setProductsError(err.response?.data?.message || 'Failed to load products.'));
   }, []);
   const [search, setSearch]         = useState('');
   const [page, setPage]             = useState(1);
@@ -204,7 +207,11 @@ const AdminPanelPage = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-outline-variant/10">
-                  {paginated.length === 0 ? (
+                  {productsError ? (
+                    <tr>
+                      <td colSpan={6} className="px-6 py-16 text-center text-error text-sm font-light">{productsError}</td>
+                    </tr>
+                  ) : paginated.length === 0 ? (
                     <tr>
                       <td colSpan={6} className="px-6 py-16 text-center text-on-surface-variant text-sm font-light">No products match your search.</td>
                     </tr>

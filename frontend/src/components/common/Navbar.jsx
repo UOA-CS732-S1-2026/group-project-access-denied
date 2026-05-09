@@ -26,7 +26,7 @@ const Navbar = ({ activePage = 'home' }) => {
       <div className="flex justify-between items-center px-8 py-4 max-w-full mx-auto">
 
         {/* Logo */}
-        <Link to={user?.role === 'admin' ? '/admin' : '/'} className={logoText}>
+        <Link to={user?.role === 'admin' ? '/admin' : '/'} className="text-sm font-bold tracking-[0.2em] uppercase text-[#56423d] dark:text-[#dcc1ba] hover:text-[#994127] transition-colors">
           APAPPAREL
         </Link>
 
@@ -54,13 +54,13 @@ const Navbar = ({ activePage = 'home' }) => {
           {user?.role !== 'admin' && (
             <Link
               to="/cart"
-              className={`${iconButton} relative ${
+              className={`relative hover:opacity-80 transition-opacity duration-300 text-[#56423d] dark:text-[#dcc1ba] ${
                 isActive('cart') ? 'text-[#994127] font-semibold border-b-2 border-[#994127]' : ''
               }`}
             >
               <span className="material-symbols-outlined">shopping_bag</span>
               {cartCount > 0 && (
-                <span className={cartBadge}>
+                <span className="absolute -top-2 -right-2 bg-[#994127] text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
                   {cartCount}
                 </span>
               )}
