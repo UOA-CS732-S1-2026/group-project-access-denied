@@ -14,8 +14,21 @@ const STATS = [
 
 const NAV_SECTIONS = [
   { label: 'Store Management', items: [
-    { id: 'products',  icon: 'inventory_2',  label: 'Products',  fill: true },
+    { id: 'products',    icon: 'inventory_2',    label: 'Products',    fill: true },
+    { id: 'promotions',  icon: 'local_offer',    label: 'Promotions',  fill: true },
   ]},
+];
+
+// Static promo codes shown in the admin panel.
+// CTF: WINTERSALE10 is the only "Active" code — players discover it here
+// after logging in with default credentials, then abuse it at checkout.
+const PROMO_CODES = [
+  { code: 'WINTERSALE10',   discount: '10%', status: 'Active',  validUntil: '2026-08-31', uses: 47,  note: 'Winter campaign — 10% off all orders' },
+  { code: 'LAUNCH25',       discount: '25%', status: 'Draft',   validUntil: '—',          uses: 0,   note: 'Q3 launch event (not yet approved)' },
+  { code: 'VIP50',          discount: '50%', status: 'Draft',   validUntil: '—',          uses: 0,   note: 'VIP influencer programme — pending legal' },
+  { code: 'BFRIDAY30',      discount: '30%', status: 'Expired', validUntil: '2025-11-30',  uses: 812, note: 'Black Friday 2025' },
+  { code: 'WELCOME15',      discount: '15%', status: 'Expired', validUntil: '2025-06-01',  uses: 1_304, note: 'New-customer welcome offer' },
+  { code: 'STAFF20',        discount: '20%', status: 'Draft',   validUntil: '—',          uses: 0,   note: 'Internal staff discount (HR approval pending)' },
 ];
 
 const stockLevel = (price) => {
@@ -156,7 +169,8 @@ const AdminPanelPage = () => {
             ))}
           </div>
 
-          {/* Products Header */}
+          {/* Products Section — visible when sidebar nav is on 'products' */}
+          {activeNav === 'products' && (<>
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
             <div>
               <h1 className="text-2xl font-extrabold tracking-tight text-on-surface mb-1">Manage Products</h1>
@@ -301,6 +315,61 @@ const AdminPanelPage = () => {
               </div>
             </div>
           </div>
+          </>)}
+
+          {/* Promotions Table — visible when sidebar nav is on 'promotions' */}
+          {activeNav === 'promotions' && (
+            <>
+              <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+                <div>
+                  <h1 className="text-2xl font-extrabold tracking-tight text-on-surface mb-1">Promo Codes</h1>
+                  <p className="text-sm text-on-surface-variant">{PROMO_CODES.length} codes configured</p>
+                </div>
+                <button className="bg-primary text-white px-5 py-2.5 text-sm font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center shadow-lg shadow-primary/20">
+                  <span className="material-symbols-outlined text-sm mr-2">add</span>
+                  Create Code
+                </button>
+              </div>
+
+              <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/10 overflow-hidden shadow-[0_4px_30px_rgba(86,66,61,0.03)]">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-surface-container-low/50">
+                        {['Code', 'Discount', 'Status', 'Valid Until', 'Uses', 'Note'].map((h) => (
+                          <th key={h} className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-outline">{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-outline-variant/10">
+                      {PROMO_CODES.map((promo) => {
+                        const statusColor =
+                          promo.status === 'Active'  ? 'text-tertiary bg-tertiary/10' :
+                          promo.status === 'Expired' ? 'text-on-surface-variant bg-surface-container' :
+                                                       'text-primary bg-primary/10';
+                        return (
+                          <tr key={promo.code} className="hover:bg-surface-container-low/30 transition-colors">
+                            <td className="px-6 py-4">
+                              <span className="font-mono text-sm font-bold text-on-surface">{promo.code}</span>
+                            </td>
+                            <td className="px-6 py-4 text-sm font-semibold text-on-surface">{promo.discount}</td>
+                            <td className="px-6 py-4">
+                              <span className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full ${statusColor}`}>
+                                {promo.status}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 text-sm text-on-surface-variant">{promo.validUntil}</td>
+                            <td className="px-6 py-4 text-sm text-on-surface-variant">{promo.uses.toLocaleString()}</td>
+                            <td className="px-6 py-4 text-xs text-on-surface-variant max-w-xs truncate" title={promo.note}>{promo.note}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </>
+          )}
 
         </main>
       </div>

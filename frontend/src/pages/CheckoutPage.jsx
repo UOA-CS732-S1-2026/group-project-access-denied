@@ -7,6 +7,7 @@ import { createOrder } from '../api/order.api';
 
 const STEPS = ['Shipping', 'Payment'];
 const STANDARD_SHIPPING_FEE = 25;
+const PROMO_CODE = 'wintersale10';
 
 const validators = {
   firstName: (v) => {
@@ -93,6 +94,9 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
+  const [stackCount, setStackCount] = useState(0);
+  const [promoInput, setPromoInput] = useState('');
+  const [promoError, setPromoError] = useState('');
   const [form, setForm] = useState({
     firstName: '', lastName: '', email: '', phone: '',
     address: '', city: '', state: '', zip: '', country: 'United States',
@@ -102,7 +106,12 @@ const CheckoutPage = () => {
   const [touched, setTouched] = useState({});
 
   const shipping = cartTotal >= 500 ? 0 : STANDARD_SHIPPING_FEE;
-  const total = cartTotal + shipping;
+  // CTF: intentional vulnerability — logic-flaw
+  // 10% of ORIGINAL subtotal per valid code entry, capped at 100%
+  const discountRate = Math.min(stackCount * 0.1, 1);
+  const discountApplied = cartTotal * discountRate;
+  const discountedSubtotal = Math.max(0, cartTotal - discountApplied);
+  const total = discountedSubtotal + shipping;
 
   const handleChange = (e) => {
     let { name, value } = e.target;
@@ -157,6 +166,19 @@ const CheckoutPage = () => {
     if (validateStep(step)) setStep((s) => s + 1);
   };
 
+  // CTF: intentional vulnerability — the same promo code can be applied repeatedly
+  const applyPromo = () => {
+    const code = promoInput.trim().toLowerCase();
+    if (!code) return;
+    if (code !== PROMO_CODE) {
+      setPromoError('Invalid promo code.');
+      return;
+    }
+    setPromoError('');
+    setPromoInput('');
+    setStackCount((n) => Math.min(n + 1, 10));
+  };
+
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
     if (!validateStep(step)) return;
@@ -181,6 +203,7 @@ const CheckoutPage = () => {
       await createOrder({
         items: itemsFromStorage,
         total: totalFromStorage,
+        discountApplied,
         shippingAddress: {
           fullName: `${form.firstName} ${form.lastName}`,
           street: form.address,
@@ -412,6 +435,49 @@ const CheckoutPage = () => {
                   <span className="text-on-surface-variant">Subtotal</span>
                   <span>${cartTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                 </div>
+
+                {/* Promo code input */}
+                <div className="pt-2">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-semibold text-on-surface">Promo code</p>
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={promoInput}
+                      onChange={(e) => { setPromoInput(e.target.value); setPromoError(''); }}
+                      placeholder="Enter code"
+                      className="flex-1 bg-transparent border border-outline-variant/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary placeholder:text-on-surface-variant/50"
+                      disabled={stackCount >= 10 || cartTotal <= 0}
+                    />
+                    <button
+                      type="button"
+                      onClick={applyPromo}
+                      disabled={stackCount >= 10 || cartTotal <= 0 || !promoInput.trim()}
+                      className="px-3 py-2 rounded-lg bg-primary text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-50"
+                    >
+                      Apply
+                    </button>
+                  </div>
+                  {promoError && (
+                    <p className="mt-2 text-xs text-red-500 font-semibold">{promoError}</p>
+                  )}
+                </div>
+
+                {/* Discount row */}
+                {discountApplied > 0 && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-on-surface-variant">
+                      Discount ({Math.round(discountRate * 100)}%)
+                    </span>
+                    <span className="text-green-700">
+                      -${discountApplied.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    </span>
+                  </div>
+                )}
+
                 <div className="flex justify-between text-sm">
                   <span className="text-on-surface-variant">Shipping</span>
                   <span>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
