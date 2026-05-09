@@ -1,4 +1,5 @@
 const Order = require('../models/order.model');
+const Product = require('../models/product.model');
 
 // GET /api/orders — returns current session's orders
 const getOrders = async (req, res, next) => {
@@ -55,9 +56,18 @@ const createOrder = async (req, res, next) => {
       discountApplied: discountApplied || 0,
     });
 
+    const realPrices = await Promise.all(
+      items.map(async (item) => {
+        const product = await Product.findById(item.product);
+        return (product?.price || 0) * (item.quantity || 1);
+      })
+    );
+    const realTotal = realPrices.reduce((sum, n) => sum + n, 0);
+
     const out = order.toObject ? order.toObject() : order;
-    // If the total is zero or negative, reveal the flag in the response.
-    if (Number(total) <= 25) {
+    // CTF: intentional vulnerability — price tampering
+    // Flag is revealed when the submitted total is less than the real product prices.
+    if (Number(total) < realTotal) {
       out.flag = 'CTF{price_tampering}';
     }
 
@@ -81,4 +91,3 @@ const getAllOrders = async (req, res, next) => {
 };
 
 module.exports = { getOrders, getOrder, createOrder, getAllOrders };
-
