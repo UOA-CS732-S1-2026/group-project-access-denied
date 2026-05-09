@@ -305,13 +305,6 @@ async function seedGlobal() {
   // ── Challenges ──────────────────────────────────────────────────────────────
   // Upsert by title so re-running the seed updates existing records (e.g. TBD
   // slots that have been filled in) without wiping solve counts on other fields.
-  await Product.findOneAndUpdate(
-    { name: SQLI_VAULT_PRODUCT.name },
-    { $set: SQLI_VAULT_PRODUCT },
-    { upsert: true }
-  );
-  console.log('Ensured SQL injection vault product exists');
-
   for (const challenge of CHALLENGES) {
     await Challenge.findOneAndUpdate(
       { title: challenge.title },
