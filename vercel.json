@@ -9,5 +9,8 @@
             "entrypoint": "backend",
             "routePrefix": "/_/backend"
         }
-    }
+    },
+    "rewrites": [
+        { "source": "/robots.txt", "destination": "/_/backend/robots.txt" }
+    ]
 }

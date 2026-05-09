@@ -53,13 +53,21 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/internal', internalRoutes);
 
-// CTF: intentional vulnerability — robots.txt advertises non-public paths
-app.get('/robots.txt', (_req, res) => {
+// CTF: intentional vulnerability — robots.txt advertises non-public paths.
+// The backend is mounted at '/' in dev and '/_/backend' on Vercel, so the
+// prefix is derived dynamically rather than hardcoded — keeps the breadcrumb
+// pointing at the real production paths regardless of mount.
+app.get('/robots.txt', (req, res) => {
+  // Prefer req.originalUrl (works whenever the proxy preserves the full path);
+  // fall back to the known Vercel mount when running on Vercel and the prefix
+  // has been stripped.
+  const fromOriginal = req.originalUrl.split('?')[0].replace(/\/robots\.txt$/, '');
+  const prefix = fromOriginal || (process.env.VERCEL ? '/_/backend' : '');
   res.type('text/plain').send(
     'User-agent: *\n' +
     'Disallow: /admin/\n' +
-    'Disallow: /internal/server-status\n' +
-    'Disallow: /api/admin/\n'
+    `Disallow: ${prefix}/internal/server-status\n` +
+    `Disallow: ${prefix}/api/admin/\n`
   );
 });
 
