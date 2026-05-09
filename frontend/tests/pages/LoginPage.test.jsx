@@ -17,7 +17,7 @@ vi.mock('../../src/api/forgotPassword.api', () => ({
 
 import { useAuth } from '../../src/context/AuthContext';
 import { login as loginService } from '../../src/api/auth.api';
-import { getSecurityQuestion, verifySecurityAnswer } from '../../src/api/forgotPassword.api';
+import { getSecurityQuestion } from '../../src/api/forgotPassword.api';
 import LoginPage from '../../src/pages/LoginPage';
 
 const wrap = () => render(<MemoryRouter><LoginPage /></MemoryRouter>);

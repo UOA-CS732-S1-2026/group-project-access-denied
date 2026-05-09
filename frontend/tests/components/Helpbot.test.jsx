@@ -45,7 +45,7 @@ describe('HelpBot', () => {
   });
 
   it('calls fetch and shows reply on message send', async () => {
-    global.fetch = vi.fn(() =>
+    window.fetch = vi.fn(() =>
       Promise.resolve({ json: () => Promise.resolve({ reply: 'Hello from bot!', sessionId: 42 }) })
     );
 
@@ -57,11 +57,11 @@ describe('HelpBot', () => {
     fireEvent.click(screen.getByRole('button', { name: /send/i }));
 
     await waitFor(() => expect(screen.getByText('Hello from bot!')).toBeTruthy());
-    expect(global.fetch).toHaveBeenCalledOnce();
+    expect(window.fetch).toHaveBeenCalledOnce();
   });
 
   it('shows error message when fetch fails', async () => {
-    global.fetch = vi.fn(() => Promise.reject(new Error('Network error')));
+    window.fetch = vi.fn(() => Promise.reject(new Error('Network error')));
 
     render(<HelpBot />);
     fireEvent.click(screen.getByRole('button', { name: /toggle helpbot/i }));
