@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { getProducts } from '../api/product.api';
+import { importProductImage, getAllProducts } from '../api/admin.api';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
-import FlagFoundModal from '../components/common/FlagFoundModal';
 
 const STATS = [
   { icon: 'payments',     label: 'Total Revenue',    value: '$124,592.00', badge: '+12.5%', badgeColor: 'text-tertiary bg-tertiary/10' },
@@ -15,14 +14,7 @@ const STATS = [
 
 const NAV_SECTIONS = [
   { label: 'Store Management', items: [
-    { id: 'dashboard', icon: 'dashboard',    label: 'Dashboard' },
     { id: 'products',  icon: 'inventory_2',  label: 'Products',  fill: true },
-    { id: 'orders',    icon: 'shopping_cart', label: 'Orders' },
-    { id: 'users',     icon: 'group',        label: 'Users' },
-  ]},
-  { label: 'Insights', items: [
-    { id: 'analytics', icon: 'analytics', label: 'Sales Analytics' },
-    { id: 'settings',  icon: 'settings',  label: 'Store Settings' },
   ]},
 ];
 
@@ -35,30 +27,22 @@ const stockLevel = (stock) => {
 const PAGE_SIZE = 5;
 
 const AdminPanelPage = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [activeNav, setActiveNav]   = useState('products');
   const [products, setProducts]     = useState([]);
-  const [showFlagModal, setShowFlagModal] = useState(false);
-  const navigate = useNavigate();
-
-  const handleForceLogout = () => {
-    logout();
-    navigate('/login', { replace: true });
-  };
 
   useEffect(() => {
-    if (user?.role === 'admin') {
-      setTimeout(() => setShowFlagModal(true), 800);
-    }
-  }, [user]);
-
-  useEffect(() => {
-    getProducts().then((res) => setProducts(res.data)).catch(() => {});
+    getAllProducts().then((res) => setProducts(res.data)).catch(() => {});
   }, []);
   const [search, setSearch]         = useState('');
   const [page, setPage]             = useState(1);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newProduct, setNewProduct] = useState({ name: '', brand: '', category: 'Clothes', price: '', image: '', isNew: false, featured: false });
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [importUrl, setImportUrl] = useState('');
+  const [importLoading, setImportLoading] = useState(false);
+  const [importResult, setImportResult] = useState(null);
+  const [importError, setImportError] = useState(null);
 
   // Redirect non-admins
   if (user && user.role !== 'admin') return <Navigate to="/" replace />;
@@ -83,11 +67,34 @@ const AdminPanelPage = () => {
     setShowAddModal(false);
   };
 
+  const handleImport = async (e) => {
+    e.preventDefault();
+    setImportLoading(true);
+    setImportError(null);
+    setImportResult(null);
+    try {
+      const productId = products[0]?._id || 'preview';
+      const { data } = await importProductImage(productId, importUrl);
+      setImportResult(data);
+    } catch (err) {
+      setImportError(err.response?.data || { message: err.message });
+    } finally {
+      setImportLoading(false);
+    }
+  };
+
+  const closeImportModal = () => {
+    setShowImportModal(false);
+    setImportUrl('');
+    setImportResult(null);
+    setImportError(null);
+  };
+
   const inputClass = 'w-full bg-surface-container-low border border-outline-variant/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary transition-all';
 
   return (
     <div className="bg-background text-on-background min-h-screen flex flex-col font-body">
-      <Navbar activePage="products" />
+      <Navbar activePage="admin" />
 
       <div className="flex pt-20 min-h-screen">
 
@@ -169,8 +176,15 @@ const AdminPanelPage = () => {
                 />
               </div>
               <button
+                onClick={() => setShowImportModal(true)}
+                className="border-2 border-primary text-primary px-5 py-2.5 text-sm font-bold rounded-lg hover:bg-primary/5 transition-colors flex items-center"
+              >
+                <span className="material-symbols-outlined text-sm mr-2">cloud_download</span>
+                Import from URL
+              </button>
+              <button
                 onClick={() => setShowAddModal(true)}
-                className="bg-gradient-to-br from-primary to-primary-container text-white px-5 py-2.5 text-sm font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center shadow-lg shadow-primary/20"
+                className="bg-primary text-white px-5 py-2.5 text-sm font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center shadow-lg shadow-primary/20"
               >
                 <span className="material-symbols-outlined text-sm mr-2">add</span>
                 Add New Product
@@ -204,9 +218,19 @@ const AdminPanelPage = () => {
                               <img className="w-full h-full object-cover" alt={product.name} src={product.images[0]} />
                             </div>
                           </td>
-                          <td className="px-6 py-4">
-                            <div className="text-sm font-bold text-on-surface">{product.name}</div>
+                          <td className="px-6 py-4 max-w-md">
+                            <div className="flex items-center gap-2">
+                              <div className="text-sm font-bold text-on-surface">{product.name}</div>
+                              {product.isActive === false && (
+                                <span className="text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-primary/10 text-primary">Draft</span>
+                              )}
+                            </div>
                             <div className="text-[10px] text-outline font-medium tracking-wide">{product.brand}</div>
+                            {product.description && (
+                              <div className="text-xs text-on-surface-variant mt-1 line-clamp-2" title={product.description}>
+                                {product.description}
+                              </div>
+                            )}
                           </td>
                           <td className="px-6 py-4">
                             <span className="text-xs text-on-surface-variant bg-surface-container px-2 py-1 rounded">{product.category}</span>
@@ -338,16 +362,66 @@ const AdminPanelPage = () => {
           </div>
         </div>
       )}
-      {showFlagModal && (
-        <FlagFoundModal
-          flag="CTF{default_creds_never_change}"
-          message="You successfully logged into the admin panel using weak default credentials."
-          primaryLabel="Logout"
-          primaryAction={handleForceLogout}
-        />
+      {showImportModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-on-background/40 backdrop-blur-sm px-4">
+          <div className="bg-surface rounded-2xl shadow-2xl w-full max-w-2xl p-8">
+            <div className="flex justify-between items-center mb-2">
+              <h2 className="text-xl font-bold tracking-tight text-on-surface">Import Image from Supplier URL</h2>
+              <button onClick={closeImportModal} className="text-outline hover:text-on-surface transition-colors">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <p className="text-xs text-on-surface-variant mb-6">
+              Paste a URL from a supplier portal — APapparel will fetch and preview the image before adding it to a product.
+            </p>
+            <form onSubmit={handleImport} className="space-y-4">
+              <div>
+                <label className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/60 mb-1 block">Supplier Image URL</label>
+                <input
+                  required
+                  type="url"
+                  value={importUrl}
+                  onChange={(e) => setImportUrl(e.target.value)}
+                  className={inputClass}
+                  placeholder="https://cdn.supplier.com/products/jacket.jpg"
+                />
+              </div>
+              <div className="flex gap-3 pt-1">
+                <button type="button" onClick={closeImportModal} className="flex-1 py-3 border border-outline/20 hover:border-primary/40 text-sm font-semibold rounded-lg transition-colors">Cancel</button>
+                <button
+                  type="submit"
+                  disabled={importLoading}
+                  className="flex-1 py-3 bg-gradient-to-br from-primary to-primary-container text-white text-sm font-bold rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
+                >
+                  {importLoading ? 'Fetching…' : 'Fetch & Preview'}
+                </button>
+              </div>
+            </form>
+
+            {importError && (
+              <div className="mt-6 p-4 bg-error/5 border border-error/20 rounded-lg">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-error mb-2">Fetch failed</div>
+                <pre className="text-xs text-on-surface whitespace-pre-wrap break-all font-mono">
+                  {JSON.stringify(importError, null, 2)}
+                </pre>
+              </div>
+            )}
+
+            {importResult && (
+              <div className="mt-6 p-4 bg-surface-container-low border border-outline-variant/20 rounded-lg">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/60 mb-2">Server response</div>
+                <pre className="text-xs text-on-surface whitespace-pre-wrap break-all font-mono max-h-80 overflow-auto">
+                  {JSON.stringify(importResult, null, 2)}
+                </pre>
+              </div>
+            )}
+          </div>
+        </div>
       )}
-      
-      <Footer />
+
+      <div className="md:ml-64">
+        <Footer />
+      </div>
 
     </div>
   );

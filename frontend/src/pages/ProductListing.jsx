@@ -58,7 +58,7 @@ const ProductListing = () => {
               ) : products.length === 0 ? (
                 <p className="text-on-surface-variant col-span-3 text-center py-24">No products found.</p>
               ) : products.map((product) => (
-                <Link key={product._id} to={`/products/${product._id}`} className="group relative block">
+                <Link key={product._id} to={`/products/${product._id}`} className="group relative block w-full text-left">
                   <div className="aspect-[3/4] bg-surface-container-highest overflow-hidden relative">
                     <img
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"

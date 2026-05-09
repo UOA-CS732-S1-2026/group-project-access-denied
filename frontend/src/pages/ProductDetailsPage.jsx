@@ -24,6 +24,10 @@ const ProductDetailsPage = () => {
   }, [id]);
 
   const handleAddToCart = () => {
+    if (!product || product.isActive === false) {
+      return;
+    }
+
     addToCart(product, { size: selectedSize });
     navigate('/cart');
   };
@@ -139,9 +143,11 @@ const ProductDetailsPage = () => {
             <div className="flex flex-col gap-4">
               <button
                 onClick={handleAddToCart}
-                className="w-full py-5 bg-gradient-to-tr from-primary to-primary-container text-white font-bold tracking-widest uppercase text-xs transition-transform active:scale-[0.98] hover:opacity-90"
+                disabled={!product.isActive}
+                aria-disabled={!product.isActive}
+                className={`w-full py-5 bg-gradient-to-tr from-primary to-primary-container text-white font-bold tracking-widest uppercase text-xs transition-transform active:scale-[0.98] hover:opacity-90 ${!product.isActive ? 'cursor-not-allowed opacity-50 hover:opacity-50' : ''}`}
               >
-                Add to Bag
+                {product.isActive ? 'Add to Bag' : 'Unavailable for Purchase'}
               </button>
             </div>
 
@@ -184,6 +190,7 @@ const ProductDetailsPage = () => {
             <div className="md:col-span-8">
               <div className="prose prose-sm max-w-none text-on-surface-variant leading-relaxed space-y-8">
                 <p className="text-lg font-medium text-on-surface">{product.description}</p>
+                <p>Our {product.name} is handcrafted in our signature Tuscany workshop using locally sourced materials. This specific process ensures that each piece develops a unique patina over time, telling the story of your journeys.</p>
                 <div className="grid grid-cols-2 gap-8 pt-4">
                   <div>
                     <h4 className="text-xs font-bold uppercase tracking-widest text-on-surface mb-2">Features</h4>

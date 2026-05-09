@@ -7,6 +7,86 @@ import { createOrder } from '../api/order.api';
 const STEPS = ['Shipping', 'Payment'];
 const STANDARD_SHIPPING_FEE = 25;
 
+const validators = {
+  firstName: (v) => {
+    if (!v.trim()) return 'First name is required';
+    if (v.trim().length < 2) return 'Must be at least 2 characters';
+    if (!/^[a-zA-Z\s'-]+$/.test(v.trim())) return 'Letters, hyphens, and apostrophes only';
+    return '';
+  },
+  lastName: (v) => {
+    if (!v.trim()) return 'Last name is required';
+    if (v.trim().length < 2) return 'Must be at least 2 characters';
+    if (!/^[a-zA-Z\s'-]+$/.test(v.trim())) return 'Letters, hyphens, and apostrophes only';
+    return '';
+  },
+  email: (v) => {
+    if (!v.trim()) return 'Email address is required';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())) return 'Invalid email address';
+    return '';
+  },
+  phone: (v) => {
+    if (!v.trim()) return '';
+    if (!/^[\d\s+\-()]{7,15}$/.test(v.trim())) return 'Invalid phone number';
+    return '';
+  },
+  address: (v) => {
+    if (!v.trim()) return 'Street address is required';
+    if (v.trim().length < 5) return 'Please enter your full street address';
+    return '';
+  },
+  city: (v) => {
+    if (!v.trim()) return 'City is required';
+    if (!/^[a-zA-Z\s'-]+$/.test(v.trim())) return 'Invalid city name';
+    return '';
+  },
+  state: (v) => {
+    if (!v.trim()) return 'State / Province is required';
+    return '';
+  },
+  zip: (v) => {
+    if (!v.trim()) return 'ZIP / Postal Code is required';
+    if (!/^[a-zA-Z0-9\s-]{3,10}$/.test(v.trim())) return 'Invalid ZIP or postal code';
+    return '';
+  },
+  country: (v) => {
+    if (!v.trim()) return 'Country is required';
+    return '';
+  },
+  cardName: (v) => {
+    if (!v.trim()) return 'Name on card is required';
+    if (v.trim().length < 2) return 'Please enter the full name on your card';
+    if (!/^[a-zA-Z\s'-]+$/.test(v.trim())) return 'Letters only';
+    return '';
+  },
+  cardNumber: (v) => {
+    const digits = v.replace(/\s/g, '');
+    if (!digits) return 'Card number is required';
+    if (!/^\d{16}$/.test(digits)) return 'Please enter a valid 16-digit card number';
+    return '';
+  },
+  expiry: (v) => {
+    if (!v.trim()) return 'Expiry date is required';
+    if (!/^\d{2}\/\d{2}$/.test(v)) return 'Use MM/YY format (e.g. 07/28)';
+    const [mm, yy] = v.split('/').map(Number);
+    if (mm < 1 || mm > 12) return 'Month must be between 01 and 12';
+    const now = new Date();
+    const exp = new Date(2000 + yy, mm - 1, 1);
+    if (exp < new Date(now.getFullYear(), now.getMonth(), 1)) return 'This card has expired';
+    return '';
+  },
+  cvv: (v) => {
+    if (!v.trim()) return 'CVV is required';
+    if (!/^\d{3,4}$/.test(v.trim())) return 'CVV must be 3 or 4 digits';
+    return '';
+  },
+};
+
+const STEP_FIELDS = [
+  ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'state', 'zip', 'country'],
+  ['cardName', 'cardNumber', 'expiry', 'cvv'],
+];
+
 const CheckoutPage = () => {
   const { cart, cartTotal, cartCount, clearCart } = useCart();
   const navigate = useNavigate();
@@ -17,24 +97,89 @@ const CheckoutPage = () => {
     address: '', city: '', state: '', zip: '', country: 'United States',
     cardName: '', cardNumber: '', expiry: '', cvv: '',
   });
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
 
   const shipping = cartTotal >= 500 ? 0 : STANDARD_SHIPPING_FEE;
   const total = cartTotal + shipping;
 
-  const handleChange = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleChange = (e) => {
+    let { name, value } = e.target;
+
+    // Auto-format card number as XXXX XXXX XXXX XXXX
+    if (name === 'cardNumber') {
+      value = value.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trimEnd();
+    }
+
+    // Auto-format expiry as MM/YY
+    if (name === 'expiry') {
+      const digits = value.replace(/\D/g, '').slice(0, 4);
+      value = digits.length >= 3 ? digits.slice(0, 2) + '/' + digits.slice(2) : digits;
+    }
+
+    // Digits only for CVV
+    if (name === 'cvv') {
+      value = value.replace(/\D/g, '').slice(0, 4);
+    }
+
+    setForm((prev) => ({ ...prev, [name]: value }));
+
+    // Re-validate live once the field has been touched
+    if (touched[name]) {
+      setErrors((prev) => ({ ...prev, [name]: validators[name]?.(value) ?? '' }));
+    }
+  };
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    setErrors((prev) => ({ ...prev, [name]: validators[name]?.(value) ?? '' }));
+  };
+
+  const validateStep = (stepIndex) => {
+    const fields = STEP_FIELDS[stepIndex];
+    const newErrors = {};
+    const newTouched = {};
+    let valid = true;
+    fields.forEach((f) => {
+      newTouched[f] = true;
+      const err = validators[f]?.(form[f]) ?? '';
+      newErrors[f] = err;
+      if (err) valid = false;
+    });
+    setTouched((prev) => ({ ...prev, ...newTouched }));
+    setErrors((prev) => ({ ...prev, ...newErrors }));
+    return valid;
+  };
+
+  const handleContinue = () => {
+    if (validateStep(step)) setStep((s) => s + 1);
+  };
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
+    if (!validateStep(step)) return;
     setSubmitting(true);
     try {
+      // CTF: read the simplified cart from localStorage and send the contained
+      // price values directly to the server (players can tamper with these).
+      const saved = localStorage.getItem('cart');
+      const storageCart = saved ? JSON.parse(saved) : [];
+      const itemsFromStorage = storageCart.map((it) => ({
+        product: it.product,
+        size: it.size,
+        quantity: it.quantity,
+        priceAtPurchase: it.price,
+      }));
+      const totalFromStorage =
+        itemsFromStorage.reduce(
+          (s, it) => s + (Number(it.priceAtPurchase) || 0) * (Number(it.quantity) || 0),
+          0,
+        ) + (cartTotal >= 500 ? 0 : STANDARD_SHIPPING_FEE);
+
       await createOrder({
-        items: cart.map((item) => ({
-          product: item.product._id,
-          size: item.size,
-          quantity: item.qty,
-          priceAtPurchase: item.product.price,
-        })),
-        total,
+        items: itemsFromStorage,
+        total: totalFromStorage,
         shippingAddress: {
           fullName: `${form.firstName} ${form.lastName}`,
           street: form.address,
@@ -52,8 +197,19 @@ const CheckoutPage = () => {
     }
   };
 
-  const inputClass = 'w-full bg-transparent border-b border-outline-variant/30 py-3 text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-on-surface-variant/40';
+  const inputClass = (name) =>
+    `w-full bg-transparent border-b py-3 text-sm focus:outline-none transition-colors placeholder:text-on-surface-variant/40 ${
+      errors[name] && touched[name]
+        ? 'border-red-500 focus:border-red-500'
+        : 'border-outline-variant/30 focus:border-primary'
+    }`;
+
   const labelClass = 'text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/60 mb-1 block';
+
+  const renderError = (name) =>
+    errors[name] && touched[name]
+      ? <p className="text-xs text-red-500 mt-1">{errors[name]}</p>
+      : null;
 
   return (
     <div className="bg-surface text-on-surface font-body min-h-screen flex flex-col">
@@ -96,7 +252,7 @@ const CheckoutPage = () => {
               <h1 className="text-4xl font-bold tracking-tighter text-on-surface">{STEPS[step]}</h1>
             </div>
 
-            <form onSubmit={handlePlaceOrder}>
+            <form onSubmit={handlePlaceOrder} noValidate>
 
               {/* Step 0 — Shipping */}
               {step === 0 && (
@@ -104,43 +260,52 @@ const CheckoutPage = () => {
                   <div className="grid grid-cols-2 gap-6">
                     <div>
                       <label className={labelClass}>First Name</label>
-                      <input name="firstName" value={form.firstName} onChange={handleChange} className={inputClass} placeholder="Julian" required />
+                      <input name="firstName" value={form.firstName} onChange={handleChange} onBlur={handleBlur} className={inputClass('firstName')} placeholder="Julian" />
+                      {renderError('firstName')}
                     </div>
                     <div>
                       <label className={labelClass}>Last Name</label>
-                      <input name="lastName" value={form.lastName} onChange={handleChange} className={inputClass} placeholder="Vance" required />
+                      <input name="lastName" value={form.lastName} onChange={handleChange} onBlur={handleBlur} className={inputClass('lastName')} placeholder="Vance" />
+                      {renderError('lastName')}
                     </div>
                   </div>
                   <div>
                     <label className={labelClass}>Email Address</label>
-                    <input name="email" type="email" value={form.email} onChange={handleChange} className={inputClass} placeholder="you@example.com" required />
+                    <input name="email" type="email" value={form.email} onChange={handleChange} onBlur={handleBlur} className={inputClass('email')} placeholder="you@example.com" />
+                    {renderError('email')}
                   </div>
                   <div>
                     <label className={labelClass}>Phone Number</label>
-                    <input name="phone" type="tel" value={form.phone} onChange={handleChange} className={inputClass} placeholder="+1 (555) 000-0000" />
+                    <input name="phone" type="tel" value={form.phone} onChange={handleChange} onBlur={handleBlur} className={inputClass('phone')} placeholder="+1 (555) 000-0000" />
+                    {renderError('phone')}
                   </div>
                   <div>
                     <label className={labelClass}>Street Address</label>
-                    <input name="address" value={form.address} onChange={handleChange} className={inputClass} placeholder="742 Evergreen Terrace" required />
+                    <input name="address" value={form.address} onChange={handleChange} onBlur={handleBlur} className={inputClass('address')} placeholder="742 Evergreen Terrace" />
+                    {renderError('address')}
                   </div>
                   <div className="grid grid-cols-2 gap-6">
                     <div>
                       <label className={labelClass}>City</label>
-                      <input name="city" value={form.city} onChange={handleChange} className={inputClass} placeholder="Springfield" required />
+                      <input name="city" value={form.city} onChange={handleChange} onBlur={handleBlur} className={inputClass('city')} placeholder="Springfield" />
+                      {renderError('city')}
                     </div>
                     <div>
                       <label className={labelClass}>State / Province</label>
-                      <input name="state" value={form.state} onChange={handleChange} className={inputClass} placeholder="OR" required />
+                      <input name="state" value={form.state} onChange={handleChange} onBlur={handleBlur} className={inputClass('state')} placeholder="OR" />
+                      {renderError('state')}
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-6">
                     <div>
                       <label className={labelClass}>ZIP / Postal Code</label>
-                      <input name="zip" value={form.zip} onChange={handleChange} className={inputClass} placeholder="97403" required />
+                      <input name="zip" value={form.zip} onChange={handleChange} onBlur={handleBlur} className={inputClass('zip')} placeholder="97403" />
+                      {renderError('zip')}
                     </div>
                     <div>
                       <label className={labelClass}>Country</label>
-                      <input name="country" value={form.country} onChange={handleChange} className={inputClass} />
+                      <input name="country" value={form.country} onChange={handleChange} onBlur={handleBlur} className={inputClass('country')} placeholder="United States" />
+                      {renderError('country')}
                     </div>
                   </div>
                 </div>
@@ -155,20 +320,24 @@ const CheckoutPage = () => {
                   </div>
                   <div>
                     <label className={labelClass}>Name on Card</label>
-                    <input name="cardName" value={form.cardName} onChange={handleChange} className={inputClass} placeholder="Julian Vance" required />
+                    <input name="cardName" value={form.cardName} onChange={handleChange} onBlur={handleBlur} className={inputClass('cardName')} placeholder="Julian Vance" />
+                    {renderError('cardName')}
                   </div>
                   <div>
                     <label className={labelClass}>Card Number</label>
-                    <input name="cardNumber" value={form.cardNumber} onChange={handleChange} className={inputClass} placeholder="•••• •••• •••• ••••" maxLength={19} required />
+                    <input name="cardNumber" value={form.cardNumber} onChange={handleChange} onBlur={handleBlur} className={inputClass('cardNumber')} placeholder="•••• •••• •••• ••••" maxLength={19} inputMode="numeric" />
+                    {renderError('cardNumber')}
                   </div>
                   <div className="grid grid-cols-2 gap-6">
                     <div>
                       <label className={labelClass}>Expiry Date</label>
-                      <input name="expiry" value={form.expiry} onChange={handleChange} className={inputClass} placeholder="MM / YY" maxLength={7} required />
+                      <input name="expiry" value={form.expiry} onChange={handleChange} onBlur={handleBlur} className={inputClass('expiry')} placeholder="MM/YY" maxLength={5} inputMode="numeric" />
+                      {renderError('expiry')}
                     </div>
                     <div>
                       <label className={labelClass}>Security Code</label>
-                      <input name="cvv" value={form.cvv} onChange={handleChange} className={inputClass} placeholder="CVV" maxLength={4} required />
+                      <input name="cvv" value={form.cvv} onChange={handleChange} onBlur={handleBlur} className={inputClass('cvv')} placeholder="CVV" maxLength={4} inputMode="numeric" />
+                      {renderError('cvv')}
                     </div>
                   </div>
                   <div className="flex justify-center gap-6 opacity-40 pt-4">
@@ -193,7 +362,7 @@ const CheckoutPage = () => {
                 {step < STEPS.length - 1 ? (
                   <button
                     type="button"
-                    onClick={() => setStep((s) => s + 1)}
+                    onClick={handleContinue}
                     className="flex-1 py-4 bg-gradient-to-br from-primary to-primary-container text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity active:scale-[0.98]"
                   >
                     Continue to {STEPS[step + 1]}

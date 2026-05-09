@@ -40,7 +40,7 @@ const ProfilePage = () => {
                 <p className="text-on-surface-variant text-sm">Welcome back, {displayName}</p>
               </div>
               <nav className="flex flex-col space-y-1">
-                {NAV_ITEMS.map((item) => (
+                {NAV_ITEMS.filter((item) => !(user?.role === 'admin' && item.id === 'orders')).map((item) => (
                   <button
                     key={item.id}
                     onClick={() => {
@@ -117,11 +117,13 @@ const ProfilePage = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-on-background/80 to-transparent flex flex-col justify-center px-12">
                 <span className="text-primary-fixed text-xs font-bold tracking-[0.3em] uppercase mb-4">Curated For You</span>
                 <h2 className="text-white text-4xl font-extrabold tracking-tighter max-w-md mb-6 leading-tight">The Autumn Editorial Collection</h2>
-                <div>
-                  <Link to="/products" className="inline-block bg-white text-on-surface px-8 py-3 rounded-lg font-bold text-sm hover:bg-primary hover:text-white transition-all">
-                    Explore Lookbook
-                  </Link>
-                </div>
+                {user?.role !== 'admin' && (
+                  <div>
+                    <Link to="/products" className="inline-block bg-white text-on-surface px-8 py-3 rounded-lg font-bold text-sm hover:bg-primary hover:text-white transition-all">
+                      Explore Lookbook
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
 

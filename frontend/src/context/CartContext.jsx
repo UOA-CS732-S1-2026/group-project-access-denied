@@ -3,12 +3,28 @@ import PropTypes from 'prop-types';
 
 const CartContext = createContext(null);
 
-const STORAGE_KEY = 'access_denied_cart';
+// CTF: intentionally persist a simplified cart under `cart` so players can
+// tamper with prices via DevTools Application → Local Storage.
+const STORAGE_KEY = 'cart';
 
 const loadCart = () => {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : [];
+    if (!saved) return [];
+    const parsed = JSON.parse(saved);
+    // parsed items have shape: { product: <id>, name, size, quantity, price }
+    // Map to the internal shape used by the app so UI still renders.
+    return parsed.map((it) => {
+      const id = it.product;
+      const key = `${id}-${it.size}-Default`;
+      return {
+        key,
+        product: { _id: id, id, name: it.name || 'Unknown product', price: it.price || 0, images: [it.image || ''] },
+        size: it.size || 'M',
+        color: 'Default',
+        qty: it.quantity || it.qty || 1,
+      };
+    });
   } catch {
     return [];
   }
@@ -19,13 +35,26 @@ export const CartProvider = ({ children }) => {
 
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
+      // Write a simplified representation to localStorage for the CTF.
+      const simplified = cart.map((item) => ({
+        product: item.product._id || item.product.id,
+        name: item.product.name,
+        size: item.size,
+        quantity: item.qty,
+        price: item.product.price,
+        image: item.product.images?.[0] || '',
+      }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(simplified));
     } catch {
       // storage quota exceeded — silently ignore
     }
   }, [cart]);
 
   const addToCart = (product, { size = 'M', color = 'Default', qty = 1 } = {}) => {
+    if (!product || product.isActive === false) {
+      return;
+    }
+
     setCart((prev) => {
       const productId = product._id || product.id;
       const key = `${productId}-${size}-${color}`;

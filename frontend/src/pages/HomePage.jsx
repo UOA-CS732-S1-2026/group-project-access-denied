@@ -68,7 +68,7 @@ const HomePage = () => {
                   <p className="text-sm tracking-widest uppercase opacity-80 mb-6">The New Silhouette</p>
                   <Link
                     className="inline-flex bg-white/10 backdrop-blur-md border border-white/20 px-6 py-3 rounded-lg text-sm font-semibold hover:bg-white hover:text-black transition-all"
-                    to="products/69ecbcf80a8ce07d57856da7"
+                    to="/products"
                   >
                     View Product
                   </Link>
@@ -85,7 +85,13 @@ const HomePage = () => {
                   <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors"></div>
                   <div className="absolute bottom-8 left-8 text-white">
                     <h3 className="text-2xl font-bold">Men</h3>
-                    <p className="text-xs tracking-widest uppercase opacity-80">Tailored Precision</p>
+                    <p className="text-xs tracking-widest uppercase opacity-80 mb-4">Tailored Precision</p>
+                    <Link
+                      className="inline-flex bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-lg text-xs font-semibold hover:bg-white hover:text-black transition-all"
+                      to="/products"
+                    >
+                      View Product
+                    </Link>
                   </div>
                 </div>
                 <div className="relative group overflow-hidden rounded-xl h-full">
@@ -97,7 +103,13 @@ const HomePage = () => {
                   <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors"></div>
                   <div className="absolute bottom-8 left-8 text-white">
                     <h3 className="text-2xl font-bold">Accessories</h3>
-                    <p className="text-xs tracking-widest uppercase opacity-80">The Finishing Touch</p>
+                    <p className="text-xs tracking-widest uppercase opacity-80 mb-4">The Finishing Touch</p>
+                    <Link
+                      className="inline-flex bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-lg text-xs font-semibold hover:bg-white hover:text-black transition-all"
+                      to="/products"
+                    >
+                      View Product
+                    </Link>
                   </div>
                 </div>
               </div>
