@@ -20,10 +20,10 @@ const NAV_SECTIONS = [
 ];
 
 // Static promo codes shown in the admin panel.
-// CTF: WINTERSALE10 is the only "Active" code — players discover it here
+// CTF: WINTERSALE25 is the only "Active" code — players discover it here
 // after logging in with default credentials, then abuse it at checkout.
 const PROMO_CODES = [
-  { code: 'WINTERSALE10',   discount: '10%', status: 'Active',  validUntil: '2026-08-31', uses: 47,  note: 'Winter campaign — 10% off all orders' },
+  { code: 'WINTERSALE25',   discount: '25%', status: 'Active',  validUntil: '2026-08-31', uses: 47,  note: 'Winter campaign — 25% off all orders' },
   { code: 'LAUNCH25',       discount: '25%', status: 'Draft',   validUntil: '—',          uses: 0,   note: 'Q3 launch event (not yet approved)' },
   { code: 'VIP50',          discount: '50%', status: 'Draft',   validUntil: '—',          uses: 0,   note: 'VIP influencer programme — pending legal' },
   { code: 'BFRIDAY30',      discount: '30%', status: 'Expired', validUntil: '2025-11-30',  uses: 812, note: 'Black Friday 2025' },

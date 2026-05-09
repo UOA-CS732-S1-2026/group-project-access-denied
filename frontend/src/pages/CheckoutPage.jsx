@@ -7,7 +7,7 @@ import { createOrder } from '../api/order.api';
 
 const STEPS = ['Shipping', 'Payment'];
 const STANDARD_SHIPPING_FEE = 25;
-const PROMO_CODE = 'wintersale10';
+const PROMO_CODE = 'wintersale25';
 
 const validators = {
   firstName: (v) => {
@@ -107,8 +107,8 @@ const CheckoutPage = () => {
 
   const shipping = cartTotal >= 500 ? 0 : STANDARD_SHIPPING_FEE;
   // CTF: intentional vulnerability — logic-flaw
-  // 10% of ORIGINAL subtotal per valid code entry, capped at 100%
-  const discountRate = Math.min(stackCount * 0.1, 1);
+  // 25% of ORIGINAL subtotal per valid code entry, capped at 100%
+  const discountRate = Math.min(stackCount * 0.25, 1);
   const discountApplied = cartTotal * discountRate;
   const discountedSubtotal = Math.max(0, cartTotal - discountApplied);
   const total = discountedSubtotal + shipping;
