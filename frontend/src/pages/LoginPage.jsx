@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { login as loginService } from '../api/auth.api';
 import { getSecurityQuestion, verifySecurityAnswer } from '../api/forgotPassword.api';
-const heroImage = 'https://res.cloudinary.com/dhyxvn66a/image/upload/v1777872498/ajith-in-suit_xlvzfj.png';
+import { loginHeroImage } from '../assets/images';
 
 const LoginPage = () => {
   const { login } = useAuth();
@@ -88,7 +88,7 @@ const LoginPage = () => {
       {/* Left — brand image panel */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
         <img
-          src={heroImage}
+          src={loginHeroImage}
           alt="APapparel collection"
           className="w-full h-full object-cover"
         />

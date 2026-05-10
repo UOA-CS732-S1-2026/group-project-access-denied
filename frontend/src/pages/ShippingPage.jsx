@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 
@@ -114,7 +115,7 @@ const ShippingPage = () => {
               Once your order has shipped, a confirmation email containing your tracking number will
               be sent to the email address on your account. You can also view the status of all past
               orders at any time from your{' '}
-              <a href="/orders" className="text-primary hover:underline">Order History</a>{' '}
+              <Link to="/orders" className="text-primary hover:underline">Order History</Link>{' '}
               page. If your tracking information has not updated within 5 business days of your
               shipping confirmation, please contact our support team.
             </p>

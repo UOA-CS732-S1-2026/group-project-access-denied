@@ -18,10 +18,10 @@ const NAV_SECTIONS = [
   ]},
 ];
 
-const stockLevel = (price) => {
-  if (price > 600) return { pct: '100%', color: 'bg-tertiary', qty: 124, textColor: 'text-on-surface-variant' };
-  if (price > 300) return { pct: '85%',  color: 'bg-tertiary', qty: 42,  textColor: 'text-on-surface-variant' };
-  return                  { pct: '15%',  color: 'bg-primary',  qty: 8,   textColor: 'text-primary' };
+const stockLevel = (stock) => {
+  if (stock > 50)  return { pct: '100%', color: 'bg-tertiary', qty: stock, textColor: 'text-on-surface-variant' };
+  if (stock > 10)  return { pct: '85%',  color: 'bg-tertiary', qty: stock, textColor: 'text-on-surface-variant' };
+  return                  { pct: '15%',  color: 'bg-primary',  qty: stock, textColor: 'text-primary' };
 };
 
 const PAGE_SIZE = 5;
@@ -30,9 +30,12 @@ const AdminPanelPage = () => {
   const { user } = useAuth();
   const [activeNav, setActiveNav]   = useState('products');
   const [products, setProducts]     = useState([]);
+  const [productsError, setProductsError] = useState(null);
 
   useEffect(() => {
-    getAllProducts().then((res) => setProducts(res.data)).catch(() => {});
+    getAllProducts()
+      .then((res) => setProducts(res.data))
+      .catch((err) => setProductsError(err.response?.data?.message || 'Failed to load products.'));
   }, []);
   const [search, setSearch]         = useState('');
   const [page, setPage]             = useState(1);
@@ -204,13 +207,17 @@ const AdminPanelPage = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-outline-variant/10">
-                  {paginated.length === 0 ? (
+                  {productsError ? (
+                    <tr>
+                      <td colSpan={6} className="px-6 py-16 text-center text-error text-sm font-light">{productsError}</td>
+                    </tr>
+                  ) : paginated.length === 0 ? (
                     <tr>
                       <td colSpan={6} className="px-6 py-16 text-center text-on-surface-variant text-sm font-light">No products match your search.</td>
                     </tr>
                   ) : (
                     paginated.map((product) => {
-                      const stock = stockLevel(product.price);
+                      const stock = stockLevel(product.stock ?? 0);
                       return (
                         <tr key={product._id} className="hover:bg-surface-container-low/30 transition-colors group">
                           <td className="px-6 py-4">

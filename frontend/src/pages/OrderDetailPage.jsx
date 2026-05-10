@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { getOrder } from '../api/order.api';
-import { useCart } from '../context/CartContext';
-import { cartBadge } from '../components/common/navbarStyles';
+import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 
 const statusStyle = (status) => {
@@ -18,7 +17,6 @@ const statusStyle = (status) => {
 const OrderDetailPage = () => {
   const { orderNumber } = useParams();
   const navigate = useNavigate();
-  const { cartCount } = useCart();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -55,23 +53,7 @@ const OrderDetailPage = () => {
   return (
     <div className="bg-surface text-on-surface font-body min-h-screen flex flex-col">
 
-      {/* Navbar */}
-      <nav className="fixed top-0 w-full z-50 bg-[#fcf9f8]/80 dark:bg-[#1c1b1b]/80 backdrop-blur-md">
-        <div className="flex justify-between items-center px-8 py-4 max-w-full mx-auto">
-          <Link to="/" className="text-2xl font-bold tracking-tighter text-[#1c1b1b] dark:text-[#fcf9f8]">APAPPAREL</Link>
-          <div className="flex items-center space-x-6 text-[#994127]">
-            <Link to="/account" className="hover:opacity-80 transition-opacity">
-              <span className="material-symbols-outlined">person</span>
-            </Link>
-            <Link to="/cart" className="hover:opacity-80 transition-opacity relative">
-              <span className="material-symbols-outlined">shopping_bag</span>
-              {cartCount > 0 && (
-                <span className={cartBadge}>{cartCount}</span>
-              )}
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar activePage="orders" />
 
       <main className="flex-grow pt-32 pb-24 px-6 md:px-12 max-w-4xl mx-auto w-full">
 

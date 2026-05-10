@@ -13,7 +13,7 @@ const notFound = (req, res, next) => {
  * Global error handler — catches anything passed via next(err)
  */
 const errorHandler = (err, req, res, _next) => {
-  const statusCode = err.status || res.statusCode === 200 ? 500 : res.statusCode;
+  const statusCode = err.status || (res.statusCode === 200 ? 500 : res.statusCode);
   logger.error(`${statusCode} — ${err.message}`);
   res.status(statusCode).json({
     message: err.message,

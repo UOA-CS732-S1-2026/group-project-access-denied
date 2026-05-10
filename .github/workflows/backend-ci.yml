@@ -1,6 +1,5 @@
 name: Backend CI
 
-# On every push to any branch, AND on every pull request targeting any branch
 on:
   push:
     branches: ['**']
@@ -10,21 +9,12 @@ on:
 jobs:
   test:
     name: Run Backend Tests
-    runs-on: ubuntu-latest  # GitHub spins up a fresh Ubuntu VM for this
-
-    # We don't have a real MongoDB in CI, so we spin one up as a service container
-    services:
-      mongodb:
-        image: mongo:7
-        ports:
-          - 27017:27017
+    runs-on: ubuntu-latest
 
     steps:
-      # Check out the repo code onto the VM
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Set up Node.js (match whatever version you're developing with)
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -32,19 +22,52 @@ jobs:
           cache: 'npm'
           cache-dependency-path: backend/package-lock.json
 
-      # Install dependencies
       - name: Install dependencies
         working-directory: backend
-        run: npm ci  # 'ci' is like 'install' but faster and stricter — use it in CI
+        run: npm ci
 
-      # We provide fake env vars so the app doesn't crash on startup
-      # (without needing your actual .env file)
       - name: Run tests
         working-directory: backend
         env:
           NODE_ENV: test
-          MONGODB_URI: mongodb://localhost:27017/access-denied-test
           JWT_SECRET: super-secret-test-key-not-real
           PORT: 3000
-        # change it back to run: npm test
-        run: npm test -- --passWithNoTests
+          GROQ_API_KEY: dummy-key-for-ci
+        run: npm test
+
+  deploy:
+    name: Deploy to Cloud Run
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' 
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev
+
+      - name: Build and push image
+        run: |
+          docker build \
+            -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ap-apparel/backend:${{ github.sha }} \
+            ./backend
+          docker push \
+            us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ap-apparel/backend:${{ github.sha }}
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ap-apparel-backend \
+            --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/ap-apparel/backend:${{ github.sha }} \
+            --region us-central1 \
+            --platform managed \
+            --allow-unauthenticated

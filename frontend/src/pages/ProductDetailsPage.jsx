@@ -88,11 +88,6 @@ const ProductDetailsPage = () => {
                   alt={product.name}
                   src={product.images[0]}
                 />
-                <div className="absolute bottom-6 right-6 flex gap-2">
-                  <button className="bg-surface/80 backdrop-blur-md p-2 hover:bg-surface transition-colors">
-                    <span className="material-symbols-outlined text-on-surface">zoom_in</span>
-                  </button>
-                </div>
               </div>
             </div>
           </div>
@@ -179,10 +174,10 @@ const ProductDetailsPage = () => {
               <ul className="space-y-6">
                 {['Product Description'].map((tab, i) => (
                   <li key={tab}>
-                    <button className={`text-xs font-bold tracking-[0.2em] uppercase flex items-center gap-4 group ${i === 0 ? 'text-primary' : 'text-outline hover:text-primary transition-colors'}`}>
-                      <span className={`w-2 h-[1px] ${i === 0 ? 'bg-primary' : 'bg-outline group-hover:bg-primary'}`}></span>
+                    <span className={`text-xs font-bold tracking-[0.2em] uppercase flex items-center gap-4 group ${i === 0 ? 'text-primary' : 'text-outline'}`}>
+                      <span className={`w-2 h-[1px] ${i === 0 ? 'bg-primary' : 'bg-outline'}`}></span>
                       {tab}
-                    </button>
+                    </span>
                   </li>
                 ))}
               </ul>

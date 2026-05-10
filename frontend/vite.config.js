@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: {
@@ -12,6 +11,15 @@ export default defineConfig({
         target: 'http://localhost:5001',
         changeOrigin: true,
       },
+    },
+  },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: './tests/setup.js',
+    coverage: {
+      reporter: ['text', 'lcov'],
+      exclude: ['node_modules/', 'tests/'],
     },
   },
 })
