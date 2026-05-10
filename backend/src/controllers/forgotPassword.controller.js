@@ -4,6 +4,23 @@ const User    = require('../models/user.model');
 const Session = require('../models/session.model');
 const { seedSession } = require('../config/seed.session');
 
+const SESSION_DURATION_MS = 2 * 60 * 60 * 1000;
+const SESSION_LOOKUP_WINDOW_MS = 2 * 60 * 60 * 1000;
+
+const getSessionExpiry = (session) => session.expiresAt?.getTime?.() ?? session.createdAt.getTime() + SESSION_DURATION_MS;
+
+const findActiveSession = (userId) =>
+  Session.findOne({
+    userId,
+    $or: [
+      { expiresAt: { $gt: new Date() } },
+      {
+        expiresAt: { $exists: false },
+        createdAt: { $gt: new Date(Date.now() - SESSION_LOOKUP_WINDOW_MS) },
+      },
+    ],
+  });
+
 const generateToken = (user, sessionId) =>
   jwt.sign(
     { id: user._id, username: user.username, role: user.role, sessionId, flag: 'CTF{m1_b0mba_y0u_f0und_me}' },
@@ -56,10 +73,14 @@ const verifySecurityAnswer = async (req, res, next) => {
     }
 
     // Answer correct — log them in directly (CTF: intentional weakness)
-    let session = await Session.findOne({ userId: user._id });
+    let session = await findActiveSession(user._id);
     if (!session) {
       const sessionId = crypto.randomUUID();
-      session = await Session.create({ userId: user._id, sessionId });
+      session = await Session.create({
+        userId: user._id,
+        sessionId,
+        expiresAt: new Date(Date.now() + SESSION_DURATION_MS),
+      });
       await seedSession(session.sessionId);
     }
 
@@ -69,7 +90,7 @@ const verifySecurityAnswer = async (req, res, next) => {
       token,
       user: { id: user._id, username: user.username, email: user.email, role: user.role },
       sessionId: session.sessionId,
-      expiresAt: session.createdAt.getTime() + 2 * 60 * 60 * 1000,
+      expiresAt: getSessionExpiry(session),
     };
 
     // CTF: flag only awarded when bypassing the CEO's account (Social Engineering 101)

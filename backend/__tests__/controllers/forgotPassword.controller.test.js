@@ -33,6 +33,7 @@ const mockSession = {
   sessionId: 'test-session-uuid',
   userId: 'user-id-123',
   createdAt: new Date(),
+  expiresAt: new Date(Date.now() + 2 * 60 * 60 * 1000),
 };
 
 beforeEach(() => {
@@ -139,6 +140,7 @@ describe('verifySecurityAnswer', () => {
     expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
       token: expect.any(String),
       sessionId: mockSession.sessionId,
+      expiresAt: mockSession.expiresAt.getTime(),
     }));
   });
 

@@ -91,7 +91,7 @@ const RegisterPage = () => {
     if (!validateAll()) return;
     try {
       const { data } = await registerService(form);
-      login(data.token, data.user);
+      login(data.token, data.user, data.expiresAt);
       navigate(data.user.role === 'admin' ? '/admin' : '/');
     } catch (err) {
       setServerError(err.response?.data?.message || 'Registration failed');

@@ -30,7 +30,7 @@ const LoginPage = () => {
     setError('');
     try {
       const { data } = await loginService(form);
-      login(data.token, data.user);
+      login(data.token, data.user, data.expiresAt);
       navigate(data.user.role === 'admin' ? '/admin' : '/');
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
@@ -60,7 +60,7 @@ const LoginPage = () => {
     try {
       const { data } = await verifySecurityAnswer({ email: forgotEmail, securityAnswer });
       // Log the user in
-      login(data.token, data.user);
+      login(data.token, data.user, data.expiresAt);
       if (data.flag) {
         setFlagValue(data.flag);
       } else {

@@ -35,6 +35,11 @@ export const CartProvider = ({ children }) => {
 
   useEffect(() => {
     try {
+      if (cart.length === 0) {
+        localStorage.removeItem(STORAGE_KEY);
+        return;
+      }
+
       // Write a simplified representation to localStorage for the CTF.
       const simplified = cart.map((item) => ({
         product: item.product._id || item.product.id,

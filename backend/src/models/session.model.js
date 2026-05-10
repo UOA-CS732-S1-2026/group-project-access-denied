@@ -18,6 +18,10 @@ const sessionSchema = new mongoose.Schema({
     // Atlas trigger fires on delete to clean up orders/reviews/submissions
     expires: 7200,
   },
+  expiresAt: {
+    type: Date,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model('Session', sessionSchema);

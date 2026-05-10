@@ -41,6 +41,7 @@ const mockSession = {
   sessionId: 'test-session-uuid',
   userId: 'user-id-123',
   createdAt: new Date(),
+  expiresAt: new Date(Date.now() + 2 * 60 * 60 * 1000),
 };
 
 beforeEach(() => {
@@ -93,6 +94,7 @@ describe('register', () => {
     }));
     expect(Session.create).toHaveBeenCalledWith(expect.objectContaining({
       sessionId: 'test-session-uuid',
+      expiresAt: expect.any(Date),
     }));
     expect(seedSession).toHaveBeenCalledWith('test-session-uuid');
     expect(res.status).toHaveBeenCalledWith(201);
@@ -100,6 +102,7 @@ describe('register', () => {
       token: expect.any(String),
       sessionId: 'test-session-uuid',
       user: expect.objectContaining({ username: 'testuser' }),
+      expiresAt: expect.any(Number),
     }));
   });
 
@@ -189,6 +192,7 @@ describe('login', () => {
     expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
       token: expect.any(String),
       sessionId: mockSession.sessionId,
+      expiresAt: mockSession.expiresAt.getTime(),
     }));
   });
 
@@ -205,7 +209,26 @@ describe('login', () => {
 
     expect(Session.create).toHaveBeenCalled();
     expect(seedSession).toHaveBeenCalledWith(mockSession.sessionId);
-    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ token: expect.any(String) }));
+    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+      token: expect.any(String),
+      expiresAt: expect.any(Number),
+    }));
+  });
+
+  it('creates a new session when the existing one has expired', async () => {
+    mockUser.comparePassword.mockResolvedValue(true);
+    User.findOne.mockReturnValue({ select: jest.fn().mockResolvedValue(mockUser) });
+    Session.findOne.mockResolvedValue(null);
+    Session.create.mockResolvedValue(mockSession);
+
+    const req = { body: { email: 'test@example.com', password: 'password123' } };
+    const res = mockRes();
+
+    await login(req, res, jest.fn());
+
+    expect(Session.create).toHaveBeenCalledWith(expect.objectContaining({
+      expiresAt: expect.any(Date),
+    }));
   });
 
   it('forwards unexpected errors to next()', async () => {
