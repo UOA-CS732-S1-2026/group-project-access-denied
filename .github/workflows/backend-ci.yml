@@ -5,7 +5,6 @@ on:
     branches: ['**']
   pull_request:
     branches: ['**']
-  workflow_dispatch:
 
 jobs:
   test:
@@ -40,7 +39,7 @@ jobs:
     name: Deploy to Cloud Run
     needs: test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    if: github.ref == 'refs/heads/main' 
 
     steps:
       - name: Checkout code

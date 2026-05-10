@@ -4,6 +4,7 @@ import HelpBot from '../../src/components/Helpbot';
 
 beforeEach(() => {
   vi.restoreAllMocks();
+  vi.unstubAllGlobals();
   sessionStorage.clear();
 });
 
@@ -45,9 +46,9 @@ describe('HelpBot', () => {
   });
 
   it('calls fetch and shows reply on message send', async () => {
-    window.fetch = vi.fn(() =>
+    vi.stubGlobal('fetch', vi.fn(() =>
       Promise.resolve({ json: () => Promise.resolve({ reply: 'Hello from bot!', sessionId: 42 }) })
-    );
+    ));
 
     render(<HelpBot />);
     fireEvent.click(screen.getByRole('button', { name: /toggle helpbot/i }));
@@ -57,11 +58,11 @@ describe('HelpBot', () => {
     fireEvent.click(screen.getByRole('button', { name: /send/i }));
 
     await waitFor(() => expect(screen.getByText('Hello from bot!')).toBeTruthy());
-    expect(window.fetch).toHaveBeenCalledOnce();
+    expect(vi.mocked(window.fetch)).toHaveBeenCalledOnce();
   });
 
   it('shows error message when fetch fails', async () => {
-    window.fetch = vi.fn(() => Promise.reject(new Error('Network error')));
+    vi.stubGlobal('fetch', vi.fn(() => Promise.reject(new Error('Network error'))));
 
     render(<HelpBot />);
     fireEvent.click(screen.getByRole('button', { name: /toggle helpbot/i }));
