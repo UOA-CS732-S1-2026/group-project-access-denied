@@ -23,7 +23,7 @@ import AboutPage           from './pages/AboutPage';
 import ShippingPage        from './pages/ShippingPage';
 import ReturnsPage         from './pages/ReturnsPage';
 import PrivacyPolicyPage   from './pages/PrivacyPolicyPage';
-import HelpBot from './components/Helpbot';
+import HelpBot from './components/HelpBot';
 import ChallengesButton from './components/ChallengesButton';
 
 const HELPBOT_HIDDEN_ROUTES = ['/challenges'];
