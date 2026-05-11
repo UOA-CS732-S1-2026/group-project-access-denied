@@ -6,7 +6,6 @@ import { createOrder } from '../api/order.api';
 
 const STEPS = ['Shipping', 'Payment'];
 const STANDARD_SHIPPING_FEE = 25;
-const PROMO_CODE = 'wintersale25';
 
 const validators = {
   firstName: (v) => {

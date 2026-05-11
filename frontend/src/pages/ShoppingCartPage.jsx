@@ -63,11 +63,6 @@ const ShoppingCartPage = () => {
           quantity: it.qty,
           priceAtPurchase: it.product.price,
         }));
-        
-        const totalFromStorage = itemsFromStorage.reduce(
-            (s, it) => s + (Number(it.priceAtPurchase) || 0) * (Number(it.quantity) || 0),
-            0
-        ) + baseShipping;
 
         const { createOrder } = await import('../api/order.api');
         const response = await createOrder({
