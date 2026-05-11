@@ -181,16 +181,16 @@ const CheckoutPage = () => {
         quantity: it.quantity,
         priceAtPurchase: it.price,
       }));
-      const totalFromStorage =
-        itemsFromStorage.reduce(
-          (s, it) => s + (Number(it.priceAtPurchase) || 0) * (Number(it.quantity) || 0),
-          0,
-        ) + (cartTotal >= 500 ? 0 : STANDARD_SHIPPING_FEE);
-
-      const response = await createOrder({
-        items: itemsFromStorage,
-        total: totalFromStorage,
-        discountApplied,
+        const totalFromStorage =
+          itemsFromStorage.reduce(
+            (s, it) => s + (Number(it.priceAtPurchase) || 0) * (Number(it.quantity) || 0),
+            0,
+          ) + (cartTotal >= 500 ? 0 : STANDARD_SHIPPING_FEE);
+  
+        const response = await createOrder({
+          items: itemsFromStorage,
+          total: total, // Send the correctly discounted total
+          discountApplied,
         shippingAddress: {
           fullName: `${form.firstName} ${form.lastName}`,
           street: form.address,
@@ -439,7 +439,6 @@ const CheckoutPage = () => {
                   <span>${cartTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                 </div>
 
-
                 {/* Discount row */}
                 {discountApplied > 0 && (
                   <div className="flex justify-between text-sm">
@@ -451,6 +450,8 @@ const CheckoutPage = () => {
                     </span>
                   </div>
                 )}
+
+
 
                 <div className="flex justify-between text-sm">
                   <span className="text-on-surface-variant">Shipping</span>
