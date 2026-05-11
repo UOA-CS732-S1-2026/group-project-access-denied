@@ -181,11 +181,7 @@ const CheckoutPage = () => {
         quantity: it.quantity,
         priceAtPurchase: it.price,
       }));
-        const totalFromStorage =
-          itemsFromStorage.reduce(
-            (s, it) => s + (Number(it.priceAtPurchase) || 0) * (Number(it.quantity) || 0),
-            0,
-          ) + STANDARD_SHIPPING_FEE;
+
   
         const response = await createOrder({
           items: itemsFromStorage,
