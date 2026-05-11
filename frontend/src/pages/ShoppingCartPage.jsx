@@ -21,7 +21,7 @@ const ShoppingCartPage = () => {
     localStorage.setItem('hasFreeShipping', hasFreeShipping);
   }, [stackCount, hasFreeShipping]);
 
-  const baseShipping = cartTotal >= 500 ? 0 : STANDARD_SHIPPING_FEE;
+  const baseShipping = STANDARD_SHIPPING_FEE;
   const shipping = hasFreeShipping ? 0 : baseShipping;
   const discountRate = Math.min(stackCount * 0.25, 1);
   const discountApplied = cartTotal * discountRate;

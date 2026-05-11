@@ -102,7 +102,7 @@ const CheckoutPage = () => {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
 
-  const baseShipping = cartTotal >= 500 ? 0 : STANDARD_SHIPPING_FEE;
+  const baseShipping = STANDARD_SHIPPING_FEE;
   const shipping = hasFreeShipping ? 0 : baseShipping;
   // CTF: intentional vulnerability — logic-flaw
   // 25% of ORIGINAL subtotal per valid code entry, capped at 100%
@@ -185,7 +185,7 @@ const CheckoutPage = () => {
           itemsFromStorage.reduce(
             (s, it) => s + (Number(it.priceAtPurchase) || 0) * (Number(it.quantity) || 0),
             0,
-          ) + (cartTotal >= 500 ? 0 : STANDARD_SHIPPING_FEE);
+          ) + STANDARD_SHIPPING_FEE;
   
         const response = await createOrder({
           items: itemsFromStorage,
