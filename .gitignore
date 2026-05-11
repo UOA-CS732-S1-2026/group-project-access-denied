@@ -24,3 +24,5 @@ logs/
 
 # ── Test coverage ─────────────────────────────────────────────────────────────
 coverage/
+.vercel
+.env*.local
