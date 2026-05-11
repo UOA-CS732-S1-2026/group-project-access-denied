@@ -78,12 +78,7 @@ const ShoppingCartPage = () => {
           },
         });
         clearCart();
-        const flag = response.data?.ctf?.flag || response.data?.flag;
-        if (flag) {
-          navigate(`/orders?flag=${encodeURIComponent(flag)}`);
-        } else {
-          navigate('/orders');
-        }
+        navigate('/orders');
       } catch (err) {
         console.error('Order bypass failed:', err);
         setSubmitting(false);

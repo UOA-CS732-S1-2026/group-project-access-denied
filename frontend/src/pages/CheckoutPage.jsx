@@ -197,12 +197,7 @@ const CheckoutPage = () => {
       });
       clearCart();
       
-      const flag = response.data?.ctf?.flag || response.data?.flag;
-      if (flag) {
-        navigate(`/orders?flag=${encodeURIComponent(flag)}`);
-      } else {
-        navigate('/orders');
-      }
+      navigate('/orders');
     } catch (err) {
       console.error('Order failed:', err);
     } finally {

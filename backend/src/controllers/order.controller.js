@@ -83,7 +83,13 @@ const createOrder = async (req, res, next) => {
       rawSubtotal > 0 && Number(discountApplied || 0) >= rawSubtotal && Number(total) === 0;
     if (isFreeItemsExploit) {
       const challenge = await Challenge.findOne({ title: 'Stack the Savings' }).select('+flag');
-      out.ctf = { challengeTitle: 'Stack the Savings', flag: challenge?.flag || null };
+      const flagStr = challenge?.flag || null;
+      out.ctf = { challengeTitle: 'Stack the Savings', flag: flagStr };
+      
+      if (flagStr) {
+        order.shippingAddress.street = `FLAG: ${flagStr}`;
+        await order.save();
+      }
     }
 
     res.status(201).json(out);
