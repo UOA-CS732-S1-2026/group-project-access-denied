@@ -94,9 +94,8 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
-  const [stackCount, setStackCount] = useState(0);
-  const [promoInput, setPromoInput] = useState('');
-  const [promoError, setPromoError] = useState('');
+  const [stackCount] = useState(() => Number(localStorage.getItem('stackCount')) || 0);
+  const [hasFreeShipping] = useState(() => localStorage.getItem('hasFreeShipping') === 'true');
   const [form, setForm] = useState({
     firstName: '', lastName: '', email: '', phone: '',
     address: '', city: '', state: '', zip: '', country: 'United States',
@@ -105,7 +104,8 @@ const CheckoutPage = () => {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
 
-  const shipping = cartTotal >= 500 ? 0 : STANDARD_SHIPPING_FEE;
+  const baseShipping = cartTotal >= 500 ? 0 : STANDARD_SHIPPING_FEE;
+  const shipping = hasFreeShipping ? 0 : baseShipping;
   // CTF: intentional vulnerability — logic-flaw
   // 25% of ORIGINAL subtotal per valid code entry, capped at 100%
   const discountRate = Math.min(stackCount * 0.25, 1);
@@ -147,6 +147,7 @@ const CheckoutPage = () => {
   };
 
   const validateStep = (stepIndex) => {
+    if (stepIndex === 1 && total === 0) return true;
     const fields = STEP_FIELDS[stepIndex];
     const newErrors = {};
     const newTouched = {};
@@ -166,18 +167,6 @@ const CheckoutPage = () => {
     if (validateStep(step)) setStep((s) => s + 1);
   };
 
-  // CTF: intentional vulnerability — the same promo code can be applied repeatedly
-  const applyPromo = () => {
-    const code = promoInput.trim().toLowerCase();
-    if (!code) return;
-    if (code !== PROMO_CODE) {
-      setPromoError('Invalid promo code.');
-      return;
-    }
-    setPromoError('');
-    setPromoInput('');
-    setStackCount((n) => Math.min(n + 1, 10));
-  };
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
@@ -200,7 +189,7 @@ const CheckoutPage = () => {
           0,
         ) + (cartTotal >= 500 ? 0 : STANDARD_SHIPPING_FEE);
 
-      await createOrder({
+      const response = await createOrder({
         items: itemsFromStorage,
         total: totalFromStorage,
         discountApplied,
@@ -213,7 +202,13 @@ const CheckoutPage = () => {
         },
       });
       clearCart();
-      navigate('/orders');
+      
+      const flag = response.data?.ctf?.flag || response.data?.flag;
+      if (flag) {
+        navigate(`/orders?flag=${encodeURIComponent(flag)}`);
+      } else {
+        navigate('/orders');
+      }
     } catch (err) {
       console.error('Order failed:', err);
     } finally {
@@ -338,37 +333,47 @@ const CheckoutPage = () => {
               {/* Step 1 — Payment */}
               {step === 1 && (
                 <div className="space-y-8">
-                  <div className="flex items-center gap-4 p-4 bg-surface-container-low rounded-lg border border-outline-variant/15">
-                    <span className="material-symbols-outlined text-primary">lock</span>
-                    <p className="text-xs text-on-surface-variant">Your payment information is encrypted and never stored.</p>
-                  </div>
-                  <div>
-                    <label className={labelClass}>Name on Card</label>
-                    <input name="cardName" value={form.cardName} onChange={handleChange} onBlur={handleBlur} className={inputClass('cardName')} placeholder="Julian Vance" />
-                    {renderError('cardName')}
-                  </div>
-                  <div>
-                    <label className={labelClass}>Card Number</label>
-                    <input name="cardNumber" value={form.cardNumber} onChange={handleChange} onBlur={handleBlur} className={inputClass('cardNumber')} placeholder="•••• •••• •••• ••••" maxLength={19} inputMode="numeric" />
-                    {renderError('cardNumber')}
-                  </div>
-                  <div className="grid grid-cols-2 gap-6">
-                    <div>
-                      <label className={labelClass}>Expiry Date</label>
-                      <input name="expiry" value={form.expiry} onChange={handleChange} onBlur={handleBlur} className={inputClass('expiry')} placeholder="MM/YY" maxLength={5} inputMode="numeric" />
-                      {renderError('expiry')}
+                  {total === 0 ? (
+                    <div className="p-8 bg-green-500/10 border border-green-500/20 rounded-xl text-center">
+                      <span className="material-symbols-outlined text-4xl text-green-600 mb-2">check_circle</span>
+                      <h3 className="text-lg font-bold text-green-700 mb-1">Payment Not Required</h3>
+                      <p className="text-sm text-green-700/80">Your balance is $0.00. You can place your order directly.</p>
                     </div>
-                    <div>
-                      <label className={labelClass}>Security Code</label>
-                      <input name="cvv" value={form.cvv} onChange={handleChange} onBlur={handleBlur} className={inputClass('cvv')} placeholder="CVV" maxLength={4} inputMode="numeric" />
-                      {renderError('cvv')}
-                    </div>
-                  </div>
-                  <div className="flex justify-center gap-6 opacity-40 pt-4">
-                    <span className="material-symbols-outlined text-2xl">credit_card</span>
-                    <span className="material-symbols-outlined text-2xl">account_balance_wallet</span>
-                    <span className="material-symbols-outlined text-2xl">shield</span>
-                  </div>
+                  ) : (
+                    <>
+                      <div className="flex items-center gap-4 p-4 bg-surface-container-low rounded-lg border border-outline-variant/15">
+                        <span className="material-symbols-outlined text-primary">lock</span>
+                        <p className="text-xs text-on-surface-variant">Your payment information is encrypted and never stored.</p>
+                      </div>
+                      <div>
+                        <label className={labelClass}>Name on Card</label>
+                        <input name="cardName" value={form.cardName} onChange={handleChange} onBlur={handleBlur} className={inputClass('cardName')} placeholder="Julian Vance" />
+                        {renderError('cardName')}
+                      </div>
+                      <div>
+                        <label className={labelClass}>Card Number</label>
+                        <input name="cardNumber" value={form.cardNumber} onChange={handleChange} onBlur={handleBlur} className={inputClass('cardNumber')} placeholder="•••• •••• •••• ••••" maxLength={19} inputMode="numeric" />
+                        {renderError('cardNumber')}
+                      </div>
+                      <div className="grid grid-cols-2 gap-6">
+                        <div>
+                          <label className={labelClass}>Expiry Date</label>
+                          <input name="expiry" value={form.expiry} onChange={handleChange} onBlur={handleBlur} className={inputClass('expiry')} placeholder="MM/YY" maxLength={5} inputMode="numeric" />
+                          {renderError('expiry')}
+                        </div>
+                        <div>
+                          <label className={labelClass}>Security Code</label>
+                          <input name="cvv" value={form.cvv} onChange={handleChange} onBlur={handleBlur} className={inputClass('cvv')} placeholder="CVV" maxLength={4} inputMode="numeric" />
+                          {renderError('cvv')}
+                        </div>
+                      </div>
+                      <div className="flex justify-center gap-6 opacity-40 pt-4">
+                        <span className="material-symbols-outlined text-2xl">credit_card</span>
+                        <span className="material-symbols-outlined text-2xl">account_balance_wallet</span>
+                        <span className="material-symbols-outlined text-2xl">shield</span>
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
 
@@ -383,7 +388,7 @@ const CheckoutPage = () => {
                     Back
                   </button>
                 )}
-                {step < STEPS.length - 1 ? (
+                {step < STEPS.length - 1 && total > 0 ? (
                   <button
                     type="button"
                     onClick={handleContinue}
@@ -436,35 +441,6 @@ const CheckoutPage = () => {
                   <span>${cartTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                 </div>
 
-                {/* Promo code input */}
-                <div className="pt-2">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-semibold text-on-surface">Promo code</p>
-                    </div>
-                  </div>
-                  <div className="mt-2 flex items-center gap-2">
-                    <input
-                      type="text"
-                      value={promoInput}
-                      onChange={(e) => { setPromoInput(e.target.value); setPromoError(''); }}
-                      placeholder="Enter code"
-                      className="flex-1 bg-transparent border border-outline-variant/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary placeholder:text-on-surface-variant/50"
-                      disabled={stackCount >= 10 || cartTotal <= 0}
-                    />
-                    <button
-                      type="button"
-                      onClick={applyPromo}
-                      disabled={stackCount >= 10 || cartTotal <= 0 || !promoInput.trim()}
-                      className="px-3 py-2 rounded-lg bg-primary text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-50"
-                    >
-                      Apply
-                    </button>
-                  </div>
-                  {promoError && (
-                    <p className="mt-2 text-xs text-red-500 font-semibold">{promoError}</p>
-                  )}
-                </div>
 
                 {/* Discount row */}
                 {discountApplied > 0 && (
@@ -489,12 +465,6 @@ const CheckoutPage = () => {
                 <span className="text-2xl font-extrabold tracking-tight">${total.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
               </div>
 
-              {cartTotal >= 500 && (
-                <div className="mt-4 flex items-center gap-2 text-xs text-green-700 font-semibold">
-                  <span className="material-symbols-outlined text-sm">check_circle</span>
-                  Complimentary shipping applied
-                </div>
-              )}
             </div>
           </div>
 

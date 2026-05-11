@@ -73,13 +73,14 @@ const createOrder = async (req, res, next) => {
     }
 
     // CTF: intentional vulnerability — logic-flaw (discount stacking)
-    // If the player stacked discounts until items were free, we leak the flag in the response
+    // If the player stacked discounts until items were free AND applied free shipping,
+    // we leak the flag in the response
     // (discoverable via DevTools Network) instead of rendering it in the UI.
     const rawSubtotal = Array.isArray(items)
       ? items.reduce((sum, it) => sum + Number(it.priceAtPurchase || 0) * Number(it.quantity || 0), 0)
       : 0;
     const isFreeItemsExploit =
-      rawSubtotal > 0 && Number(discountApplied || 0) >= rawSubtotal;
+      rawSubtotal > 0 && Number(discountApplied || 0) >= rawSubtotal && Number(total) === 0;
     if (isFreeItemsExploit) {
       const challenge = await Challenge.findOne({ title: 'Stack the Savings' }).select('+flag');
       out.ctf = { challengeTitle: 'Stack the Savings', flag: challenge?.flag || null };

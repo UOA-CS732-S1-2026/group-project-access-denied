@@ -55,6 +55,9 @@ export const CartProvider = ({ children }) => {
       return;
     }
 
+    localStorage.removeItem('stackCount');
+    localStorage.removeItem('hasFreeShipping');
+
     setCart((prev) => {
       const productId = product._id || product.id;
       const key = `${productId}-${size}-${color}`;

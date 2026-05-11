@@ -24,6 +24,7 @@ const NAV_SECTIONS = [
 // after logging in with default credentials, then abuse it at checkout.
 const PROMO_CODES = [
   { code: 'WINTERSALE25',   discount: '25%', status: 'Active',  validUntil: '2026-08-31', uses: 47,  note: 'Winter campaign — 25% off all orders' },
+  { code: 'FREESHIP',       discount: 'Shipping', status: 'Active', validUntil: '2026-12-31', uses: 12, note: 'Free shipping on any order' },
   { code: 'LAUNCH25',       discount: '25%', status: 'Draft',   validUntil: '—',          uses: 0,   note: 'Q3 launch event (not yet approved)' },
   { code: 'VIP50',          discount: '50%', status: 'Draft',   validUntil: '—',          uses: 0,   note: 'VIP influencer programme — pending legal' },
   { code: 'BFRIDAY30',      discount: '30%', status: 'Expired', validUntil: '2025-11-30',  uses: 812, note: 'Black Friday 2025' },
@@ -325,10 +326,6 @@ const AdminPanelPage = () => {
                   <h1 className="text-2xl font-extrabold tracking-tight text-on-surface mb-1">Promo Codes</h1>
                   <p className="text-sm text-on-surface-variant">{PROMO_CODES.length} codes configured</p>
                 </div>
-                <button className="bg-primary text-white px-5 py-2.5 text-sm font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center shadow-lg shadow-primary/20">
-                  <span className="material-symbols-outlined text-sm mr-2">add</span>
-                  Create Code
-                </button>
               </div>
 
               <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/10 overflow-hidden shadow-[0_4px_30px_rgba(86,66,61,0.03)]">
