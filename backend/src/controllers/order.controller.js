@@ -38,11 +38,11 @@ const createOrder = async (req, res, next) => {
   try {
     const { items, total, shippingAddress, discountApplied } = req.body;
 
-      // Accept total from the client without enforcing server-side recalculation.
-      // CTF: intentional vulnerability — price tampering
-      if (!items || !items.length || !shippingAddress) {
-        return res.status(400).json({ message: 'items and shippingAddress are required' });
-      }
+    // Accept total from the client without enforcing server-side recalculation.
+    // CTF: intentional vulnerability — price tampering
+    if (!items || !items.length || !shippingAddress) {
+      return res.status(400).json({ message: 'items and shippingAddress are required' });
+    }
 
     const last = await Order.findOne().sort({ orderNumber: -1 }).select('orderNumber');
     const nextNumber = last?.orderNumber ? last.orderNumber + 1 : 2;

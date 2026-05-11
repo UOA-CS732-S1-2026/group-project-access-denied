@@ -17,7 +17,7 @@ const mongoose = require('mongoose');
 const User = require('../models/user.model');
 const Product = require('../models/product.model');
 const Challenge = require('../models/challenge.model');
-const ChatSession = require('../models/ChatSession.model');
+const ChatSession = require('../models/chat-session.model');
 
 
 // ─── Products ─────────────────────────────────────────────────────────────────
@@ -94,15 +94,15 @@ const PRODUCTS = [
     images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122156/Day-to-Night_Tote_mxwc8s.png'],
     stock: 42, isActive: true, isNew: false, featured: false,
   },
-  // CTF: intentional vulnerability — default-credentials (Flag 6).
-  // Inactive draft hidden from the public catalogue but listed in the admin panel.
-  // Only an attacker who logs in with admin/admin can see this product and discover
-  // the flag tucked inside the description's "Internal note".
+  // CTF: intentional vulnerability — sql-injection (Flag 6).
+  // Inactive draft hidden from the public catalogue. The isActive filter is dropped
+  // when a NoSQL injection is detected in the search query, exposing this product
+  // in the listing. Clicking through to the product detail page reveals the flag.
   {
-    name: 'Founder\'s Capsule — Internal Draft',
-    description: 'DO NOT PUBLISH. Placeholder entry used to validate the admin upload flow before the Founder\'s Capsule launches in Q4. Internal note from ops: admin login confirmed working with seeded credentials — verification token CTF{default_creds_never_change}. Remove this entry before going live.',
-    price: 0, category: 'clothing', sizes: ['One Size'],
-    images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1777122156/Day-to-Night_Tote_mxwc8s.png'],
+    name: 'Vault Prototype Trench Coat',
+    description: 'Internal launch sample. Not ready for sale! CTF{sql_i_found_the_vault}',
+    price: 0, category: 'shoes', sizes: ['39', '40', '41', '42', '43'],
+    images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1778120293/non-mustache_qokq3o.png'],
     stock: 0, isActive: false, isNew: false, featured: false,
   },
 ];
@@ -110,14 +110,6 @@ const PRODUCTS = [
 
 // ─── Challenges ───────────────────────────────────────────────────────────────
 
-
-const SQLI_VAULT_PRODUCT = {
-  name: 'Vault Prototype Trench Coat',
-  description: 'Internal launch sample. Not ready for sale! CTF{sql_i_found_the_vault}',
-  price: 0, category: 'shoes', sizes: ['39', '40', '41', '42', '43'],
-  images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1778120293/non-mustache_qokq3o.png'],
-  stock: 0, isActive: false, isNew: false, featured: false,
-};
 
 const CHALLENGES = [
   {
@@ -255,12 +247,14 @@ async function seedGlobal() {
   if (!admin) {
     admin = await User.create({
       username: 'admin',
-      email: 'admin@apapparel.com',
+      email: 'CTF{default_creds_never_change}',
       password: 'admin',        // CTF: intentional vulnerability — default-credentials
       role: 'admin',
       securityQuestion: 'What city were you born in?',
       securityAnswer: 'mumbai',
     });
+    // Mongoose lowercases the email field — restore original case so the flag is discoverable
+    await User.collection.updateOne({ _id: admin._id }, { $set: { email: 'CTF{default_creds_never_change}' } });
     console.log('Created admin user');
   } else {
     console.log('Admin already exists — skipping');
@@ -300,7 +294,6 @@ async function seedGlobal() {
     console.log('Alice already exists — skipping');
   }
 
-
   // ── Products ────────────────────────────────────────────────────────────────
   // Upsert by name so re-running the seed picks up new products (e.g. the
   // Founder's Capsule draft for Flag 6) without wiping existing entries.
@@ -317,13 +310,6 @@ async function seedGlobal() {
   // ── Challenges ──────────────────────────────────────────────────────────────
   // Upsert by title so re-running the seed updates existing records (e.g. TBD
   // slots that have been filled in) without wiping solve counts on other fields.
-  await Product.findOneAndUpdate(
-    { name: SQLI_VAULT_PRODUCT.name },
-    { $set: SQLI_VAULT_PRODUCT },
-    { upsert: true }
-  );
-  console.log('Ensured SQL injection vault product exists');
-
   for (const challenge of CHALLENGES) {
     await Challenge.findOneAndUpdate(
       { title: challenge.title },

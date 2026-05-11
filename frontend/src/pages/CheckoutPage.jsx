@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { cartBadge } from '../components/common/navbarStyles';
 import Footer from '../components/common/Footer';
 import { createOrder } from '../api/order.api';
 
@@ -251,7 +250,7 @@ const CheckoutPage = () => {
           <Link to="/cart" className="hover:opacity-80 transition-opacity duration-300 relative text-[#994127]">
             <span className="material-symbols-outlined">shopping_bag</span>
             {cartCount > 0 && (
-              <span className={cartBadge}>{cartCount}</span>
+              <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">{cartCount}</span>
             )}
           </Link>
         </div>

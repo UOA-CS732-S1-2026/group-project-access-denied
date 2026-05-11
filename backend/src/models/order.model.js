@@ -5,6 +5,7 @@ const orderSchema = new mongoose.Schema(
     orderNumber: {
       type: Number,
       unique: true,
+      sparse: true,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

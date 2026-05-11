@@ -8,6 +8,7 @@ import {
   brandStory,
 } from '../assets/images';
 
+
 const HomePage = () => {
   return (
     <div className="bg-surface text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
@@ -33,13 +34,13 @@ const HomePage = () => {
               <p className="text-xl text-on-surface-variant font-light mb-10 max-w-lg leading-relaxed">
                 Curated selections from the world&apos;s most innovative designers, focused on form, function, and the beauty of simplicity.
               </p>
-              <a
+              <Link
                 className="inline-flex items-center px-10 py-5 primary-gradient text-on-primary rounded-lg font-semibold tracking-wide hover:opacity-90 transition-all scale-95 active:transition-transform"
-                href="products"
+                to="/products"
               >
                 Shop New Arrivals
                 <span className="material-symbols-outlined ml-2">arrow_forward</span>
-              </a>
+              </Link>
             </div>
           </div>
         </section>

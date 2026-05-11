@@ -1,5 +1,5 @@
-const Review = require("../models/review.model");
-const Product = require("../models/product.model");
+const Review = require('../models/review.model');
+const Product = require('../models/product.model');
 
 // GET /api/products/:productId/reviews — scoped to current session
 const getReviews = async (req, res, next) => {
@@ -22,11 +22,11 @@ const getReviews = async (req, res, next) => {
 const createReview = async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.productId);
-    if (!product) return res.status(404).json({ message: "Product not found" });
+    if (!product) return res.status(404).json({ message: 'Product not found' });
 
     const { rating, body } = req.body;
     if (!rating || !body) {
-      return res.status(400).json({ message: "rating and body are required" });
+      return res.status(400).json({ message: 'rating and body are required' });
     }
 
     // CTF: intentional vulnerability — xss
@@ -49,8 +49,8 @@ const createReview = async (req, res, next) => {
 const deleteReview = async (req, res, next) => {
   try {
     const review = await Review.findByIdAndDelete(req.params.id);
-    if (!review) return res.status(404).json({ message: "Review not found" });
-    res.json({ message: "Review deleted" });
+    if (!review) return res.status(404).json({ message: 'Review not found' });
+    res.json({ message: 'Review deleted' });
   } catch (err) {
     next(err);
   }
