@@ -65,7 +65,7 @@ const ShoppingCartPage = () => {
         }));
 
         const { createOrder } = await import('../api/order.api');
-        const response = await createOrder({
+        await createOrder({
           items: itemsFromStorage,
           total: 0, // Backend expects total: 0 to prove both free items and free shipping were achieved
           discountApplied,

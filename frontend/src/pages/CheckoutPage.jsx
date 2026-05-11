@@ -183,7 +183,7 @@ const CheckoutPage = () => {
       }));
 
   
-        const response = await createOrder({
+        await createOrder({
           items: itemsFromStorage,
           total: total, // Send the correctly discounted total
           discountApplied,
