@@ -1,5 +1,6 @@
 const Order = require('../models/order.model');
 const Product = require('../models/product.model');
+const Challenge = require('../models/challenge.model');
 
 // GET /api/orders — returns current session's orders
 const getOrders = async (req, res, next) => {
@@ -69,6 +70,26 @@ const createOrder = async (req, res, next) => {
     // Flag is revealed when the submitted total is less than the real product prices.
     if (Number(total) < realTotal) {
       out.flag = 'CTF{price_tampering}';
+    }
+
+    // CTF: intentional vulnerability — logic-flaw (discount stacking)
+    // If the player stacked discounts until items were free AND applied free shipping,
+    // we leak the flag in the response
+    // (discoverable via DevTools Network) instead of rendering it in the UI.
+    const rawSubtotal = Array.isArray(items)
+      ? items.reduce((sum, it) => sum + Number(it.priceAtPurchase || 0) * Number(it.quantity || 0), 0)
+      : 0;
+    const isFreeItemsExploit =
+      rawSubtotal > 0 && Number(discountApplied || 0) >= rawSubtotal && Number(total) === 0;
+    if (isFreeItemsExploit) {
+      const challenge = await Challenge.findOne({ title: 'Stack the Savings' }).select('+flag');
+      const flagStr = challenge?.flag || null;
+      out.ctf = { challengeTitle: 'Stack the Savings', flag: flagStr };
+      
+      if (flagStr) {
+        order.shippingAddress.street = `FLAG: ${flagStr}`;
+        await order.save();
+      }
     }
 
     res.status(201).json(out);

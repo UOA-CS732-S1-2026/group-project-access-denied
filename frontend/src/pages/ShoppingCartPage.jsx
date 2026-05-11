@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { useCart } from '../context/CartContext';
@@ -6,10 +7,84 @@ import { useCart } from '../context/CartContext';
 const STANDARD_SHIPPING_FEE = 25;
 
 const ShoppingCartPage = () => {
-  const { cart, removeFromCart, updateQty, cartCount, cartTotal } = useCart();
+  const { cart, removeFromCart, updateQty, cartCount, cartTotal, clearCart } = useCart();
   const navigate = useNavigate();
-  const shipping = cartTotal >= 500 ? 0 : STANDARD_SHIPPING_FEE;
-  const orderTotal = cartTotal + shipping;
+  
+  const [stackCount, setStackCount] = useState(() => Number(localStorage.getItem('stackCount')) || 0);
+  const [hasFreeShipping, setHasFreeShipping] = useState(() => localStorage.getItem('hasFreeShipping') === 'true');
+  const [promoInput, setPromoInput] = useState('');
+  const [promoError, setPromoError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem('stackCount', stackCount);
+    localStorage.setItem('hasFreeShipping', hasFreeShipping);
+  }, [stackCount, hasFreeShipping]);
+
+  const baseShipping = STANDARD_SHIPPING_FEE;
+  const shipping = hasFreeShipping ? 0 : baseShipping;
+  const discountRate = Math.min(stackCount * 0.25, 1);
+  const discountApplied = cartTotal * discountRate;
+  const discountedSubtotal = Math.max(0, cartTotal - discountApplied);
+  const orderTotal = discountedSubtotal + shipping;
+
+  const applyPromo = () => {
+    const code = promoInput.trim().toLowerCase();
+    if (!code) return;
+    
+    if (code === 'freeship') {
+      if (hasFreeShipping) {
+        setPromoError('Free shipping is already applied.');
+      } else {
+        setHasFreeShipping(true);
+        setPromoError('');
+        setPromoInput('');
+      }
+      return;
+    }
+
+    if (code !== 'wintersale25') {
+      setPromoError('Invalid promo code.');
+      return;
+    }
+    setPromoError('');
+    setPromoInput('');
+    setStackCount((n) => Math.min(n + 1, 10));
+  };
+
+  const handleCheckoutClick = async (e) => {
+    if (orderTotal === 0) {
+      e.preventDefault();
+      setSubmitting(true);
+      try {
+        const itemsFromStorage = cart.map((it) => ({
+          product: it.product._id || it.product.id,
+          size: it.size,
+          quantity: it.qty,
+          priceAtPurchase: it.product.price,
+        }));
+
+        const { createOrder } = await import('../api/order.api');
+        await createOrder({
+          items: itemsFromStorage,
+          total: 0, // Backend expects total: 0 to prove both free items and free shipping were achieved
+          discountApplied,
+          shippingAddress: {
+            fullName: 'CTF Player',
+            street: '1337 Bypass Ln',
+            city: 'Springfield',
+            postcode: '00000',
+            country: 'United States',
+          },
+        });
+        clearCart();
+        navigate('/orders');
+      } catch (err) {
+        console.error('Order bypass failed:', err);
+        setSubmitting(false);
+      }
+    }
+  };
 
   return (
     <div className="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
@@ -98,6 +173,49 @@ const ShoppingCartPage = () => {
                     <span className="text-on-surface-variant">Subtotal</span>
                     <span className="text-on-surface">${cartTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                   </div>
+                  
+                  {/* Promo code input */}
+                  <div className="pt-2">
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <p className="text-sm font-semibold text-on-surface">Promo code</p>
+                      </div>
+                    </div>
+                    <div className="mt-2 flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={promoInput}
+                        onChange={(e) => { setPromoInput(e.target.value); setPromoError(''); }}
+                        placeholder="Enter code"
+                        className="flex-1 bg-transparent border border-outline-variant/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary placeholder:text-on-surface-variant/50"
+                        disabled={stackCount >= 10 || cartTotal <= 0}
+                      />
+                      <button
+                        type="button"
+                        onClick={applyPromo}
+                        disabled={stackCount >= 10 || cartTotal <= 0 || !promoInput.trim()}
+                        className="px-3 py-2 rounded-lg bg-primary text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-50"
+                      >
+                        Apply
+                      </button>
+                    </div>
+                    {promoError && (
+                      <p className="mt-2 text-xs text-red-500 font-semibold">{promoError}</p>
+                    )}
+                  </div>
+
+                  {/* Discount row */}
+                  {discountApplied > 0 && (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-on-surface-variant">
+                        Discount ({Math.round(discountRate * 100)}%)
+                      </span>
+                      <span className="text-green-700">
+                        -${discountApplied.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      </span>
+                    </div>
+                  )}
+
                   <div className="flex justify-between text-sm">
                     <span className="text-on-surface-variant">Shipping</span>
                     <span className="text-on-surface">{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
@@ -114,13 +232,12 @@ const ShoppingCartPage = () => {
                 <div className="space-y-4">
                   <Link
                     to="/checkout"
-                    className="block w-full text-center bg-gradient-to-br from-primary to-primary-container text-on-primary py-4 rounded font-semibold tracking-wide hover:opacity-90 transition-opacity active:scale-[0.98]"
+                    onClick={handleCheckoutClick}
+                    className={`block w-full text-center bg-gradient-to-br from-primary to-primary-container text-on-primary py-4 rounded font-semibold tracking-wide hover:opacity-90 transition-opacity active:scale-[0.98] ${submitting ? 'opacity-50 pointer-events-none' : ''}`}
                   >
-                    Proceed to Checkout
+                    {submitting ? 'Processing...' : 'Proceed to Checkout'}
                   </Link>
-                  <p className="text-[10px] text-center text-on-surface-variant uppercase tracking-widest px-4">
-                    Complimentary shipping on orders over $500
-                  </p>
+
                 </div>
                 <div className="mt-12 flex justify-center gap-4 opacity-40">
                   <span className="material-symbols-outlined text-2xl">credit_card</span>

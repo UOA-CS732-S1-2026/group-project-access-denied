@@ -6,30 +6,46 @@ import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 
 const STATS = [
-  { icon: 'payments',     label: 'Total Revenue',    value: '$124,592.00', badge: '+12.5%', badgeColor: 'text-tertiary bg-tertiary/10' },
-  { icon: 'shopping_bag', label: 'Active Orders',     value: '1,284',       badge: '+8.2%',  badgeColor: 'text-tertiary bg-tertiary/10' },
-  { icon: 'person_add',   label: 'New Customers',     value: '312',         badge: '-2.4%',  badgeColor: 'text-primary bg-primary/10'  },
-  { icon: 'trending_up',  label: 'Conversion Rate',   value: '4.82%',       badge: '+18.9%', badgeColor: 'text-tertiary bg-tertiary/10' },
+  { icon: 'payments', label: 'Total Revenue', value: '$124,592.00', badge: '+12.5%', badgeColor: 'text-tertiary bg-tertiary/10' },
+  { icon: 'shopping_bag', label: 'Active Orders', value: '1,284', badge: '+8.2%', badgeColor: 'text-tertiary bg-tertiary/10' },
+  { icon: 'person_add', label: 'New Customers', value: '312', badge: '-2.4%', badgeColor: 'text-primary bg-primary/10' },
+  { icon: 'trending_up', label: 'Conversion Rate', value: '4.82%', badge: '+18.9%', badgeColor: 'text-tertiary bg-tertiary/10' },
 ];
 
 const NAV_SECTIONS = [
-  { label: 'Store Management', items: [
-    { id: 'products',  icon: 'inventory_2',  label: 'Products',  fill: true },
-  ]},
+  {
+    label: 'Store Management', items: [
+      { id: 'products', icon: 'inventory_2', label: 'Products', fill: true },
+      { id: 'promotions', icon: 'local_offer', label: 'Promotions', fill: true },
+    ]
+  },
+];
+
+// Static promo codes shown in the admin panel.
+// CTF: WINTERSALE25 is the only "Active" code — players discover it here
+// after logging in with default credentials, then abuse it at checkout.
+const PROMO_CODES = [
+  { code: 'WINTERSALE25', discount: '25%', status: 'Active', validUntil: '2026-08-31', uses: 47, note: 'Winter campaign — 25% off all orders' },
+  { code: 'FREESHIP', discount: 'Shipping', status: 'Active', validUntil: '2026-12-31', uses: 12, note: 'Free shipping on any order' },
+  { code: 'LAUNCH25', discount: '25%', status: 'Draft', validUntil: '—', uses: 0, note: 'Q3 launch event (not yet approved)' },
+  { code: 'VIP50', discount: '50%', status: 'Draft', validUntil: '—', uses: 0, note: 'VIP influencer programme — pending legal' },
+  { code: 'BFRIDAY30', discount: '30%', status: 'Expired', validUntil: '2025-11-30', uses: 812, note: 'Black Friday 2025' },
+  { code: 'WELCOME15', discount: '15%', status: 'Expired', validUntil: '2025-06-01', uses: 1_304, note: 'New-customer welcome offer' },
+  { code: 'STAFF20', discount: '20%', status: 'Draft', validUntil: '—', uses: 0, note: 'Internal staff discount (HR approval pending)' },
 ];
 
 const stockLevel = (stock) => {
-  if (stock > 50)  return { pct: '100%', color: 'bg-tertiary', qty: stock, textColor: 'text-on-surface-variant' };
-  if (stock > 10)  return { pct: '85%',  color: 'bg-tertiary', qty: stock, textColor: 'text-on-surface-variant' };
-  return                  { pct: '15%',  color: 'bg-primary',  qty: stock, textColor: 'text-primary' };
+  if (stock > 50) return { pct: '100%', color: 'bg-tertiary', qty: stock, textColor: 'text-on-surface-variant' };
+  if (stock > 10) return { pct: '85%', color: 'bg-tertiary', qty: stock, textColor: 'text-on-surface-variant' };
+  return { pct: '15%', color: 'bg-primary', qty: stock, textColor: 'text-primary' };
 };
 
 const PAGE_SIZE = 5;
 
 const AdminPanelPage = () => {
   const { user } = useAuth();
-  const [activeNav, setActiveNav]   = useState('products');
-  const [products, setProducts]     = useState([]);
+  const [activeNav, setActiveNav] = useState('products');
+  const [products, setProducts] = useState([]);
   const [productsError, setProductsError] = useState(null);
 
   useEffect(() => {
@@ -37,8 +53,8 @@ const AdminPanelPage = () => {
       .then((res) => setProducts(res.data))
       .catch((err) => setProductsError(err.response?.data?.message || 'Failed to load products.'));
   }, []);
-  const [search, setSearch]         = useState('');
-  const [page, setPage]             = useState(1);
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newProduct, setNewProduct] = useState({ name: '', brand: '', category: 'Clothes', price: '', image: '', isNew: false, featured: false });
   const [showImportModal, setShowImportModal] = useState(false);
@@ -56,7 +72,7 @@ const AdminPanelPage = () => {
     p.category.toLowerCase().includes(search.toLowerCase())
   );
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const paginated  = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const handleDelete = (id) => {
     setProducts((prev) => prev.filter((p) => p._id !== id));
@@ -111,11 +127,10 @@ const AdminPanelPage = () => {
                   <button
                     key={item.id}
                     onClick={() => setActiveNav(item.id)}
-                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all group ${
-                      activeNav === item.id
+                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all group ${activeNav === item.id
                         ? 'bg-surface-container-lowest text-primary shadow-sm ring-1 ring-outline-variant/10'
                         : 'text-on-surface-variant hover:bg-surface-container'
-                    }`}
+                      }`}
                   >
                     <span
                       className={`material-symbols-outlined text-lg ${activeNav === item.id ? 'text-primary' : 'group-hover:text-primary transition-colors'}`}
@@ -159,155 +174,206 @@ const AdminPanelPage = () => {
             ))}
           </div>
 
-          {/* Products Header */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-            <div>
-              <h1 className="text-2xl font-extrabold tracking-tight text-on-surface mb-1">Manage Products</h1>
-              <p className="text-sm text-on-surface-variant">
-                {filtered.length} product{filtered.length !== 1 ? 's' : ''} found
-                {search && ` for "${search}"`}
-              </p>
-            </div>
-            <div className="flex items-center space-x-3">
-              <div className="hidden md:block relative">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
-                <input
-                  className="bg-surface-container-low border border-outline-variant/20 text-sm py-2 pl-10 pr-4 w-64 focus:ring-1 focus:ring-primary rounded-lg transition-all"
-                  placeholder="Search inventory..."
-                  value={search}
-                  onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                />
+          {/* Products Section — visible when sidebar nav is on 'products' */}
+          {activeNav === 'products' && (<>
+            <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+              <div>
+                <h1 className="text-2xl font-extrabold tracking-tight text-on-surface mb-1">Manage Products</h1>
+                <p className="text-sm text-on-surface-variant">
+                  {filtered.length} product{filtered.length !== 1 ? 's' : ''} found
+                  {search && ` for "${search}"`}
+                </p>
               </div>
-              <button
-                onClick={() => setShowImportModal(true)}
-                className="border-2 border-primary text-primary px-5 py-2.5 text-sm font-bold rounded-lg hover:bg-primary/5 transition-colors flex items-center"
-              >
-                <span className="material-symbols-outlined text-sm mr-2">cloud_download</span>
-                Import from URL
-              </button>
-              <button
-                onClick={() => setShowAddModal(true)}
-                className="bg-primary text-white px-5 py-2.5 text-sm font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center shadow-lg shadow-primary/20"
-              >
-                <span className="material-symbols-outlined text-sm mr-2">add</span>
-                Add New Product
-              </button>
+              <div className="flex items-center space-x-3">
+                <div className="hidden md:block relative">
+                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+                  <input
+                    className="bg-surface-container-low border border-outline-variant/20 text-sm py-2 pl-10 pr-4 w-64 focus:ring-1 focus:ring-primary rounded-lg transition-all"
+                    placeholder="Search inventory..."
+                    value={search}
+                    onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+                  />
+                </div>
+                <button
+                  onClick={() => setShowImportModal(true)}
+                  className="border-2 border-primary text-primary px-5 py-2.5 text-sm font-bold rounded-lg hover:bg-primary/5 transition-colors flex items-center"
+                >
+                  <span className="material-symbols-outlined text-sm mr-2">cloud_download</span>
+                  Import from URL
+                </button>
+                <button
+                  onClick={() => setShowAddModal(true)}
+                  className="bg-primary text-white px-5 py-2.5 text-sm font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center shadow-lg shadow-primary/20"
+                >
+                  <span className="material-symbols-outlined text-sm mr-2">add</span>
+                  Add New Product
+                </button>
+              </div>
             </div>
-          </div>
 
-          {/* Products Table */}
-          <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/10 overflow-hidden shadow-[0_4px_30px_rgba(86,66,61,0.03)]">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-surface-container-low/50">
-                    {['Product Image', 'Product Name', 'Category', 'Stock Level', 'Price', 'Actions'].map((h, i) => (
-                      <th key={h} className={`px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-outline ${i === 5 ? 'text-right' : ''}`}>{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-outline-variant/10">
-                  {productsError ? (
-                    <tr>
-                      <td colSpan={6} className="px-6 py-16 text-center text-error text-sm font-light">{productsError}</td>
+            {/* Products Table */}
+            <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/10 overflow-hidden shadow-[0_4px_30px_rgba(86,66,61,0.03)]">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-surface-container-low/50">
+                      {['Product Image', 'Product Name', 'Category', 'Stock Level', 'Price', 'Actions'].map((h, i) => (
+                        <th key={h} className={`px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-outline ${i === 5 ? 'text-right' : ''}`}>{h}</th>
+                      ))}
                     </tr>
-                  ) : paginated.length === 0 ? (
-                    <tr>
-                      <td colSpan={6} className="px-6 py-16 text-center text-on-surface-variant text-sm font-light">No products match your search.</td>
-                    </tr>
-                  ) : (
-                    paginated.map((product) => {
-                      const stock = stockLevel(product.stock ?? 0);
-                      return (
-                        <tr key={product._id} className="hover:bg-surface-container-low/30 transition-colors group">
-                          <td className="px-6 py-4">
-                            <div className="w-16 h-20 bg-surface-container rounded overflow-hidden">
-                              <img className="w-full h-full object-cover" alt={product.name} src={product.images[0]} />
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 max-w-md">
-                            <div className="flex items-center gap-2">
-                              <div className="text-sm font-bold text-on-surface">{product.name}</div>
-                              {product.isActive === false && (
-                                <span className="text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-primary/10 text-primary">Draft</span>
+                  </thead>
+                  <tbody className="divide-y divide-outline-variant/10">
+                    {productsError ? (
+                      <tr>
+                        <td colSpan={6} className="px-6 py-16 text-center text-error text-sm font-light">{productsError}</td>
+                      </tr>
+                    ) : paginated.length === 0 ? (
+                      <tr>
+                        <td colSpan={6} className="px-6 py-16 text-center text-on-surface-variant text-sm font-light">No products match your search.</td>
+                      </tr>
+                    ) : (
+                      paginated.map((product) => {
+                        const stock = stockLevel(product.stock ?? 0);
+                        return (
+                          <tr key={product._id} className="hover:bg-surface-container-low/30 transition-colors group">
+                            <td className="px-6 py-4">
+                              <div className="w-16 h-20 bg-surface-container rounded overflow-hidden">
+                                <img className="w-full h-full object-cover" alt={product.name} src={product.images[0]} />
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 max-w-md">
+                              <div className="flex items-center gap-2">
+                                <div className="text-sm font-bold text-on-surface">{product.name}</div>
+                                {product.isActive === false && (
+                                  <span className="text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-primary/10 text-primary">Draft</span>
+                                )}
+                              </div>
+                              <div className="text-[10px] text-outline font-medium tracking-wide">{product.brand}</div>
+                              {product.description && (
+                                <div className="text-xs text-on-surface-variant mt-1 line-clamp-2" title={product.description}>
+                                  {product.description}
+                                </div>
                               )}
-                            </div>
-                            <div className="text-[10px] text-outline font-medium tracking-wide">{product.brand}</div>
-                            {product.description && (
-                              <div className="text-xs text-on-surface-variant mt-1 line-clamp-2" title={product.description}>
-                                {product.description}
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className="text-xs text-on-surface-variant bg-surface-container px-2 py-1 rounded">{product.category}</span>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="flex items-center space-x-2">
+                                <div className="w-24 bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+                                  <div className={`${stock.color} h-full`} style={{ width: stock.pct }}></div>
+                                </div>
+                                <span className={`text-xs font-bold ${stock.textColor}`}>{stock.qty}</span>
                               </div>
-                            )}
-                          </td>
-                          <td className="px-6 py-4">
-                            <span className="text-xs text-on-surface-variant bg-surface-container px-2 py-1 rounded">{product.category}</span>
-                          </td>
-                          <td className="px-6 py-4">
-                            <div className="flex items-center space-x-2">
-                              <div className="w-24 bg-surface-container-high h-1.5 rounded-full overflow-hidden">
-                                <div className={`${stock.color} h-full`} style={{ width: stock.pct }}></div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="text-sm font-bold text-on-surface">${product.price.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              <div className="flex items-center justify-end space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button className="p-2 text-outline hover:text-primary hover:bg-primary/5 rounded-lg transition-all">
+                                  <span className="material-symbols-outlined text-lg">edit</span>
+                                </button>
+                                <button
+                                  onClick={() => handleDelete(product._id)}
+                                  className="p-2 text-outline hover:text-error hover:bg-error/5 rounded-lg transition-all"
+                                >
+                                  <span className="material-symbols-outlined text-lg">delete</span>
+                                </button>
                               </div>
-                              <span className={`text-xs font-bold ${stock.textColor}`}>{stock.qty}</span>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4">
-                            <div className="text-sm font-bold text-on-surface">${product.price.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
-                          </td>
-                          <td className="px-6 py-4 text-right">
-                            <div className="flex items-center justify-end space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                              <button className="p-2 text-outline hover:text-primary hover:bg-primary/5 rounded-lg transition-all">
-                                <span className="material-symbols-outlined text-lg">edit</span>
-                              </button>
-                              <button
-                                onClick={() => handleDelete(product._id)}
-                                className="p-2 text-outline hover:text-error hover:bg-error/5 rounded-lg transition-all"
-                              >
-                                <span className="material-symbols-outlined text-lg">delete</span>
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })
-                  )}
-                </tbody>
-              </table>
-            </div>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
 
-            {/* Pagination */}
-            <div className="px-6 py-4 bg-surface-container-low/50 flex items-center justify-between border-t border-outline-variant/10">
-              <div className="text-xs text-on-surface-variant font-medium">
-                Showing {Math.min((page - 1) * PAGE_SIZE + 1, filtered.length)}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length} products
-              </div>
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                  className="p-2 rounded-lg border border-outline-variant/20 hover:bg-surface-container-high transition-colors disabled:opacity-30"
-                >
-                  <span className="material-symbols-outlined text-sm">chevron_left</span>
-                </button>
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+              {/* Pagination */}
+              <div className="px-6 py-4 bg-surface-container-low/50 flex items-center justify-between border-t border-outline-variant/10">
+                <div className="text-xs text-on-surface-variant font-medium">
+                  Showing {Math.min((page - 1) * PAGE_SIZE + 1, filtered.length)}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length} products
+                </div>
+                <div className="flex items-center space-x-2">
                   <button
-                    key={n}
-                    onClick={() => setPage(n)}
-                    className={`w-8 h-8 flex items-center justify-center rounded-lg text-xs font-bold transition-colors ${
-                      n === page ? 'bg-primary text-white' : 'hover:bg-surface-container-high text-on-surface-variant'
-                    }`}
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    disabled={page === 1}
+                    className="p-2 rounded-lg border border-outline-variant/20 hover:bg-surface-container-high transition-colors disabled:opacity-30"
                   >
-                    {n}
+                    <span className="material-symbols-outlined text-sm">chevron_left</span>
                   </button>
-                ))}
-                <button
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={page === totalPages}
-                  className="p-2 rounded-lg border border-outline-variant/20 hover:bg-surface-container-high transition-colors disabled:opacity-30"
-                >
-                  <span className="material-symbols-outlined text-sm">chevron_right</span>
-                </button>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+                    <button
+                      key={n}
+                      onClick={() => setPage(n)}
+                      className={`w-8 h-8 flex items-center justify-center rounded-lg text-xs font-bold transition-colors ${n === page ? 'bg-primary text-white' : 'hover:bg-surface-container-high text-on-surface-variant'
+                        }`}
+                    >
+                      {n}
+                    </button>
+                  ))}
+                  <button
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={page === totalPages}
+                    className="p-2 rounded-lg border border-outline-variant/20 hover:bg-surface-container-high transition-colors disabled:opacity-30"
+                  >
+                    <span className="material-symbols-outlined text-sm">chevron_right</span>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          </>)}
+
+          {/* Promotions Table — visible when sidebar nav is on 'promotions' */}
+          {activeNav === 'promotions' && (
+            <>
+              <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+                <div>
+                  <h1 className="text-2xl font-extrabold tracking-tight text-on-surface mb-1">Promo Codes</h1>
+                  <p className="text-sm text-on-surface-variant">{PROMO_CODES.length} codes configured</p>
+                </div>
+              </div>
+
+              <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/10 overflow-hidden shadow-[0_4px_30px_rgba(86,66,61,0.03)]">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-surface-container-low/50">
+                        {['Code', 'Discount', 'Status', 'Valid Until', 'Uses', 'Note'].map((h) => (
+                          <th key={h} className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-outline">{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-outline-variant/10">
+                      {PROMO_CODES.map((promo) => {
+                        const statusColor =
+                          promo.status === 'Active' ? 'text-tertiary bg-tertiary/10' :
+                            promo.status === 'Expired' ? 'text-on-surface-variant bg-surface-container' :
+                              'text-primary bg-primary/10';
+                        return (
+                          <tr key={promo.code} className="hover:bg-surface-container-low/30 transition-colors">
+                            <td className="px-6 py-4">
+                              <span className="font-mono text-sm font-bold text-on-surface">{promo.code}</span>
+                            </td>
+                            <td className="px-6 py-4 text-sm font-semibold text-on-surface">{promo.discount}</td>
+                            <td className="px-6 py-4">
+                              <span className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full ${statusColor}`}>
+                                {promo.status}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 text-sm text-on-surface-variant">{promo.validUntil}</td>
+                            <td className="px-6 py-4 text-sm text-on-surface-variant">{promo.uses.toLocaleString()}</td>
+                            <td className="px-6 py-4 text-xs text-on-surface-variant max-w-xs truncate" title={promo.note}>{promo.note}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </>
+          )}
 
         </main>
       </div>
