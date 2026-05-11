@@ -11,37 +11,37 @@ beforeEach(() => {
 describe('HelpBot', () => {
   it('renders the toggle button', () => {
     render(<HelpBot />);
-    expect(screen.getByRole('button', { name: /toggle helpbot/i })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /toggle stylebot/i })).toBeTruthy();
   });
 
   it('chat panel is hidden by default', () => {
     render(<HelpBot />);
-    expect(screen.queryByText('HelpBot')).toBeNull();
+    expect(screen.queryByText('StyleBot')).toBeNull();
   });
 
   it('opens chat panel when toggle button is clicked', () => {
     render(<HelpBot />);
-    fireEvent.click(screen.getByRole('button', { name: /toggle helpbot/i }));
-    expect(screen.getByText('HelpBot')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: /toggle stylebot/i }));
+    expect(screen.getByText('StyleBot')).toBeTruthy();
   });
 
   it('shows initial greeting message', () => {
     render(<HelpBot />);
-    fireEvent.click(screen.getByRole('button', { name: /toggle helpbot/i }));
-    expect(screen.getByText(/ask me anything/i)).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: /toggle stylebot/i }));
+    expect(screen.getByText(/sizing/i)).toBeTruthy();
   });
 
   it('closes panel when toggle button is clicked again', () => {
     render(<HelpBot />);
-    const toggle = screen.getByRole('button', { name: /toggle helpbot/i });
+    const toggle = screen.getByRole('button', { name: /toggle stylebot/i });
     fireEvent.click(toggle);
     fireEvent.click(toggle);
-    expect(screen.queryByText('HelpBot')).toBeNull();
+    expect(screen.queryByText('StyleBot')).toBeNull();
   });
 
   it('send button is disabled when input is empty', () => {
     render(<HelpBot />);
-    fireEvent.click(screen.getByRole('button', { name: /toggle helpbot/i }));
+    fireEvent.click(screen.getByRole('button', { name: /toggle stylebot/i }));
     expect(screen.getByRole('button', { name: /send/i }).disabled).toBe(true);
   });
 
@@ -51,7 +51,7 @@ describe('HelpBot', () => {
     ));
 
     render(<HelpBot />);
-    fireEvent.click(screen.getByRole('button', { name: /toggle helpbot/i }));
+    fireEvent.click(screen.getByRole('button', { name: /toggle stylebot/i }));
 
     const textarea = screen.getByPlaceholderText(/ask me anything/i);
     fireEvent.change(textarea, { target: { value: 'Hello' } });
@@ -65,7 +65,7 @@ describe('HelpBot', () => {
     vi.stubGlobal('fetch', vi.fn(() => Promise.reject(new Error('Network error'))));
 
     render(<HelpBot />);
-    fireEvent.click(screen.getByRole('button', { name: /toggle helpbot/i }));
+    fireEvent.click(screen.getByRole('button', { name: /toggle stylebot/i }));
 
     const textarea = screen.getByPlaceholderText(/ask me anything/i);
     fireEvent.change(textarea, { target: { value: 'Hello' } });

@@ -25,7 +25,7 @@ function TypingIndicator() {
 export default function HelpBot() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { role: 'model', content: 'Hi! I\'m HelpBot. Ask me anything about the Access Denied platform — challenges, scoring, or how to submit flags.' }
+    { role: 'model', content: 'Hi, I\'m StyleBot — APapparel\'s style assistant. Ask me about sizing, fabrics, deliveries, or anything else from the boutique.' }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -104,7 +104,7 @@ const bottomRef = useRef(null);
       {/* Floating toggle button */}
       <button
         onClick={() => setOpen(o => !o)}
-        aria-label="Toggle HelpBot"
+        aria-label="Toggle StyleBot"
         style={{
           position: 'fixed',
           bottom: 28,
@@ -181,10 +181,10 @@ const bottomRef = useRef(null);
             </div>
             <div>
               <div style={{ color: '#fff', fontWeight: 700, fontSize: 14, letterSpacing: '-0.01em' }}>
-                HelpBot
+                StyleBot
               </div>
               <div style={{ color: 'rgba(255,255,255,0.75)', fontSize: 11 }}>
-                Access Denied Support
+                APapparel Concierge
               </div>
             </div>
           </div>
