@@ -7,6 +7,13 @@ import { createOrder } from '../api/order.api';
 const STEPS = ['Shipping', 'Payment'];
 const STANDARD_SHIPPING_FEE = 25;
 
+/** Step navbar circle styles — avoid nested ternaries (Sonar). */
+function stepIndicatorCircleClass(index, currentStep) {
+  if (index < currentStep) return 'bg-primary border-primary text-white';
+  if (index === currentStep) return 'border-primary text-primary';
+  return 'border-outline-variant/30 text-on-surface-variant/40';
+}
+
 const validators = {
   firstName: (v) => {
     if (!v.trim()) return 'First name is required';
@@ -229,9 +236,10 @@ const CheckoutPage = () => {
           <div className="hidden md:flex items-center space-x-8 text-xs font-bold tracking-[0.2em] uppercase text-on-surface-variant">
             {STEPS.map((s, i) => (
               <span key={s} className={`flex items-center gap-2 ${i <= step ? 'text-primary' : ''}`}>
-                <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] border ${i < step ? 'bg-primary border-primary text-white' : i === step ? 'border-primary text-primary' : 'border-outline-variant/30 text-on-surface-variant/40'}`}>
+                <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] border ${stepIndicatorCircleClass(i, step)}`}>
                   {i < step ? '✓' : i + 1}
                 </span>
+                {' '}
                 {s}
                 {i < STEPS.length - 1 && <span className="text-outline-variant/30 ml-2">—</span>}
               </span>
@@ -254,6 +262,7 @@ const CheckoutPage = () => {
             <div className="mb-10">
               <Link to="/cart" className="text-sm text-primary hover:underline flex items-center gap-1 w-fit mb-6">
                 <span className="material-symbols-outlined text-sm">arrow_back</span>
+                {' '}
                 Back to Bag
               </Link>
               <span className="text-xs uppercase tracking-[0.2em] text-outline font-semibold mb-2 block">Secure Checkout</span>
@@ -384,6 +393,7 @@ const CheckoutPage = () => {
                     className="flex-1 py-4 bg-gradient-to-br from-primary to-primary-container text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity active:scale-[0.98]"
                   >
                     Continue to {STEPS[step + 1]}
+                    {' '}
                     <span className="material-symbols-outlined text-sm ml-2 align-middle">arrow_forward</span>
                   </button>
                 ) : (
