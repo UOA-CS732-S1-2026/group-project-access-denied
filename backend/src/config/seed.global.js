@@ -262,7 +262,7 @@ async function seedGlobal() {
 
 
   // ── CEO user "Ajith Patel" (CTF: Social Engineering 101 — Flag #9) ─────────
-  let ajith = await User.findOne({ username: 'CTF{social_profile_3xp0s3d}' });
+  let ajith = await User.findOne({ email: 'AjithPatel@APapparel.com' });
   if (!ajith) {
     ajith = await User.create({
       username: 'CTF{social_profile_3xp0s3d}',
