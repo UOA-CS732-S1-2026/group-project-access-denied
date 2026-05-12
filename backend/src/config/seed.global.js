@@ -245,17 +245,23 @@ async function seedGlobal() {
   // ── Admin user ──────────────────────────────────────────────────────────────
   let admin = await User.findOne({ username: 'admin' });
   if (!admin) {
-    admin = await User.create({
-      username: 'admin',
-      email: 'CTF{d3fault_cr3ds_never_chang3}',
-      password: 'admin',        // CTF: intentional vulnerability — default-credentials
-      role: 'admin',
-      securityQuestion: 'What city were you born in?',
-      securityAnswer: 'mumbai',
-    });
-    // Mongoose lowercases the email field — restore original case so the flag is discoverable
-    await User.collection.updateOne({ _id: admin._id }, { $set: { email: 'CTF{d3fault_cr3ds_never_chang3}' } });
-    console.log('Created admin user');
+    try{
+      admin = await User.create({
+        username: 'admin',
+        email: 'CTF{d3fault_cr3ds_never_chang3}',
+        password: 'admin',        // CTF: intentional vulnerability — default-credentials
+        role: 'admin',
+        securityQuestion: 'What city were you born in?',
+        securityAnswer: 'mumbai',
+      });
+      // Mongoose lowercases the email field — restore original case so the flag is discoverable
+      await User.collection.updateOne({ _id: admin._id }, { $set: { email: 'CTF{d3fault_cr3ds_never_chang3}' } });
+      console.log('Created admin user');
+    } catch (err) {
+      if (err.code !== 11000) throw err; // Ignore duplicate key error from re-running the seed
+      admin = await User.findOne({ username: 'admin' });
+      console.log('Admin already exists — skipping');
+    }
   } else {
     console.log('Admin already exists — skipping');
   }
@@ -264,15 +270,21 @@ async function seedGlobal() {
   // ── CEO user "Ajith Patel" (CTF: Social Engineering 101 — Flag #9) ─────────
   let ajith = await User.findOne({ email: 'AjithPatel@APapparel.com' });
   if (!ajith) {
-    ajith = await User.create({
-      username: 'CTF{social_profile_3xp0s3d}',
-      email: 'AjithPatel@APapparel.com',
-      password: 'Ap$ecure2026!',  // strong password — not the attack vector
-      role: 'user',
-      securityQuestion: "What is your pet's name?",
-      securityAnswer: 'simba',    // CTF: discoverable via founder's Instagram
-    });
-    console.log('Created ajith (CEO)');
+    try{
+      ajith = await User.create({
+        username: 'CTF{social_profile_3xp0s3d}',
+        email: 'AjithPatel@APapparel.com',
+        password: 'Ap$ecure2026!',  // strong password — not the attack vector
+        role: 'user',
+        securityQuestion: "What is your pet's name?",
+        securityAnswer: 'simba',    // CTF: discoverable via founder's Instagram
+      });
+      console.log('Created ajith (CEO)');
+    } catch (err) {
+      if (err.code !== 11000) throw err; // Ignore duplicate key error from re-running the seed
+      ajith = await User.findOne({ email: 'AjithPatel@APapparel.com' });
+      console.log('Ajith already exists — skipping');
+    }
   } else {
     console.log('Ajith already exists — skipping');
   }
@@ -281,6 +293,7 @@ async function seedGlobal() {
   // ── Victim user "alice" ─────────────────────────────────────────────────────
   let alice = await User.findOne({ username: 'alice' });
   if (!alice) {
+    try{
     alice = await User.create({
       username: 'alice',
       email: 'alice@apapparel.com',
@@ -290,6 +303,11 @@ async function seedGlobal() {
       securityAnswer: 'honda',
     });
     console.log('Created alice');
+    } catch (err) {
+      if (err.code !== 11000) throw err; // Ignore duplicate key error from re-running the seed
+      alice = await User.findOne({ username: 'alice' });
+      console.log('Alice already exists — skipping');
+    }
   } else {
     console.log('Alice already exists — skipping');
   }
