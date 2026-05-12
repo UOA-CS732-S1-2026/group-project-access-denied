@@ -1,6 +1,5 @@
 export const CATEGORY_LABELS = {
   'sql-injection':       'SQL Injection',
-  'xss':                 'Cross-Site Scripting',
   'auth-bypass':         'Auth Bypass',
   'exposed-files':       'Exposed Files',
   'insecure-api':        'Insecure API',
@@ -12,7 +11,6 @@ export const CATEGORY_LABELS = {
 
 export const CATEGORY_COLORS = {
   'sql-injection':       'bg-red-900/40 text-red-300 border-red-700',
-  'xss':                 'bg-orange-900/40 text-orange-300 border-orange-700',
   'auth-bypass':         'bg-yellow-900/40 text-yellow-300 border-yellow-700',
   'exposed-files':       'bg-green-900/40 text-green-300 border-green-700',
   'insecure-api':        'bg-blue-900/40 text-blue-300 border-blue-700',

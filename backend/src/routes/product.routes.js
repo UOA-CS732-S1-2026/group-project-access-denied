@@ -8,7 +8,6 @@ const {
   updateProduct,
   deleteProduct,
 } = require('../controllers/product.controller');
-const { getReviews, createReview, deleteReview } = require('../controllers/review.controller');
 
 // Product routes — require auth for db routing
 router.get('/', protect, getProducts);
@@ -18,10 +17,5 @@ router.get('/:id', protect, getProduct);
 router.post('/', protect, adminOnly, createProduct);
 router.put('/:id', protect, adminOnly, updateProduct);
 router.delete('/:id', protect, adminOnly, deleteProduct);
-
-// Reviews — nested under products
-router.get('/:productId/reviews', protect, getReviews);
-router.post('/:productId/reviews', protect, createReview);
-router.delete('/:productId/reviews/:id', protect, adminOnly, deleteReview);
 
 module.exports = router;

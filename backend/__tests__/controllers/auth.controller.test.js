@@ -4,13 +4,9 @@ const crypto = require('crypto');
 const { register, login, getMe } = require('../../src/controllers/auth.controller');
 const User = require('../../src/models/user.model');
 const Session = require('../../src/models/session.model');
-const { seedSession } = require('../../src/config/seed.session');
 
 jest.mock('../../src/models/user.model');
 jest.mock('../../src/models/session.model');
-jest.mock('../../src/config/seed.session', () => ({
-  seedSession: jest.fn().mockResolvedValue(undefined),
-}));
 
 const mockRes = () => {
   const res = {};
@@ -76,7 +72,7 @@ describe('register', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'Username or email already taken' });
   });
 
-  it('creates user and session, calls seedSession, returns 201 with token', async () => {
+  it('creates user and session, returns 201 with token', async () => {
     User.findOne.mockResolvedValue(null);
     User.create.mockResolvedValue(mockUser);
     Session.create.mockResolvedValue(mockSession);
@@ -94,7 +90,6 @@ describe('register', () => {
     expect(Session.create).toHaveBeenCalledWith(expect.objectContaining({
       sessionId: 'test-session-uuid',
     }));
-    expect(seedSession).toHaveBeenCalledWith('test-session-uuid');
     expect(res.status).toHaveBeenCalledWith(201);
     expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
       token: expect.any(String),
@@ -185,7 +180,6 @@ describe('login', () => {
     await login(req, res, jest.fn());
 
     expect(Session.create).not.toHaveBeenCalled();
-    expect(seedSession).not.toHaveBeenCalled();
     expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
       token: expect.any(String),
       sessionId: mockSession.sessionId,
@@ -204,7 +198,6 @@ describe('login', () => {
     await login(req, res, jest.fn());
 
     expect(Session.create).toHaveBeenCalled();
-    expect(seedSession).toHaveBeenCalledWith(mockSession.sessionId);
     expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ token: expect.any(String) }));
   });
 
