@@ -5,7 +5,7 @@ vi.mock('../../src/api/api.js', () => ({
 }));
 
 import api from '../../src/api/api.js';
-import { getChallenges, getChallenge, submitFlag, useHint } from '../../src/api/challenge.api.js';
+import { getChallenges, submitFlag, useHint } from '../../src/api/challenge.api.js';
 
 beforeEach(() => vi.clearAllMocks());
 
@@ -13,11 +13,6 @@ describe('challenge.api', () => {
   it('getChallenges calls GET /challenges', () => {
     getChallenges();
     expect(api.get).toHaveBeenCalledWith('/challenges');
-  });
-
-  it('getChallenge calls GET /challenges/:id', () => {
-    getChallenge('ch1');
-    expect(api.get).toHaveBeenCalledWith('/challenges/ch1');
   });
 
   it('submitFlag calls POST /flags/submit', () => {

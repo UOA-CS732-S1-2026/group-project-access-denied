@@ -1,5 +1,5 @@
 module.exports = async () => {
-  if (global.__MONGOD__) {
-    await global.__MONGOD__.stop();
+  if (globalThis.__MONGOD__) {
+    await globalThis.__MONGOD__.stop();
   }
 };

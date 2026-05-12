@@ -10,7 +10,7 @@ const ProductListing = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
+    const timeoutId = globalThis.setTimeout(() => {
       setLoading(true);
       getProducts({ search: search.trim() || undefined })
         .then((res) => setProducts(res.data))
@@ -18,7 +18,7 @@ const ProductListing = () => {
         .finally(() => setLoading(false));
     }, 250);
 
-    return () => window.clearTimeout(timeoutId);
+    return () => globalThis.clearTimeout(timeoutId);
   }, [search]);
 
   return (

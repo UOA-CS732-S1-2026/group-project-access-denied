@@ -32,7 +32,7 @@ const AppContent = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    globalThis.scrollTo(0, 0);
   }, [pathname]);
 
   const showHelpBot = !HELPBOT_HIDDEN_ROUTES.includes(pathname);
