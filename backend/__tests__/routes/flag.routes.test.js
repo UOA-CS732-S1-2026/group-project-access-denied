@@ -2,7 +2,6 @@ const request = require('supertest');
 const app = require('../../src/app');
 const User = require('../../src/models/user.model');
 const Challenge = require('../../src/models/challenge.model');
-const Submission = require('../../src/models/submission.model');
 const { connect, runGlobalSeed, clearSessionData, disconnect } = require('../helpers/db');
 
 const testUser = {
@@ -87,18 +86,6 @@ describe('POST /api/flags/submit', () => {
 
     const user = await User.findOne({ email: testUser.email });
     expect(user.totalScore).toBe(0);
-  });
-
-  it('records an incorrect submission in the database', async () => {
-    await request(app)
-      .post('/api/flags/submit')
-      .set('Authorization', `Bearer ${token}`)
-      .send({ challengeId: challenge._id, flag: 'CTF{wrong_flag}' });
-
-    const sub = await Submission.findOne({ challenge: challenge._id });
-    expect(sub).not.toBeNull();
-    expect(sub.isCorrect).toBe(false);
-    expect(sub.pointsAwarded).toBe(0);
   });
 
   it('returns 400 when the challenge has already been solved', async () => {

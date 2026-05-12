@@ -69,7 +69,7 @@ const createOrder = async (req, res, next) => {
     // CTF: intentional vulnerability — price tampering
     // Flag is revealed when the submitted total is less than the real product prices.
     if (Number(total) < realTotal) {
-      out.flag = 'CTF{price_tampering}';
+      out.flag = 'CTF{pr1ce_t4mp3ring}';
     }
 
     // CTF: intentional vulnerability — logic-flaw (discount stacking)
