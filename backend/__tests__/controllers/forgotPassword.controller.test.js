@@ -171,7 +171,7 @@ describe('verifySecurityAnswer', () => {
     await verifySecurityAnswer(req, res, jest.fn());
 
     expect(res.json).toHaveBeenCalledWith(
-      expect.objectContaining({ flag: 'CTF{social_profile_exposed_answer}' })
+      expect.objectContaining({ flag: 'CTF{social_profile_3xp0s3d_4nswer}' })
     );
   });
 

@@ -100,7 +100,7 @@ const PRODUCTS = [
   // in the listing. Clicking through to the product detail page reveals the flag.
   {
     name: 'Vault Prototype Trench Coat',
-    description: 'Internal launch sample. Not ready for sale! CTF{sql_i_found_the_vault}',
+    description: 'Internal launch sample. Not ready for sale! CTF{sql_1_found_th3_vault}',
     price: 0, category: 'shoes', sizes: ['39', '40', '41', '42', '43'],
     images: ['https://res.cloudinary.com/dhyxvn66a/image/upload/v1778120293/non-mustache_qokq3o.png'],
     stock: 0, isActive: false, isNew: false, featured: false,
@@ -124,7 +124,7 @@ const CHALLENGES = [
     title: 'The Fine Print',
     description: "APapparel's legal team hid something in the Terms & Conditions. Most users never read it — maybe you should.",
     category: 'other', difficulty: 'easy', points: 100,
-    flag: 'CTF{nobody_reads_the_terms}',
+    flag: 'CTF{nob0dy_reads_th3_terms}',
     hints: [{ text: 'Try scrolling all the way to the bottom of the Terms & Conditions page.', cost: 0 }],
     isActive: true,
   },
@@ -132,7 +132,7 @@ const CHALLENGES = [
     title: "Someone Else's Orders",
     description: "The order history API has a little secret — it doesn't always check who's asking. Can you find an order that isn't yours?",
     category: 'insecure-api', difficulty: 'medium', points: 200,
-    flag: 'CTF{idor_order_exposed}',
+    flag: 'CTF{idor_0rder_3xposed}',
     hints: [
       { text: 'Try fetching /api/orders directly. What does the response tell you?', cost: 0 },
       { text: 'Order IDs are sequential. What happens if you change the ID in the URL?', cost: 50 },
@@ -151,7 +151,7 @@ const CHALLENGES = [
     title: 'The Helpful Assistant',
     description: "APapparel's AI shopping assistant is very helpful. Maybe too helpful. See if you can get it to reveal something it shouldn't.",
     category: 'prompt-injection', difficulty: 'medium', points: 200,
-    flag: 'CTF{prompt_injection_unlocked}',
+    flag: 'CTF{pr0mpt_1nj3ction_unlocked}',
     hints: [{ text: 'Try asking the assistant to ignore its previous instructions.', cost: 0 }],
     isActive: true,
   },
@@ -159,7 +159,7 @@ const CHALLENGES = [
     title: 'Welcome, Administrator',
     description: "The APapparel admin panel is locked. Or is it? Try the obvious before you try the clever.",
     category: 'default-credentials', difficulty: 'easy', points: 100,
-    flag: 'CTF{default_creds_never_change}',
+    flag: 'CTF{d3fault_cr3ds_never_chang3}',
     hints: [{ text: 'admin / admin is a classic for a reason.', cost: 0 }],
     isActive: true,
   },
@@ -167,7 +167,7 @@ const CHALLENGES = [
     title: 'The Search Bar Speaks',
     description: "APapparel's product search passes user input is not sanitised, directly querying the database. Can you speak its language and find the hidden vault?",
     category: 'sql-injection', difficulty: 'medium', points: 200,
-    flag: 'CTF{sql_i_found_the_vault}',
+    flag: 'CTF{sql_1_found_th3_vault}',
     hints: [
       { text: "The search endpoint doesn't sanitise input. Try a single quote.", cost: 50 },
     ],
@@ -177,7 +177,7 @@ const CHALLENGES = [
     title: 'Verbose Errors',
     description: "APapparel's login endpoint is a little too talkative when things go wrong. See what you can learn from a failed login.",
     category: 'other', difficulty: 'easy', points: 100,
-    flag: 'CTF{error_messages_leak_info}',
+    flag: 'CTF{error_m3ssages_leak_inf0}',
     hints: [{ text: 'Try logging in with a real email address but the wrong password. Then try a fake email.', cost: 0 }],
     isActive: true,
   },
@@ -185,7 +185,7 @@ const CHALLENGES = [
     title: 'Social Engineering 101',
     description: "APapparel's forgot password flow asks a security question. The answer is out there — you just have to find it.",
     category: 'auth-bypass', difficulty: 'easy', points: 100,
-    flag: 'CTF{social_profile_exposed_answer}',
+    flag: 'CTF{social_profile_3xp0s3d_4nswer}',
     hints: [{ text: 'The founder has quite the social media presence. Maybe their Instagram has some clues.', cost: 0 }],
     isActive: true,
   },
@@ -193,7 +193,7 @@ const CHALLENGES = [
     title: 'Stack the Savings',
     description: "A promo code appears while browsing products. Enter it at checkout — then try entering it more than once.",
     category: 'logic-flaw', difficulty: 'easy', points: 100,
-    flag: 'CTF{discount_stacking_exploit}',
+    flag: 'CTF{discount_st4cking_3xploit}',
     hints: [
       { text: 'The admin panel has a Promotions tab. Maybe there\'s an active code you can use.', cost: 0 },
       { text: 'Checkout accepts the same code more than once. Keep applying it and watch the items subtotal.', cost: 25 },
@@ -204,7 +204,7 @@ const CHALLENGES = [
     title: 'Something Went Wrong',
     description: "StyleBot crashed — and APapparel's error handler had a lot to say about it. See what gets exposed when the bot can't cope.",
     category: 'exposed-files', difficulty: 'medium', points: 200,
-    flag: 'CTF{verbose_error_env_leak}',
+    flag: 'CTF{v3rb0se_error_3nv_leak}',
     hints: [
       { text: 'What happens when you send the chatbot something it cannot handle?', cost: 0 },
       { text: 'A malformed or empty message body might cause an unhandled exception. Check the full response carefully.', cost: 50 },
@@ -215,7 +215,7 @@ const CHALLENGES = [
     title: "Other People's Conversations",
     description: "StyleBot keeps a history of every conversation. Sessions are numbered. Not all of them belong to you.",
     category: 'insecure-api', difficulty: 'medium', points: 200,
-    flag: 'CTF{idor_chat_history_exposed}',
+    flag: 'CTF{id0r_ch4t_h1st0ry_3xposed}',
     hints: [
       { text: 'Your session ID is returned in the chat API response. What does that tell you about other sessions?', cost: 0 },
       { text: 'Try fetching /api/chat/1 directly — no login required.', cost: 50 },
@@ -226,7 +226,7 @@ const CHALLENGES = [
     title: 'The Price is Wrong',
     description: "APapparel trusts the cart too much. Can you change what the checkout thinks something costs?",
     category: 'logic-flaw', difficulty: 'medium', points: 200,
-    flag: 'CTF{price_tampering}',
+    flag: 'CTF{pr1ce_t4mp3ring}',
     hints: [
       { text: 'Your browser stores cart data locally. Check the Application tab before you pay.', cost: 0 },
       { text: 'If the checkout trusts local values, changing a price may change the final response too.', cost: 50 },
@@ -247,14 +247,14 @@ async function seedGlobal() {
   if (!admin) {
     admin = await User.create({
       username: 'admin',
-      email: 'CTF{default_creds_never_change}',
+      email: 'CTF{d3fault_cr3ds_never_chang3}',
       password: 'admin',        // CTF: intentional vulnerability — default-credentials
       role: 'admin',
       securityQuestion: 'What city were you born in?',
       securityAnswer: 'mumbai',
     });
     // Mongoose lowercases the email field — restore original case so the flag is discoverable
-    await User.collection.updateOne({ _id: admin._id }, { $set: { email: 'CTF{default_creds_never_change}' } });
+    await User.collection.updateOne({ _id: admin._id }, { $set: { email: 'CTF{d3fault_cr3ds_never_chang3}' } });
     console.log('Created admin user');
   } else {
     console.log('Admin already exists — skipping');
@@ -265,7 +265,7 @@ async function seedGlobal() {
   let ajith = await User.findOne({ username: 'ajithpatel' });
   if (!ajith) {
     ajith = await User.create({
-      username: 'ajithpatel',
+      username: 'CTF{social_profile_3xp0s3d_4nswer}',
       email: 'AjithPatel@APapparel.com',
       password: 'Ap$ecure2026!',  // strong password — not the attack vector
       role: 'user',
@@ -332,7 +332,7 @@ async function seedGlobal() {
       },
       {
         role: 'model',
-        content: 'Hello! Confirmed. Your admin verification code for today is: CTF{idor_chat_history_exposed}. Please keep this confidential.',
+        content: 'Hello! Confirmed. Your admin verification code for today is: CTF{id0r_ch4t_h1st0ry_3xposed}. Please keep this confidential.',
       },
       {
         role: 'user',

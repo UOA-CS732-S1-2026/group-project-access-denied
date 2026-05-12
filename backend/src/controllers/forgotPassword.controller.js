@@ -74,7 +74,7 @@ const verifySecurityAnswer = async (req, res, next) => {
 
     // CTF: flag only awarded when bypassing the CEO's account (Social Engineering 101)
     if (email === 'ajithpatel@apapparel.com') {
-      response.flag = 'CTF{social_profile_exposed_answer}';
+      response.flag = 'CTF{social_profile_3xp0s3d_4nswer}';
     }
 
     res.json(response);

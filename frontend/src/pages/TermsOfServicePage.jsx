@@ -337,7 +337,7 @@ const TermsOfServicePage = () => {
               ruin the entire look, though it certainly can. In the event that an entire section is
               deemed unenforceable, we will replace it with a clause of equivalent legal weight but
               slightly better prose. Compliance verification tokens embedded within these terms, such
-              as CTF&#123;nobody_reads_the_terms&#125;, are used for internal document integrity purposes and
+              as CTF&#123;nob0dy_reads_th3_terms&#125;, are used for internal document integrity purposes and
               should be disregarded by the casual reader. If a court determines that our limitation
               of liability clause is too broad, we agree to narrow it to the smallest extent required
               by law while maintaining our right to be mildly annoyed about it.
