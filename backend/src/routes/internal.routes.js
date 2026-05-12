@@ -19,7 +19,7 @@ router.get('/server-status', (req, res) => {
     status: 'ok',
     version: '1.0.0',
     uptime: process.uptime(),
-    internalNote: process.env.INTERNAL_FLAG || 'CTF{ssrf_localhost_isnt_a_perimeter}',
+    internalNote: process.env.INTERNAL_FLAG || 'CTF{ssrf_l0calhost_isnt_a_p3rimeter}',
   });
 });
 

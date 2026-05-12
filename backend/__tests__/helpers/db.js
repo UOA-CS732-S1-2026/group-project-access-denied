@@ -19,7 +19,7 @@ async function runGlobalSeed() {
 
 async function clearSessionData() {
   const { collections } = mongoose.connection;
-  const sessionCollections = ['sessions', 'orders', 'reviews', 'submissions'];
+  const sessionCollections = ['sessions', 'orders', 'reviews'];
   for (const name of sessionCollections) {
     if (collections[name]) await collections[name].deleteMany({});
   }

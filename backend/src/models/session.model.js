@@ -15,7 +15,7 @@ const sessionSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
     // TTL index — MongoDB auto-deletes session documents after 2 hours
-    // Atlas trigger fires on delete to clean up orders/reviews/submissions
+    // Atlas trigger fires on delete to clean up orders/reviews
     expires: 7200,
   },
 });
