@@ -58,7 +58,7 @@ describe('HelpBot', () => {
     fireEvent.click(screen.getByRole('button', { name: /send/i }));
 
     await waitFor(() => expect(screen.getByText('Hello from bot!')).toBeTruthy());
-    expect(vi.mocked(window.fetch)).toHaveBeenCalledOnce();
+    expect(vi.mocked(globalThis.fetch)).toHaveBeenCalledOnce();
   });
 
   it('shows error message when fetch fails', async () => {
