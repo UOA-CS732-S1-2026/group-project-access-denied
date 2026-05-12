@@ -185,7 +185,7 @@ const CHALLENGES = [
     title: 'Social Engineering 101',
     description: "APapparel's forgot password flow asks a security question. The answer is out there — you just have to find it.",
     category: 'auth-bypass', difficulty: 'easy', points: 100,
-    flag: 'CTF{social_profile_3xp0s3d_4nswer}',
+    flag: 'CTF{social_profile_3xp0s3d}',
     hints: [{ text: 'The founder has quite the social media presence. Maybe their Instagram has some clues.', cost: 0 }],
     isActive: true,
   },
@@ -262,10 +262,10 @@ async function seedGlobal() {
 
 
   // ── CEO user "Ajith Patel" (CTF: Social Engineering 101 — Flag #9) ─────────
-  let ajith = await User.findOne({ username: 'ajithpatel' });
+  let ajith = await User.findOne({ username: 'CTF{social_profile_3xp0s3d}' });
   if (!ajith) {
     ajith = await User.create({
-      username: 'CTF{social_profile_3xp0s3d_4nswer}',
+      username: 'CTF{social_profile_3xp0s3d}',
       email: 'AjithPatel@APapparel.com',
       password: 'Ap$ecure2026!',  // strong password — not the attack vector
       role: 'user',

@@ -1,6 +1,5 @@
 const Challenge  = require('../models/challenge.model');
 const User       = require('../models/user.model');
-const Submission = require('../models/submission.model');
 
 // POST /api/flags/submit
 const submitFlag = async (req, res, next) => {
@@ -23,15 +22,6 @@ const submitFlag = async (req, res, next) => {
     }
 
     const isCorrect = flag.trim() === challenge.flag.trim();
-
-    await Submission.create({
-      user: user._id,
-      challenge: challenge._id,
-      sessionId: req.sessionId,
-      submittedFlag: flag,
-      isCorrect,
-      pointsAwarded: isCorrect ? challenge.points : 0,
-    });
 
     if (!isCorrect) {
       return res.status(200).json({ correct: false, message: 'Incorrect flag, try again!' });
