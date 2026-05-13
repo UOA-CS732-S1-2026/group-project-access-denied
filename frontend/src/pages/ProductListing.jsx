@@ -78,7 +78,6 @@ const ProductListing = () => {
                   <div className="mt-6 space-y-1">
                     <div className="flex justify-between items-start">
                       <div>
-                        <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant/60">{product.brand}</p>
                         <h4 className="text-sm font-bold text-on-surface">{product.name}</h4>
                       </div>
                       <p className="text-sm font-bold text-primary">${product.price}</p>
