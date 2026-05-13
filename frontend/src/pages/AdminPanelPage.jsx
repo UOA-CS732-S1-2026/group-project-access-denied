@@ -56,7 +56,7 @@ const AdminPanelPage = () => {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [newProduct, setNewProduct] = useState({ name: '', brand: '', category: 'Clothes', price: '', image: '', isNew: false, featured: false });
+  const [newProduct, setNewProduct] = useState({ name: '', category: 'Clothes', price: '', image: '', isNew: false, featured: false });
   const [showImportModal, setShowImportModal] = useState(false);
   const [importUrl, setImportUrl] = useState('');
   const [importLoading, setImportLoading] = useState(false);
@@ -248,7 +248,6 @@ const AdminPanelPage = () => {
                                   <span className="text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-primary/10 text-primary">Draft</span>
                                 )}
                               </div>
-                              <div className="text-[10px] text-outline font-medium tracking-wide">{product.brand}</div>
                               {product.description && (
                                 <div className="text-xs text-on-surface-variant mt-1 line-clamp-2" title={product.description}>
                                   {product.description}
@@ -389,15 +388,9 @@ const AdminPanelPage = () => {
               </button>
             </div>
             <form onSubmit={handleAddProduct} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/60 mb-1 block">Product Name</label>
-                  <input required value={newProduct.name} onChange={(e) => setNewProduct((p) => ({ ...p, name: e.target.value }))} className={inputClass} placeholder="e.g. Silk Blouse" />
-                </div>
-                <div>
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/60 mb-1 block">Brand</label>
-                  <input required value={newProduct.brand} onChange={(e) => setNewProduct((p) => ({ ...p, brand: e.target.value }))} className={inputClass} placeholder="e.g. Parchment" />
-                </div>
+              <div>
+                <label className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/60 mb-1 block">Product Name</label>
+                <input required value={newProduct.name} onChange={(e) => setNewProduct((p) => ({ ...p, name: e.target.value }))} className={inputClass} placeholder="e.g. Silk Blouse" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
