@@ -1,7 +1,7 @@
 // vulnerableErrorHandler.js
 // INTENTIONAL VULNERABILITY: This error handler exposes HELPBOT_SECRET
 // (Flag 2) in the response body. No stack trace, error message, or other
-// env vars (JWT_SECRET, MONGO_URI, GROQ_API_KEY, INTERNAL_FLAG, etc.)
+// env vars (JWT_SECRET, MONGO_URI, GROQ_API_KEY, etc.)
 // are exposed. Triggered by sending malformed input to POST /api/chat.
 
 const vulnerableErrorHandler = (err, req, res, next) => {

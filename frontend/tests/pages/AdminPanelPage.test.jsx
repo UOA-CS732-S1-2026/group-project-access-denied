@@ -8,7 +8,6 @@ vi.mock('../../src/context/AuthContext', () => ({
 
 vi.mock('../../src/api/admin.api', () => ({
   getAllProducts: vi.fn(),
-  importProductImage: vi.fn(),
 }));
 
 vi.mock('../../src/components/common/Navbar', () => ({ default: () => <nav data-testid="navbar" /> }));

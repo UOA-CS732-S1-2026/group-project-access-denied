@@ -11,7 +11,6 @@ const scoreboardRoutes = require('./routes/scoreboard.routes');
 const productRoutes = require('./routes/product.routes');
 const orderRoutes   = require('./routes/order.routes');
 const adminRoutes = require('./routes/admin.routes');
-const internalRoutes = require('./routes/internal.routes');
 const { notFound, errorHandler } = require('./middleware/error.middleware');
 const logger = require('./utils/logger');
 const chatRoutes = require('./routes/chat.routes');
@@ -51,7 +50,6 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders',   orderRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/chat', chatRoutes);
-app.use('/internal', internalRoutes);
 
 // CTF: intentional vulnerability — robots.txt advertises non-public paths.
 // The backend is mounted at '/' in dev and '/_/backend' on Vercel, so the
@@ -66,7 +64,6 @@ app.get('/robots.txt', (req, res) => {
   res.type('text/plain').send(
     'User-agent: *\n' +
     'Disallow: /admin/\n' +
-    `Disallow: ${prefix}/internal/server-status\n` +
     `Disallow: ${prefix}/api/admin/\n`
   );
 });
