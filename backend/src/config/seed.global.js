@@ -18,6 +18,7 @@ const User = require('../models/user.model');
 const Product = require('../models/product.model');
 const Challenge = require('../models/challenge.model');
 const ChatSession = require('../models/chat-session.model');
+const Order = require('../models/order.model');
 
 
 // ─── Products ─────────────────────────────────────────────────────────────────
@@ -174,14 +175,6 @@ const CHALLENGES = [
     isActive: true,
   },
   {
-    title: 'Verbose Errors',
-    description: "APapparel's login endpoint is a little too talkative when things go wrong. See what you can learn from a failed login.",
-    category: 'other', difficulty: 'easy', points: 100,
-    flag: 'CTF{error_m3ssages_leak_inf0}',
-    hints: [{ text: 'Try logging in with a real email address but the wrong password. Then try a fake email.', cost: 0 }],
-    isActive: true,
-  },
-  {
     title: 'Social Engineering 101',
     description: "APapparel's forgot password flow asks a security question. The answer is out there — you just have to find it.",
     category: 'auth-bypass', difficulty: 'easy', points: 100,
@@ -233,7 +226,6 @@ const CHALLENGES = [
     ],
     isActive: true,
   },
-  { title: 'TBD', description: 'Coming soon.', category: 'other', difficulty: 'easy', points: 100, flag: 'CTF{tbd_flag_14}', isActive: false },
 ];
 
 
@@ -310,6 +302,23 @@ async function seedGlobal() {
     }
   } else {
     console.log('Alice already exists — skipping');
+  }
+
+  // ── Alice's order (CTF: IDOR — orderNumber 1 has the flag in internalNote) ──
+  const existingOrder = await Order.findOne({ orderNumber: 1 });
+  if (!existingOrder) {
+    await Order.create({
+      orderNumber: 1,
+      user: alice._id,
+      sessionId: 'alice-seed-session',
+      items: [],
+      total: 0,
+      shippingAddress: { fullName: 'Alice Smith', street: '1 Main St', city: 'Auckland', postcode: '1010', country: 'New Zealand' },
+      internalNote: 'CTF{idor_0rder_3xposed}',
+    });
+    console.log('Created alice\'s seed order (orderNumber: 1)');
+  } else {
+    console.log('Alice\'s seed order already exists — skipping');
   }
 
   // ── Products ────────────────────────────────────────────────────────────────

@@ -4,6 +4,7 @@ import ChallengeCard from '../components/challenges/ChallengeCard';
 import SubmitModal from '../components/challenges/SubmitModal';
 import { CATEGORY_LABELS } from '../components/challenges/challengeConstants';
 import { getChallenges } from '../api/challenge.api';
+import { getMe } from '../api/auth.api';
 import { useAuth } from '../context/AuthContext';
 
 const ChallengePage = () => {
@@ -26,12 +27,13 @@ const ChallengePage = () => {
       .catch(() => setError('Failed to load challenges. Make sure you are logged in.'))
       .finally(() => setLoading(false));
 
-    if (user) {
-      // solvedChallenges comes back populated (array of objects), so extract just the _id strings
-      setSolvedIds((user.solvedChallenges || []).map((c) => c._id ?? c));
-      setTotalScore(user.totalScore || 0);
-    }
-  }, [user]);
+    getMe()
+      .then((res) => {
+        setSolvedIds((res.data.solvedChallenges || []).map((c) => c._id ?? c));
+        setTotalScore(res.data.totalScore || 0);
+      })
+      .catch(() => {});
+  }, []);
 
   const handleSuccess = (challengeId, _pointsAwarded, newTotal) => {
     setSolvedIds((prev) => [...prev, challengeId]);
