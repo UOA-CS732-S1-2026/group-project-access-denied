@@ -220,9 +220,4 @@ refactor/seed-cleanup
 | `CLIENT_URL`     | Frontend URL (for CORS)            | `http://localhost:3000`                        |
 | `GROQ_API_KEY`   | Groq API key for HelpBot           | from groq.com                                  |
 
-### Frontend (`frontend/.env`)
-| Variable       | Description                  | Example                             |
-|----------------|------------------------------|-------------------------------------|
-| `VITE_API_URL` | Backend API base URL         | `https://your-backend.cloud.run/api`|
-
 > ⚠️ Never commit `.env` files. They are already in `.gitignore`.
