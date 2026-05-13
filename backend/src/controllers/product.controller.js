@@ -27,7 +27,6 @@ const getProducts = async (req, res, next) => {
         const searchRegex = new RegExp(escapeRegex(searchTerm), 'i');
         filter.$or = [
           { name: searchRegex },
-          { brand: searchRegex },
           { description: searchRegex },
           { category: searchRegex },
         ];

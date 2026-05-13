@@ -56,7 +56,7 @@ const AdminPanelPage = () => {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [newProduct, setNewProduct] = useState({ name: '', brand: '', category: 'Clothes', price: '', image: '', isNew: false, featured: false });
+  const [newProduct, setNewProduct] = useState({ name: '', category: 'Clothes', price: '', image: '', featured: false });
   const [showImportModal, setShowImportModal] = useState(false);
   const [importUrl, setImportUrl] = useState('');
   const [importLoading, setImportLoading] = useState(false);
@@ -82,7 +82,7 @@ const AdminPanelPage = () => {
   const handleAddProduct = (e) => {
     e.preventDefault();
     setProducts((prev) => [...prev, { ...newProduct, _id: Date.now().toString(), price: Number(newProduct.price) }]);
-    setNewProduct({ name: '', category: 'clothing', price: '', image: '', isNew: false, featured: false });
+    setNewProduct({ name: '', category: 'clothing', price: '', image: '', featured: false });
     setShowAddModal(false);
   };
 
@@ -248,7 +248,6 @@ const AdminPanelPage = () => {
                                   <span className="text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-primary/10 text-primary">Draft</span>
                                 )}
                               </div>
-                              <div className="text-[10px] text-outline font-medium tracking-wide">{product.brand}</div>
                               {product.description && (
                                 <div className="text-xs text-on-surface-variant mt-1 line-clamp-2" title={product.description}>
                                   {product.description}
@@ -389,15 +388,9 @@ const AdminPanelPage = () => {
               </button>
             </div>
             <form onSubmit={handleAddProduct} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/60 mb-1 block">Product Name</label>
-                  <input required value={newProduct.name} onChange={(e) => setNewProduct((p) => ({ ...p, name: e.target.value }))} className={inputClass} placeholder="e.g. Silk Blouse" />
-                </div>
-                <div>
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/60 mb-1 block">Brand</label>
-                  <input required value={newProduct.brand} onChange={(e) => setNewProduct((p) => ({ ...p, brand: e.target.value }))} className={inputClass} placeholder="e.g. Parchment" />
-                </div>
+              <div>
+                <label className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/60 mb-1 block">Product Name</label>
+                <input required value={newProduct.name} onChange={(e) => setNewProduct((p) => ({ ...p, name: e.target.value }))} className={inputClass} placeholder="e.g. Silk Blouse" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -418,10 +411,6 @@ const AdminPanelPage = () => {
                 <input value={newProduct.image} onChange={(e) => setNewProduct((p) => ({ ...p, image: e.target.value }))} className={inputClass} placeholder="https://..." />
               </div>
               <div className="flex gap-6 pt-1">
-                <label className="flex items-center gap-2 text-sm cursor-pointer">
-                  <input type="checkbox" checked={newProduct.isNew} onChange={(e) => setNewProduct((p) => ({ ...p, isNew: e.target.checked }))} className="accent-primary" />
-                  New Arrival
-                </label>
                 <label className="flex items-center gap-2 text-sm cursor-pointer">
                   <input type="checkbox" checked={newProduct.featured} onChange={(e) => setNewProduct((p) => ({ ...p, featured: e.target.checked }))} className="accent-primary" />
                   Featured on Home

@@ -15,8 +15,8 @@ import ProductListing from '../../src/pages/ProductListing';
 const wrap = () => render(<MemoryRouter><ProductListing /></MemoryRouter>);
 
 const mockProducts = [
-  { _id: 'p1', name: 'Test Product Alpha', price: 199, images: ['img1.jpg'], isNew: true },
-  { _id: 'p2', name: 'Test Product Beta', price: 499, images: ['img2.jpg'], isNew: false },
+  { _id: 'p1', name: 'Test Product Alpha', price: 199, images: ['img1.jpg'] },
+  { _id: 'p2', name: 'Test Product Beta', price: 499, images: ['img2.jpg'] },
 ];
 
 beforeEach(() => {

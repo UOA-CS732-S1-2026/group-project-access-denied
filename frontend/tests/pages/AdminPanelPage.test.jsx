@@ -61,7 +61,7 @@ describe('AdminPanelPage', () => {
   });
 
   it('renders product rows when products are loaded', async () => {
-    const product = { _id: '1', name: 'Test Product Alpha', category: 'Clothes', price: 200, stock: 10, images: [''], brand: 'Brand', description: '' };
+    const product = { _id: '1', name: 'Test Product Alpha', category: 'Clothes', price: 200, stock: 10, images: [''], description: '' };
     getAllProducts.mockResolvedValue({ data: [product] });
     wrap();
     await waitFor(() => expect(screen.getByText(product.name)).toBeTruthy());
