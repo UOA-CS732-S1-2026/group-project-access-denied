@@ -4,13 +4,9 @@ const crypto = require('crypto');
 const { getSecurityQuestion, verifySecurityAnswer } = require('../../src/controllers/forgotPassword.controller');
 const User = require('../../src/models/user.model');
 const Session = require('../../src/models/session.model');
-const { seedSession } = require('../../src/config/seed.session');
 
 jest.mock('../../src/models/user.model');
 jest.mock('../../src/models/session.model');
-jest.mock('../../src/config/seed.session', () => ({
-  seedSession: jest.fn().mockResolvedValue(undefined),
-}));
 
 const mockRes = () => {
   const res = {};
@@ -153,7 +149,6 @@ describe('verifySecurityAnswer', () => {
     await verifySecurityAnswer(req, res, jest.fn());
 
     expect(Session.create).toHaveBeenCalled();
-    expect(seedSession).toHaveBeenCalledWith(mockSession.sessionId);
   });
 
   it('returns the CTF flag when the CEO account is accessed', async () => {

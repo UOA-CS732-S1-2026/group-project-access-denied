@@ -2,7 +2,6 @@ const jwt    = require('jsonwebtoken');
 const crypto = require('crypto');
 const User    = require('../models/user.model');
 const Session = require('../models/session.model');
-const { seedSession } = require('../config/seed.session');
 
 const generateToken = (user, sessionId) =>
   jwt.sign(
@@ -60,7 +59,6 @@ const verifySecurityAnswer = async (req, res, next) => {
     if (!session) {
       const sessionId = crypto.randomUUID();
       session = await Session.create({ userId: user._id, sessionId });
-      await seedSession(session.sessionId);
     }
 
     const token = generateToken(user, session.sessionId);
