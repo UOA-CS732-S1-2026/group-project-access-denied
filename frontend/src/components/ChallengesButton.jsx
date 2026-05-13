@@ -1,22 +1,14 @@
-import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const HIDDEN_ROUTES = ['/login', '/register', '/challenges'];
 
 const ChallengesButton = () => {
-  const [unlocked, setUnlocked] = useState(false);
   const { pathname } = useLocation();
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!user) { setUnlocked(false); return; }
-    if (localStorage.getItem(`ctf_unlocked_${user.id}`) === '1') setUnlocked(true);
-    else setUnlocked(false);
-  }, [pathname, user]);
-
-  if (!unlocked || user?.role === 'admin' || HIDDEN_ROUTES.includes(pathname)) return null;
+  if (!user || user?.role === 'admin' || HIDDEN_ROUTES.includes(pathname)) return null;
 
   return (
     <button
