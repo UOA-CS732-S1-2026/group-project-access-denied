@@ -56,7 +56,7 @@ const AdminPanelPage = () => {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [newProduct, setNewProduct] = useState({ name: '', category: 'Clothes', price: '', image: '', isNew: false, featured: false });
+  const [newProduct, setNewProduct] = useState({ name: '', category: 'Clothes', price: '', image: '', featured: false });
   const [showImportModal, setShowImportModal] = useState(false);
   const [importUrl, setImportUrl] = useState('');
   const [importLoading, setImportLoading] = useState(false);
@@ -82,7 +82,7 @@ const AdminPanelPage = () => {
   const handleAddProduct = (e) => {
     e.preventDefault();
     setProducts((prev) => [...prev, { ...newProduct, _id: Date.now().toString(), price: Number(newProduct.price) }]);
-    setNewProduct({ name: '', category: 'clothing', price: '', image: '', isNew: false, featured: false });
+    setNewProduct({ name: '', category: 'clothing', price: '', image: '', featured: false });
     setShowAddModal(false);
   };
 
@@ -411,10 +411,6 @@ const AdminPanelPage = () => {
                 <input value={newProduct.image} onChange={(e) => setNewProduct((p) => ({ ...p, image: e.target.value }))} className={inputClass} placeholder="https://..." />
               </div>
               <div className="flex gap-6 pt-1">
-                <label className="flex items-center gap-2 text-sm cursor-pointer">
-                  <input type="checkbox" checked={newProduct.isNew} onChange={(e) => setNewProduct((p) => ({ ...p, isNew: e.target.checked }))} className="accent-primary" />
-                  New Arrival
-                </label>
                 <label className="flex items-center gap-2 text-sm cursor-pointer">
                   <input type="checkbox" checked={newProduct.featured} onChange={(e) => setNewProduct((p) => ({ ...p, featured: e.target.checked }))} className="accent-primary" />
                   Featured on Home
